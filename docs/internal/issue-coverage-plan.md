@@ -45,7 +45,54 @@ Exercises are **tool-agnostic** — harder to write, but matches the playbook's 
 
 **Light theme only.** No existing brand reference to match — we define the visual language ourselves in `docs/visual-style.md`.
 
-**Deliverable:** `docs/visual-style.md` + a small library of reusable diagram fragments (the agentic loop, fan-out/fan-in, the three-checkpoint verification pipeline, the spec-as-artifact flow).
+**Deliverable:** `docs/visual-style.md` + a small library of reusable diagram fragments (the agentic loop, fan-out/fan-in, the three-checkpoint verification pipeline, the spec-as-artifact flow). Drafts of the fragments below — these are the canonical sources reused across modules and slides; finalize once `visual-style.md` fixes the conventions.
+
+**Fragment: the agentic loop**
+
+```mermaid
+flowchart LR
+    Spec[Spec / instruction] --> Plan[Agent plans]
+    Plan --> Act[Agent acts<br/>tool calls / edits]
+    Act --> Verify[Verify<br/>tests / linters / human]
+    Verify -->|pass| Done[Done]
+    Verify -->|fail| Plan
+```
+
+**Fragment: fan-out / fan-in (subagents, used in 07)**
+
+```mermaid
+flowchart LR
+    Orchestrator[Orchestrator agent] --> A[Subagent A]
+    Orchestrator --> B[Subagent B]
+    Orchestrator --> C[Subagent C]
+    A --> Aggregate[Aggregate results]
+    B --> Aggregate
+    C --> Aggregate
+    Aggregate --> Orchestrator
+```
+
+**Fragment: three-checkpoint verification pipeline (used in 06)**
+
+```mermaid
+flowchart LR
+    Change[Code change] --> RT[Real-time<br/>linter · type checker · LSP]
+    RT --> PC[Pre-commit<br/>hooks · formatters · fast tests]
+    PC --> PR[PR review<br/>two-way critique · CI suite]
+    PR --> Merge[Merge]
+```
+
+**Fragment: spec-as-artifact flow (used in 09 / 11)**
+
+```mermaid
+flowchart LR
+    PRD[PRD] --> Spec[Spec / design doc]
+    Spec --> Issues[Issues / task prompts]
+    Issues --> Agent[Agent session]
+    Agent --> PR[Pull request]
+    PR --> Review[Two-way review]
+    Review -->|merged| Followup[Follow-up issues]
+    Review -->|rework| Issues
+```
 
 ---
 
@@ -65,7 +112,20 @@ These are framings, not standalone topics. Each one wants a short dedicated sect
 
 **Where it lands:** Sidebar in 01 Agentic Loop, then explicit reinforcement in 07 (Subagents) and 09 (Production Workflows).
 
-**Treatment:** The skills that matter are now scoping, delegation, review, and feedback — not typing speed. Connect this to existing engineering-management literature (one-on-ones become agent retros; performance reviews become evals).
+**Treatment:** The skills that matter are now scoping, delegation, review, and feedback — not typing speed. Connect this to existing engineering-management literature so the analogy does work for the reader.
+
+**Parallels table** (renders as the sidebar's central asset):
+
+| Engineering management practice | Agent-coding equivalent |
+| --- | --- |
+| Onboarding a new hire | Writing the AGENTS.md / CLAUDE.md / instruction file |
+| Delegating to a junior | Scoping a task prompt with verification criteria |
+| One-on-ones | Retros on what the agent did and how to adjust the instructions |
+| Performance review | Eval suites — measured behavior over a fixed task set |
+| Peer review | Two-way critique (#11/#12) — both the agent's work and your spec |
+| Coaching | Feeding corrections back into instructions, not just the current session |
+
+This frame also reinforces #13 (operators must be familiar with coding) — a manager who can't read the work product can't manage.
 
 ### #11 — Humans are not always right & #12 — Review was already broken
 
@@ -73,11 +133,54 @@ These are framings, not standalone topics. Each one wants a short dedicated sect
 
 **Treatment:** Pair these because they're the same coin. Humans rubber-stamp ("LGTM"), agents over-defer. The fix is the same on both sides: the agent should be instructed to push back on weak premises, and the human should review the *reasoning*, not just the diff. Concrete: example instruction-file snippets that license the agent to challenge, plus a review checklist that goes beyond "does it compile."
 
+**Narrative voice:** Use punchy, claim-style section headers (e.g. "The slop problem is real, but it's not new") rather than neutral descriptive ones. The section is a posture argument — the headers should carry the argument too.
+
+**Stats deployment** (sources catalogued in [`sources.md`](sources.md)):
+
+- **Open the section with** Cisco/SmartBear's "61% of code reviews find zero defects" + the 60–90 minute fatigue cliff. Establishes the broken pre-agent baseline in one sentence.
+- **Justify the "review reasoning, not diff" bullet with** Bacchelli & Bird (Microsoft, ICSE 2013) — managers expect bug-finding; reality is dominated by maintainability comments. The discipline change is recovering an unmet expectation, not adding a new one.
+- **Argue reviewer variance as a named gap.** SE doesn't have a strong empirical study quantifying intra-reviewer inconsistency (same person, same code, different day). Cite peer-review IRR + decision-fatigue research as the closest analogues and say so explicitly — the absence of SE numbers is itself a defensible reason to take a position.
+- **Pivot to "agents amplify" with** DX Q4 2025 (22% of merged code is AI-authored) + Jellyfish (median PR size +33%, incidents per PR +23.5%). Three numbers, one story: more code, bigger diffs, more breakage into the same broken process.
+- **Operational sidebar** (separate callout): 60–90 min cliff, <300 LOC/hour pace, 200–400 LOC sweet spot. Concrete things readers can change tomorrow.
+- **Avoid:** Sadowski/Google numbers in the broken-review framing (describes a working system; reads as cherry-picking next to rubber-stamp data — save for a "what good looks like" reference if added later). Don't lean on the headline CodeRabbit "1.7×" stat — use the sharper breakdown (75% more logic errors, 2.74× more security issues) when the amplification claim needs to bite, and only as a supporting citation since it's vendor-published.
+
+**Practitioner quotes** (from the [PyAI OSS panel](https://pydantic.dev/articles/pyai-oss-panel)):
+
+- **Bridge from "broken" to "what discipline looks like":** Guido van Rossum on large PRs — *"If someone confronts you with 10,000 lines of code, I find it real hard to believe that those are the right 10,000 lines of code."* Human counterpart to the 200–400 LOC sweet spot, supports the incrementalism bullet.
+- **Defuse the "AI just means bigger PRs" objection:** Jeremiah Lowin — *"I think it's about creating an environment where explaining the code is of paramount importance."* Reasoning is what the author owes the reviewer, regardless of who typed the code.
+- **Concrete recommendation for the #11 crossover:** Sebastián Ramirez attaches model, prompts, and full conversation history to AI-assisted PRs he sends to other people's projects. Disclosure as a default behavior, not a footnote.
+
+**Mitigations to cover** (the prescriptive half of the section):
+
+- **Pre-review as fatigue mitigation.** A first-pass agent (or a structured self-review against the checklist) catches the obvious problems before the human review starts, so the human attention budget doesn't get burned on syntax and rubber-stamp candidates. Frame as a way to protect the 60–90 minute attention window, not a replacement for review.
+- **Review checklist that goes beyond "does it compile"** — checks for unjustified abstractions, hidden assumptions, divergence from intent, what the change is *not* doing.
+- **Instruction-file snippets that license the agent to challenge** — "if my premise is wrong, say so before writing code."
+
+**TODO:** Internal team chat (incl. the algotrader) on how each of us actually mitigates review-related issues — the section's prescriptions should reflect a real discussion, not just the literature.
+
+**Visualization (deliverable):** Mermaid diagram of the two-way critique loop. Lives in the section and is reused on the matching slide. Source fragment goes in the diagram library defined under #3. Draft:
+
+```mermaid
+flowchart LR
+    Spec[Human writes spec] --> Premise{Agent: premise check}
+    Premise -->|weak / missing constraint| Flag[Agent flags assumption<br/>asks before writing code]
+    Flag --> Spec
+    Premise -->|sound| Impl[Agent implements +<br/>articulates reasoning]
+    Impl --> Review{Human reviews<br/>reasoning, not diff}
+    Review -->|reasoning sound| Merge[Merge]
+    Review -->|unjustified abstraction /<br/>divergence from intent| Pushback[Human pushes back<br/>names the divergence]
+    Pushback --> Impl
+```
+
+The diagram makes both halves of the section visible in one frame: the agent half (premise-check + flag) on the left, the human half (review reasoning + push back on divergence) on the right. Same loop, two failure modes, one fix.
+
 ### #9 — Who should code?
 
 **Where it lands:** Leadership track, as a chapter after 12 Enterprise Adoption. Title something like "Allocating coding work in an agent-augmented team."
 
-**Treatment:** Frame as resource allocation, not gatekeeping. Junior + agent vs. senior + agent produce different artifacts at different costs and different review burdens. The chapter should give leaders a decision framework, not an answer.
+**Treatment:** Frame as resource allocation, not gatekeeping. Junior + agent vs. senior + agent vs. non-coder + agent produce different artifacts at different costs and different review burdens. The chapter should give leaders a decision framework, not an answer.
+
+**Second axis — what "coding" means at senior level.** Allocation isn't just about *who* codes; it's about whether senior engineers and architects should be writing specs and distilling problem space into issues *more than* they're instructing coding agents directly. Senior engineers have always done architecture and implementation planning, but in an agent-augmented team this shifts from "the upstream half of the job" to "the load-bearing half." The chapter should make this explicit and put weight on it — the leverage point for a senior is now spec quality, not keystrokes. Connects directly to #10 (syntax → architecture perspective shift) and #11/#12 (agents and humans both review the *reasoning*, which only exists if someone wrote a real spec).
 
 ---
 
@@ -91,11 +194,32 @@ Discipline content. These are the habits that separate people who get value from
 
 **Treatment:** The infrastructure that makes agents *less necessary* is also what makes them *more reliable* when you do use them: linters, pre-commit hooks, type checkers, generated clients, generated docs, centralized theming, strong CI. Reframe "automation" as "things you build once so the agent (and you) don't have to think about them again." The infrastructure label on this issue is correct — this slots near production workflows.
 
+**Why infrastructure, specifically — the load-bearing argument.** The chapter shouldn't present infrastructure as ergonomics. It should present it as the deterministic counterweight to a probabilistic collaborator. Agents are stochastic — they produce plausible-looking output, not guaranteed-correct output. Linters, type checkers, generated clients, and CI are deterministic — same input, same verdict, every time. Every check we push from agent-judgment into deterministic infrastructure replaces a probabilistic verdict with a guaranteed one. Stronger still: well-defined interfaces and consistent codebase patterns *narrow the space of plausible-but-wrong outputs* the agent can produce. That's the only honest way to make a stochastic system reliable — by ruling out bad outputs structurally rather than hoping the model guesses right. (This is the "stochastic parrots, yada yada" point — cite the paper if useful, but the chapter should make the consequence explicit even without naming it.)
+
+**Visualization — what gets pushed where:**
+
+```mermaid
+flowchart TD
+    Need[A correctness check is needed] --> Q{Can it be<br/>made deterministic?}
+    Q -->|yes| Det[Linter · type checker<br/>generated client · CI test<br/><i>same answer every time</i>]
+    Q -->|no — requires judgment| Prob[Agent + human review<br/><i>probabilistic; reliable<br/>only when reviewed</i>]
+    Det --> Scale[Scales freely<br/>no review tax per change]
+    Prob --> Tax[Pays the review tax<br/>every change]
+```
+
+The visualization makes the chapter's working question concrete: for any new correctness check the team is tempted to "just have the agent handle," ask first whether it can be turned into infrastructure. If yes, build it once. If no, accept the review tax and design the review discipline (#11/#12) to handle it.
+
 ### #10 — Lean heavily on design principles
 
-**Where it lands:** New section in 04 Effective Prompting, "Speak in principles." Reinforced in 03 Context Engineering (instruction file should encode them).
+**Where it lands:** New section in 04 Effective Prompting. Reinforced in 03 Context Engineering (instruction file should encode the principles the team actually holds, so the agent applies them without being reminded each turn).
 
-**Treatment:** SOLID, KISS, DRY, YAGNI, WYSIWYG aren't optional decoration — they're the shared vocabulary the agent uses to make the thousand small decisions you didn't specify. A developer who can't say "this violates SRP" can't course-correct an agent that just wrote a 600-line god-class.
+**Treatment — reframed.** Lead with the perspective shift, not the principles themselves. The developer's job is moving from syntax to architecture: writing and maintaining a healthy codebase is now the load-bearing skill, and that's intrinsically tied to understanding design principles. Design principles aren't the headline (SOLID/KISS/DRY/YAGNI have been around for decades — readers will tune out if we present them as the new thing); the *shift in where the developer's attention goes* is the headline.
+
+**The auto-regressive point — the strongest argument for codebase health.** Coding agents build on what's there. They're auto-regressive: if your codebase is slop, they will, by virtue of their core logic, write code that matches. Slop in → slop out, at higher throughput. This is the load-bearing reason to lean on principles — not because they're virtuous, but because the agent's output is bounded by the patterns it sees in your repo. Pairs naturally with #8's deterministic-infrastructure argument: infrastructure narrows the space of plausible outputs; codebase health raises the floor of what "plausible" looks like.
+
+**Subordinate point — speak in principles.** Once the perspective shift is established, the prompting application follows: principles are the shared vocabulary the agent uses to make the thousand small decisions you didn't specify. A developer who can't say *"this violates SRP"* can't course-correct an agent that just wrote a 600-line god-class. The 03 callback shows what these principles look like *encoded in an instruction file* — not "follow SOLID" (useless) but specific applications ("functions over 50 lines need a comment justifying the size", "no inheritance for sharing — use composition").
+
+**Concrete asset:** Short worked example contrasting (a) a vague prompt against a slop codebase, (b) the same prompt against a healthy codebase, (c) the same prompt with principles encoded in the instruction file. The diff between the three outputs makes both points — auto-regressive amplification *and* the leverage of speaking in principles — without having to argue them.
 
 ### #13 — Users NEED to be familiar with coding
 
@@ -112,6 +236,8 @@ Discipline content. These are the habits that separate people who get value from
 **Where it lands:** New appendix `docs/examples/` with 2–3 worked examples, linked from 09 Production Workflows and 10 Building Your System.
 
 **Treatment:** Each example walks one realistic feature from PRD → spec → task prompts → agent session(s) → review → merge → follow-up. Show the actual artifacts (instruction file, prompts, agent transcripts trimmed for length, the resulting PR). Resist sanitizing — the messy decisions are where the learning is.
+
+**Visualization:** Reuse the *spec-as-artifact flow* fragment from #3 as the canonical lifecycle diagram. Each worked example annotates the same fragment with the example-specific artifacts at each node, so readers see the same shape three times with different content — reinforces the lifecycle rather than introducing three competing visualizations.
 
 Examples use **synthetic repos** (easier to maintain, lets us shape the example to hit the teaching points) and are recorded in **Claude Code** as the canonical harness, with notes on how patterns transfer to other tools.
 
