@@ -1,6 +1,6 @@
 # Issue Coverage Plan
 
-A proposal for how to fold the 13 open GitHub issues into the existing 14-module playbook. Grouped by theme, with a recommendation for where each issue lands (new module, integrated section, or cross-cutting thread), what the deliverable looks like, and the open questions that need a decision before drafting.
+A proposal for how to fold the 13 open GitHub issues into the existing 14-module playbook. Grouped by theme, with a recommendation for where each issue lands (new module, integrated section, or cross-cutting thread) and what the deliverable looks like.
 
 The goal is to keep the existing module spine intact and weave most issues into it rather than spawning a parallel structure. Two issues (#2 tracks, #1 exercises) are structural and should be resolved first because they constrain how the others get written.
 
@@ -10,36 +10,30 @@ The goal is to keep the existing module spine intact and weave most issues into 
 
 These change the shape of the workshop. Everything else depends on them.
 
-### #2 — Split into tracks (developer vs. business)
+### #2 — Split into tracks (developer vs. leadership)
 
 **Recommendation:** Two tracks sharing a common foundation, not two parallel workshops.
 
 - **Shared core (everyone reads):** 00 Introduction, 01 Agentic Loop, plus a new "perspectives" chapter that holds the distribution framing (#6) and the engineering-manager framing (#7). These are the load-bearing concepts a non-coder still needs to reason about agents.
 - **Developer track:** 02–10 as they stand today. Adds a posture chapter on design principles (#10) and "use agents as little as possible" (#8).
-- **Business / leadership track:** 11 (business → tasks), 12 (enterprise adoption), plus new chapters on culture (#4) and "who should code?" (#9). Lighter on tool mechanics, heavier on governance, distribution, ROI, and review process (#12).
+- **Leadership track:** 11 (business → tasks), 12 (enterprise adoption), plus new chapters on culture (#4) and "who should code?" (#9). Lighter on tool mechanics, heavier on governance, distribution, ROI, and review process (#12).
 - README gets a "pick your track" section near the top.
+
+The second track is **Leadership** rather than "Business" — the content is closer to engineering management than to general business. We are not building a separate reviewer/QA track; everyone reviews, so review-as-discipline is folded into the developer track.
 
 **Deliverable:** Restructured README + a one-page track map showing which modules each track reads in which order.
 
-**Open questions:**
-
-- Is "business" the right second label, or should it be "leadership / engineering manager"? The content is closer to the latter.
-- Do we want a third "evaluator / reviewer" track for people doing PR review and QA, or is that just a chapter inside the developer track?
-
 ### #1 — Exercises
 
-**Recommendation:** One exercise per developer-track module, sized 15–30 min, with a stated learning objective and a "done when…" criterion. Business track gets discussion prompts and case studies rather than coding exercises.
+**Recommendation:** One exercise per developer-track module, sized 15–30 min, with a stated learning objective and a "done when…" criterion. Leadership track gets discussion prompts and case studies rather than coding exercises.
 
 - Each exercise lives in an `exercises/` folder, named `NN-<module-slug>.md`, and is linked from the matching module.
 - Format: **Goal · Setup · Task · Done when · Stretch.** Short, runnable in any agent harness.
-- A handful of exercises should be paired (one developer-track, one business-track) so a mixed audience can do them side-by-side in a workshop setting — e.g. a PRD writing exercise (business) feeding into a spec-to-task exercise (dev).
+- A handful of exercises should be paired (one developer-track, one leadership-track) so a mixed audience can do them side-by-side in a workshop setting — e.g. a PRD writing exercise (leadership) feeding into a spec-to-task exercise (dev).
+
+Exercises are **tool-agnostic** — harder to write, but matches the playbook's stated stance. We are **not** auto-grading. Each exercise states a "done when…" criterion and learners decide for themselves when they've met it.
 
 **Deliverable:** Exercise template + 14 exercises, drafted in priority order (03 Context Engineering, 04 Prompting, 06 Verification first — these are the highest-leverage skills).
-
-**Open questions:**
-
-- Do exercises assume a specific harness (Claude Code) or stay tool-agnostic? Tool-agnostic is harder to write but matches the playbook's stated stance.
-- Do we want auto-graded exercises, or is "did you produce a sensible diff?" sufficient?
 
 ### #3 — Visualizations
 
@@ -49,12 +43,9 @@ These change the shape of the workshop. Everything else depends on them.
 - **Visual language:** A short `docs/visual-style.md` that fixes color palette, arrow conventions (control flow vs. data flow), node shapes (agent / tool / human / artifact), and font.
 - The slide deck and docs reuse the same Mermaid blocks so updates flow to both.
 
+**Light theme only.** No existing brand reference to match — we define the visual language ourselves in `docs/visual-style.md`.
+
 **Deliverable:** `docs/visual-style.md` + a small library of reusable diagram fragments (the agentic loop, fan-out/fan-in, the three-checkpoint verification pipeline, the spec-as-artifact flow).
-
-**Open questions:**
-
-- Light theme only, or do we maintain a dark variant for the slide deck?
-- Who owns the visual language going forward — is there an existing brand reference we should match?
 
 ---
 
@@ -68,7 +59,7 @@ These are framings, not standalone topics. Each one wants a short dedicated sect
 
 **Treatment:** Frame agent capability as a distribution: design choices and well-specified work sit in the fat middle where agents excel; novel algorithms, deep domain modeling, and ambiguous product calls sit in the tails where humans lead. The point isn't a hard line — it's giving the reader a mental model for *deciding* per task.
 
-**Concrete asset:** One diagram (the distribution sketch from issue #6) + a 5-row table of "in the middle / in the tails" examples.
+**Concrete asset:** An actual normal/Gaussian curve with real distribution language — first standard deviation, second standard deviation, tails — labeled "agent-led" in the body and "human-led" in the tails. Using genuine stats vocabulary anchors the visualization to something readers already understand instead of being a hand-wavy bell shape. Bonus points if we can credibly anchor the curve to a real signal (task complexity, novelty, specification clarity) rather than treating it as decorative. Plus a 5-row "in the middle / in the tails" comparison table.
 
 ### #7 — Every developer is now an engineering manager
 
@@ -84,7 +75,7 @@ These are framings, not standalone topics. Each one wants a short dedicated sect
 
 ### #9 — Who should code?
 
-**Where it lands:** Business / leadership track, as a chapter after 12 Enterprise Adoption. Title something like "Allocating coding work in an agent-augmented team."
+**Where it lands:** Leadership track, as a chapter after 12 Enterprise Adoption. Title something like "Allocating coding work in an agent-augmented team."
 
 **Treatment:** Frame as resource allocation, not gatekeeping. Junior + agent vs. senior + agent produce different artifacts at different costs and different review burdens. The chapter should give leaders a decision framework, not an answer.
 
@@ -96,7 +87,7 @@ Discipline content. These are the habits that separate people who get value from
 
 ### #8 — Use coding agents as little as possible
 
-**Where it lands:** New section in 06 Verification and Quality, or its own short chapter between 06 and 07. Lean toward the latter — it's a posture, not a verification technique.
+**Where it lands:** New short chapter between 06 and 07 — it's a posture, not a verification technique, so it deserves its own slot rather than a section inside 06.
 
 **Treatment:** The infrastructure that makes agents *less necessary* is also what makes them *more reliable* when you do use them: linters, pre-commit hooks, type checkers, generated clients, generated docs, centralized theming, strong CI. Reframe "automation" as "things you build once so the agent (and you) don't have to think about them again." The infrastructure label on this issue is correct — this slots near production workflows.
 
@@ -122,26 +113,24 @@ Discipline content. These are the habits that separate people who get value from
 
 **Treatment:** Each example walks one realistic feature from PRD → spec → task prompts → agent session(s) → review → merge → follow-up. Show the actual artifacts (instruction file, prompts, agent transcripts trimmed for length, the resulting PR). Resist sanitizing — the messy decisions are where the learning is.
 
-**Suggested examples:**
+Examples use **synthetic repos** (easier to maintain, lets us shape the example to hit the teaching points) and are recorded in **Claude Code** as the canonical harness, with notes on how patterns transfer to other tools.
+
+**Three examples:**
 
 1. **Greenfield small:** Adding a feature to a fresh repo (illustrates 02–06).
 2. **Brownfield enterprise:** Modifying an existing codebase with conventions (illustrates 11–12).
 3. **Multi-session / long-running:** A refactor that spans days (illustrates 07–08).
 
-**Open questions:**
+### #4 — Material on culture (leadership track)
 
-- Real repos or synthetic? Real is more credible but harder to maintain.
-- Which agent harness to record in? Probably one canonical (Claude Code) with notes on how it transfers.
+**Where it lands:** New chapter in the leadership track, between 11 and 12.
 
-### #4 — Material on culture (business track)
+**Treatment:** Two halves.
 
-**Where it lands:** New chapter in the business track, between 11 and 12.
+1. **What changes culturally once a team adopts agentic coding** — review norms, ownership, blame, pairing, on-call, hiring criteria, IC career ladders. Pairs naturally with #9 (who codes) and #7 (everyone's a manager).
+2. **How cultural disposition controls adoption itself.** Some organizations have engineers and employees who are at the forefront — curious about new tooling, willing to retool. Others are more conservative: they build deep expertise around stable tooling and rely on what they're good at. That disposition determines adoption rate, the friction you'll meet, and the change strategy that actually works. The chapter should give leaders a way to read their own organization's archetype and act accordingly — not push a single playbook on every culture.
 
-**Treatment:** What changes culturally when a team adopts agentic coding — review norms, ownership, blame, pairing, on-call, hiring criteria, IC career ladders. How to seed and accelerate the shift without forcing it. This pairs naturally with #9 (who codes) and #7 (everyone's a manager).
-
-**Open questions:**
-
-- Do we have first-hand case studies to draw on, or is this synthesized from the research-summary sources?
+We don't have first-hand case studies to draw on, so this is synthesized from the existing research-summary sources plus the framing above. If we collect concrete stories during workshop runs, those should land here.
 
 ---
 
@@ -162,29 +151,13 @@ Discipline content. These are the habits that separate people who get value from
 | 1 | Exercises | `exercises/NN-*.md` per module | new asset |
 | 2 | Split into tracks | README + track map | structural |
 | 3 | Visualizations | `docs/visual-style.md` + Mermaid library | new asset |
-| 4 | Culture material | New chapter, business track | new chapter |
+| 4 | Culture material | New chapter, leadership track | new chapter |
 | 5 | Full-lifecycle examples | `docs/examples/` appendix | new asset |
 | 6 | Situate as distributions | 00 Introduction, new section | integrated |
 | 7 | Developer as engineering manager | 01, sidebar; reinforced in 07, 09 | integrated |
 | 8 | Use agents as little as possible | New short chapter after 06 | new chapter |
-| 9 | Who should code? | New chapter, business track | new chapter |
+| 9 | Who should code? | New chapter, leadership track | new chapter |
 | 10 | Lean on design principles | 04 Effective Prompting, new section | integrated |
 | 11 | Humans not always right | 06 Verification, paired with #12 | integrated |
 | 12 | Review was already broken | 06 Verification, paired with #11 | integrated |
-| 13 | Users must know coding | 00 Introduction (prereq) + business track | integrated |
-
----
-
-## Open questions for review
-
-Collected from above so they're easy to walk through in one pass:
-
-1. **Track naming** — "business" vs. "leadership / engineering manager" for the second track?
-2. **Third track?** — Do reviewers / QA folks want their own path, or is that a chapter inside the developer track?
-3. **Tool-agnostic exercises?** — Harder to write; matches stated stance.
-4. **Auto-graded exercises?** — Or is "produce a sensible diff" enough?
-5. **Visualization theme** — Light only, or maintain a dark variant for slides?
-6. **Visual brand** — Is there an existing reference to match?
-7. **Worked examples** — Real repos or synthetic?
-8. **Canonical harness for examples** — Claude Code with portability notes, or rotate?
-9. **Culture chapter sourcing** — First-hand case studies available, or synthesized from existing research?
+| 13 | Users must know coding | 00 Introduction (prereq) + leadership track | integrated |
