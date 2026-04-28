@@ -128,6 +128,37 @@ Each exchange gives the agent more context. This is normal and expected. Treat t
 
 You can also interrupt. If the agent is heading in the wrong direction (you can see it reading files that aren't relevant, or making changes you disagree with), just type your correction and hit enter. The agent stops and adjusts [^1].
 
+## Triggering Tools Creatively
+
+Your agent ships with more tools than the obvious file-editing and shell-running ones. Most of them get invoked when the agent decides it needs them. But you can also prompt the agent to use a specific tool on purpose, to change how a session behaves.
+
+A good example in Claude Code is the `AskUserQuestion` tool. The agent usually decides on its own when to ask for clarification, and by default it leans toward making reasonable assumptions and pushing forward. You can override that bias explicitly:
+
+```
+Before you start, use AskUserQuestion to ask me 10 questions
+about this task to make sure we're aligned on scope,
+architecture, and edge cases. Don't write any code until
+I've answered.
+```
+
+This flips the interaction. Instead of the agent guessing and you correcting later, the agent surfaces its uncertainties up front. It's particularly valuable after a long session where context is dense and the next step is ambiguous, or before a complex task where the cost of guessing wrong is high.
+
+The same idea applies to other built-in tools:
+
+**Planning tools.** "Enter plan mode and produce a written plan before touching any files." Forces the research-then-implement split even when the agent would otherwise jump to code.
+
+**Task tracking.** "Create a task list for this work and tick items off as you finish them." Useful for multi-step jobs where you want visible progress rather than one giant diff at the end.
+
+**Subagents.** "Spawn an Explore subagent to map the auth module, then use its findings to plan the refactor." Keeps the main context clean and runs the search in parallel. Covered in more depth in [Module 07](./07-subagents-and-parallelism.md).
+
+**Web search and fetch.** "Before implementing, use WebFetch on the library's changelog page and check the current API." Grounds the agent in up-to-date external facts instead of relying on training data.
+
+**Memory.** "Save what we just agreed on as a project memory so future sessions know about it." Turns a passing conversation into durable context.
+
+The pattern is the same each time: you know which tool fits the situation better than the agent's default heuristic does, so you name it in the prompt. Think of the tool list as a menu you can steer from, not a black box the agent manages alone.
+
+A rough rule: if you've ever felt the agent was too eager to start coding, too shy to ask, or too quick to forget, there's usually a specific tool you can prompt it to use instead.
+
 ## Anti-Patterns
 
 **Over-specifying the how.** Tell the agent what you want and let it figure out the approach. "Use reduce instead of a for loop" is micromanagement. "The function should return the sum of items matching the filter" lets the agent pick the right implementation.
@@ -158,6 +189,7 @@ For lower-success tasks, break them into smaller pieces that each fall into the 
 2. Try the same task with a vague prompt and a precise prompt. Compare the results.
 3. Practice the research-then-implement pattern: use plan mode to analyze a piece of your codebase, then switch to implementation mode.
 4. Find a situation where pointing the agent to an existing pattern ("do it like X") produces better results than describing the desired output from scratch.
+5. At the end of your next complex session, prompt the agent to use its ask-user-question tool to surface 10 alignment questions before continuing. Note which questions you hadn't thought to answer up front.
 
 ## References
 
