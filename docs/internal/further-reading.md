@@ -35,23 +35,38 @@ A resource that's been read and adopted should move to `sources.md` (or directly
 **Next action:** absorb the operational thresholds and session-management discipline tips into module 03 and 08 directly; treat the workflow taxonomy as a literature review for #5.
 **Related:** modules 02, 03, 05, 08; issues #5, #9
 
-**Gap analysis — what they cover that we've under-covered:**
+**Gap analysis — platform-agnostic lens.** The playbook's stance is tool-neutral, so each item below is split into the principle that transfers vs. the Claude-Code-specific dressing we should not port verbatim.
 
-- **Operational context-management thresholds.** Context rot kicks in ~300–400k tokens on the 1M model; "dumb zone" at ~40% context usage; experts target <30%, newcomers <40%. Our 03 mentions context engineering as a concept but doesn't give numbers like these. Worth absorbing as a callout — operational stats readers can apply tomorrow, similar to the Cisco LOC/hour numbers in #12.
-- **Session-management discipline.** `/rewind` over leaving corrections in context; `/compact` with hints over auto-compact; named/resumable sessions; "summarize from here" before rewinding for handoff. Tool-specific to Claude Code but the underlying principles transfer. Belongs in 03 or 08.
-- **Auto mode + sandbox + permissions hierarchy.** 2026 Claude Code introduced a background safety classifier that replaces manual permission prompts; `/sandbox` reportedly reduces prompts ~84% via file/network isolation. Module 02 (environment setup) likely needs a refresh.
-- **CLAUDE.md operational tips.** 60-line ideal target per file; multiple CLAUDE.md in monorepos with ancestor/descendant loading; `.claude/rules/*.md` for lazy-loaded domain logic; `<important if="…">` tags to prevent ignoring as files grow. Module 03 should have these as concrete recipes, not abstract principles.
-- **Skill architecture patterns.** `context: fork` to isolate skill execution in a subagent; "gotchas section is the highest-signal content"; `!command` in SKILL.md for dynamic shell output injection; descriptions written *as triggers for the model*, not summaries. Module 05 or 14.
-- **Hook recipes.** PreToolUse to measure skill-usage frequency (find popular/undertriggering skills); PostToolUse for auto-formatting; Stop hook to nudge "keep going" or verify at turn end; on-demand hooks (`/careful`, `/freeze`) for destructive-action gating. Module 05.
-- **Test-time compute as a named pattern.** "Multiple agents with separate contexts improve quality" — they call this test-time compute and treat it as first-class. Module 07.
-- **Workflow taxonomy.** They catalogue 9 documented methodologies (Superpowers, Everything Claude Code, Spec Kit, gstack, BMAD-METHOD, OpenSpec, oh-my-claudecode, Compound Engineering, Get Shit Done). Useful prior art when writing #5 — at minimum a "see also" appendix; possibly a comparison table of which patterns each one emphasizes.
-- **Skill collection libraries.** anthropics/skills, mattpocock/skills, wshobson/agents, scientific-agent-skills, awesome-agent-skills. Worth pointing readers at rather than reinventing.
+**Worth absorbing — principles transfer cleanly:**
 
-**Gap analysis — direct counter-tensions to our framing:**
+- **Context-rot / "dumb zone" framing.** *Principle:* every model has a sweet spot well below its advertised max context where reasoning quality is preserved; intelligence-sensitive work should stay inside it. *Claude-Code dressing:* the specific 300–400k / 30% / 40% numbers are tied to current Claude Sonnet behavior. *Port:* the framing as a recurring operational pattern in 03; cite the numbers as model-specific examples, not as universal thresholds. Mirrors how we use Cisco's LOC/hour numbers in #12 — illustrative, not prescriptive.
+- **"Rewind over correct" session discipline.** *Principle:* don't fix mistakes by writing more turns into a polluted context — restart from a clean point or split off a new session. *Claude-Code dressing:* `/rewind`, `/compact`, `/clear` are specific commands. *Port:* the discipline ("treat polluted context as a debt to clear, not a substrate to keep building on"), expressed in terms any harness user can apply. Note in passing that named harnesses provide the equivalent.
+- **Test-time compute as a named pattern.** *Principle:* run the same task across multiple isolated contexts and ensemble the results — fully platform-agnostic, this is research-grade vocabulary that happens to apply to coding agents. *Port:* introduce by name in 07 (subagents and parallelism); call out that fan-out/fan-in is one instance of it. No tool-specific dressing involved.
+- **Instruction-file operational tips.** *Principle:* target file size (~60 lines per file before splitting); monorepo splits with ancestor/descendant loading; lazy-load domain rules from a subdirectory; conditional inclusion to keep large files coherent. *Claude-Code dressing:* CLAUDE.md, `.claude/rules/`, `<important if="…">` tags. *Port:* express in terms of AGENTS.md (the cross-tool standard) and note that the same patterns render identically into CLAUDE.md, `.cursorrules`, etc. Module 03 already covers the concept; this is operational depth.
+- **Skill / instruction-module architecture.** *Principle:* progressive disclosure (most readers should hit the high-signal content first); gotchas section is the highest-signal part because it captures non-obvious failure modes; descriptions should be written as *triggers for the model*, not human-facing summaries. *Claude-Code dressing:* SKILL.md format, `context: fork`, `!command` injection. *Port:* the principles into 05 / 14 as guidance applicable to any prompt-template or instruction-module system, with the SKILL.md format as one concrete example.
 
-- **"Prototype over PRD" (Boris Cherny, Claude Code creator).** Their tip: build 20–30 versions instead of writing specs — the cost is low, so take many shots. This *directly contradicts* the spec-heavy framing planned for #5 and #9 (specs as the load-bearing senior leverage point). Not necessarily wrong — it's a real tension between "spec-first for high-stakes work" and "shotgun-prototype for exploratory work." Worth surfacing in #5 and #9 as an explicit fork in the road, not paving over.
+**Worth absorbing as principles, but the implementation is tool-specific:**
 
-**What we already cover that they also stress:** subagents (07), MCP/hooks (05), parallel execution via worktrees (07), full-lifecycle workflows (09), AGENTS.md/CLAUDE.md (03). Differences are in depth and operational specificity, not in topic selection.
+- **Permissions hierarchy and sandboxing.** *Principle:* configure agent permissions declaratively rather than relying on interactive prompts; use sandboxing for risky surfaces; hierarchical config (project / user / system) for layering policies. *Claude-Code dressing:* Auto mode, `/sandbox`, `.claude/settings.json`. *Port:* module 02 (environment setup) gets a "configure permissions declaratively where your harness supports it" section. The 84%-prompt-reduction stat is Claude-Code-specific; cite it as an existence proof that declarative permissioning has measurable ergonomic upside, not as a general claim.
+- **Hooks / interceptors.** *Principle:* deterministic interceptors around stochastic agent actions — measure usage, auto-format outputs, gate destructive actions, nudge at turn boundaries. *Claude-Code dressing:* PreToolUse / PostToolUse / Stop hooks, on-demand `/careful`, `/freeze`. *Port:* discuss the pattern in 05 and tie it to #8 (deterministic infrastructure as the counterweight to a probabilistic collaborator). Implementations vary across tools; the playbook should describe the pattern and link to per-tool reference.
+
+**Worth referencing rather than absorbing:**
+
+- **Workflow taxonomy.** Most of the 9 methodologies they catalogue (Spec Kit, BMAD-METHOD, OpenSpec, Compound Engineering, etc.) are *methodology-level* and work across harnesses with adaptation. *Port:* a "see also" appendix in #5 with one-line summaries and explicit notes on which are tool-agnostic vs. Claude-Code-specific. Don't re-import nine workflows; do anchor our worked examples against the existing landscape so readers can locate us in it.
+- **Skill collection libraries.** anthropics/skills, mattpocock/skills, wshobson/agents, scientific-agent-skills, awesome-agent-skills. These are Claude-Code-format-specific. *Port:* note them in `further-reading.md` (this file) as cross-tool reading for readers who use Claude Code, but don't pull them into the playbook itself. Tool-agnostic equivalents (e.g. cross-tool prompt libraries) belong in the same callout when they exist.
+
+**Skip — too tool-specific to generalize:**
+
+- Specific Claude Code commands as recipes (`/rewind`, `/compact`, `/sandbox`, `/loop`, `/schedule`).
+- Auto mode as a named feature, ultraplan, ultrareview, Ralph Wiggum loop, Compound Engineering plugin.
+- Voice dictation, Chrome extension, remote control, routines.
+- The specific skill registries — listed above as further reading, not pulled into modules.
+
+**Counter-tension worth surfacing in the playbook:**
+
+- **"Prototype over PRD" (Boris Cherny, Claude Code creator).** Their tip: build 20–30 versions instead of writing specs — the cost is low, so take many shots. This *directly contradicts* the spec-heavy framing planned for #5 and #9 (specs as the load-bearing senior leverage point). Fully platform-agnostic philosophical tension — has nothing to do with which harness you use. Not necessarily wrong: there's a real fork between "spec-first for high-stakes / brownfield work" and "shotgun-prototype for exploratory / greenfield work." Worth surfacing in #5 and #9 as an explicit choice readers make per task, not paving over.
+
+**What we already cover that they also stress:** subagents (07), MCP/hooks (05), parallel execution via worktrees (07), full-lifecycle workflows (09), AGENTS.md/CLAUDE.md (03). Differences are in operational depth, not topic selection.
 
 ---
 
