@@ -2,6 +2,8 @@
 
 Working knowledge base of articles, studies, and other sources we've gathered while researching open issues and topics for the playbook. Each entry has a short summary, the key stats or claims that make it citable, and notes on where it pulls weight.
 
+For resources we've flagged but haven't drawn from yet, see [`further-reading.md`](further-reading.md). The two files form a pipeline: `further-reading.md` → `sources.md` → `docs/research-summary.md`.
+
 ## How to use this page
 
 - **Look up a source before citing it.** If we've used it before, the entry already has the framing we settled on.
