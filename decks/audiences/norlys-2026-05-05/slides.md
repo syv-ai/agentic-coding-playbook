@@ -10,6 +10,8 @@ transition: slide-left
 mdc: true
 ---
 
+<img src="../../assets/syv-logo.svg" class="h-10 absolute top-8 right-8" />
+
 # Agentic coding
 
 ### Fra "jeg prøver lidt Copilot" til "AI er en team-kapabilitet"
@@ -799,7 +801,9 @@ Tænk over: hvilken én observation fra de sidste 150 minutter ville du dele med
 
 # Tak
 
-<div class="mt-12">
+<img src="../../assets/syv-logo.svg" class="h-12 mt-8" />
+
+<div class="mt-8">
 
 **Rasmus Krebs**<br/>
 AI Engineer · syv.ai<br/>
