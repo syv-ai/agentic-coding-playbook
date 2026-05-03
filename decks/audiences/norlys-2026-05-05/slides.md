@@ -100,7 +100,7 @@ layout: center
 class: text-center
 ---
 
-![Andrej Karpathy tweet, januar 2026](/andrej-karpathy-agentic-coding-didnt-work-before-december.png){class="max-h-[28rem] mx-auto rounded-lg shadow-md"}
+![Andrej Karpathy tweet, januar 2026](/andrej-karpathy-agentic-coding-didnt-work-before-december.png){class="max-h-[40rem] mx-auto rounded-lg shadow-md"}
 
 <div class="mt-6 text-base opacity-70">
 Andrej Karpathy, Februar 2026
@@ -262,12 +262,13 @@ Business insider article: https://www.businessinsider.com/google-ai-generated-co
 -->
 
 ---
+layout: center
+class: text-center
+---
 
-# Uber · marts 2026
+![Praveen Neppalli (Uber CTO) on agentic coding adoption at Uber](/uber-cto-tweet-about-agentic-coding-at-uber.png){class="max-h-[28rem] mx-auto rounded-lg shadow-md"}
 
-![Praveen Neppalli (Uber CTO) on agentic coding adoption at Uber](/uber-cto-tweet-about-agentic-coding-at-uber.png){class="max-h-[28rem] mx-auto rounded-lg shadow-lg opacity-100 bg-white p-2"}
-
-<div class="mt-4 text-sm opacity-70 text-center">
+<div class="mt-6 text-base opacity-70">
 Praveen Neppalli, Uber CTO · 16. marts 2026
 </div>
 
@@ -281,6 +282,42 @@ asset: ../../assets/uber-cto-tweet-about-agentic-coding-at-uber.png
 - Pointen: 22%-tallet er ikke en abstrakt branche-statistik. Det er Uber. Det er sandsynligvis dine konkurrenter. Det er allerede sket.
 - Trader-relevant nuance: Uber er ikke et lavrisiko-shop — de håndterer realtime-pricing, betalinger, regulatorisk komplekse markeder. Hvis det virker for dem på 1.800 changes/uge, er argumentet "vores domæne er for risikabelt" ikke længere selvfølgeligt.
 - Hvis nogen spørger om kvalitet: "background coding agent" implicerer det er ikke ucontrolleret — det kører gennem deres normale review/CI. Vi kommer tilbage til det i best practices.
+-->
+
+---
+
+# Husk: dette er frontier
+
+<div class="mt-8 text-lg">
+De foregående tal kommer fra <strong>Google, OpenAI, Meta, Uber, Anthropic</strong>. Virksomheder med store engineering-orgs, egne AI-research-teams, og kultur for tidlig adoption.
+</div>
+
+<div class="mt-6 text-lg">
+I er sandsynligvis 1–2 år bagud på samme kurve. Det er forventeligt. Og det er en fordel: I bygger ovenpå værktøjer der allerede er blevet testet og pillet ved af de første mover-teams.
+</div>
+
+<div class="absolute bottom-12 left-12 right-12 border-l-4 border-cyan-400 pl-4 italic text-base opacity-90">
+Brug tallene som retning, ikke som målestok.
+</div>
+
+<!--
+- Det her slide er calibration, ikke deflation. Tonen: nøgtern, ikke undskyldende.
+- Sig det højt: "I er ikke Google. Det skal I heller ikke være. Men retningen er den samme — I er bare et stykke længere tilbage på kurven."
+- Konkret: Google rapporterede 25% i 2024, 50% i 2025, 75% i dag. Hvis I gætter at I er hvor Google var for 18 måneder siden, er det måske 5–15% af jeres nye kode i dag. Det er en realistisk baseline.
+- Modargumentet I møder: "Vi er bagud, så det giver ikke mening at investere endnu". Modsvar: jo længere bagud, jo mere lærings-ammunition fra dem der gik først. I behøver ikke begå deres fejl. Det her workshop er en del af det.
+- Bro til næste slide: "Indtil nu har vi set HVOR MEGET af eksisterende arbejde der nu laves med AI. Næste tal måler noget andet — hvor meget arbejde AI får os til at lave, som ikke ville være lavet ellers."
+-->
+
+---
+layout: section
+---
+
+# Nyt arbejde, ikke kun hurtigere
+
+<!--
+- Sub-section break. Pivoten er fra "samme arbejde, hurtigere" til "andet arbejde, som ikke ville eksistere uden AI".
+- To forskellige målinger der ofte rodes sammen. De fleste adoption-tal måler det første. Det næste tal måler det andet.
+- Hold det kort her — bare lad rummet registrere skiftet.
 -->
 
 ---
