@@ -317,6 +317,46 @@ asset: ../../assets/uber-cto-tweet-about-agentic-coding-at-uber.png
 
 ---
 
+# Andre frontier-virksomheder
+
+<div class="mt-10 grid grid-cols-3 gap-6">
+
+<div>
+<div class="text-sm opacity-60">OpenAI · Greg Brockman, maj 2026</div>
+<div class="mt-2 text-lg"><strong>20 % → 80 % i én måned</strong></div>
+<div class="mt-2 text-sm opacity-80 italic">"I løbet af december gik vi fra at agentic coding-værktøjer skrev 20 % af din kode til at de skrev 80 %."</div>
+</div>
+
+<div>
+<div class="text-sm opacity-60">Meta · creation-org, marts 2026</div>
+<div class="mt-2 text-lg"><strong>65 % af engineers, 75 %+ AI-kode</strong></div>
+<div class="mt-2 text-sm opacity-80">65 % af engineers i creation-organisationen forventes at skrive 75 %+ af deres committed kode med AI.</div>
+</div>
+
+<div>
+<div class="text-sm opacity-60">Anthropic · Cowork-projekt, 2026</div>
+<div class="mt-2 text-lg"><strong>4 personer · 1,5 ugers sprint</strong></div>
+<div class="mt-2 text-sm opacity-80">Et 4-mands team byggede Cowork end-to-end med Claude Code til al kode-generering.</div>
+</div>
+
+</div>
+
+<div class="mt-10 text-base opacity-80">
+Forskellige målinger, samme retning: dyb adoption, hurtigt.
+</div>
+
+<!--
+source: docs/internal/sources.md (Business Insider maj 2026 for Brockman/Meta · Anthropic 2026 Trends Report Trend 2 / GAI Insights for Cowork)
+
+- Tre korte testimonials fra de tre frontier-virksomheder vi nævner i disclaimer på næste slide. Pointen: når Google, OpenAI, Meta og Anthropic alle siger lignende ting mod kryds-incitamenter, er den directionelle påstand svær at affærdige.
+- Brockman: vendor-caveat — han taler om OpenAI's egen agentic-coding-segment, ikke en målt branche-tal. Men "in December" framingen er konsistent med Karpathy fra tidligere.
+- Meta: dette er en *forventning* (target), ikke en målt baseline. Sig det eksplicit hvis nogen spørger.
+- Anthropic Cowork: konkret og målbart — 4 mennesker, 1,5 uge, et helt produkt. Parallel til Uber's "1.800/uge". Bind tilbage til Trend 3 (lang-løbende agenter, Rakuten 7-timers run) hvis nogen vil have mere kontekst.
+- Bro til næste slide: "Det er hvad de selv siger. Lad os huske at de ER frontier — ikke median."
+-->
+
+---
+
 # Husk: dette er frontier
 
 <div class="mt-8 text-lg">
@@ -670,32 +710,22 @@ class: text-center
 
 # De der bygger det, tror kurven fortsætter
 
-<div class="grid grid-cols-2 gap-12 mt-12 text-left">
-
-<div class="border-l-4 border-cyan-400 pl-6">
+<div class="mt-16 max-w-4xl mx-auto border-l-4 border-cyan-400 pl-8 text-left">
 <div class="text-base opacity-70">Dario Amodei · Anthropic CEO</div>
-<div class="mt-2 text-lg italic">"AI vil skrive 90% af koden inden for 3–6 måneder. Inden for 12 måneder skriver den i praksis al koden."</div>
-</div>
-
-<div class="border-l-4 border-cyan-400 pl-6">
-<div class="text-base opacity-70">Greg Brockman · OpenAI president</div>
-<div class="mt-2 text-lg italic">"I løbet af december gik vi fra at agentic coding-værktøjer skrev 20% af din kode til at de skrev 80%."</div>
-</div>
-
+<div class="mt-3 text-2xl italic">"AI vil skrive 90 % af koden inden for 3–6 måneder. Inden for 12 måneder skriver den i praksis al koden."</div>
 </div>
 
 <div class="absolute bottom-12 left-12 right-12 border-l-4 border-orange-500 pl-4 italic text-sm opacity-80">
-Forudsigelser, ikke målinger. Men retningen er konsistent på tværs af konkurrerende laboratorier.
+Forudsigelse, ikke måling. Men retningen er konsistent på tværs af frontier-virksomhederne fra forrige sub-section.
 </div>
 
 <!--
-source: docs/internal/sources.md (Business Insider, maj 2026 — Brockman/Amodei)
+source: docs/internal/sources.md (Business Insider, maj 2026 — Amodei blog post / konference-udtalelser)
 
-- Tonen: ikke "tro mig" — "se hvad de siger, og bemærk at de er enige mod kryds-incitamenter".
-- Amodei: blog post tidligt i 2026, plus tidligere konference-udtalelser. Forudsigelse, så kan tages med skepsis. Men 3-måneders-tidshorisonten er kort nok til at I kan vurdere selv inden næste workshop.
-- Brockman: Sequoia Capital talk, maj 2026. "Over the course of December" — han taler om den agentic-coding-segment han ser.
-- Pointen: når Anthropic, OpenAI og (på Pichai-slidet tidligere) Google alle siger 75–90%+ mod hinandens kommercielle interesser, er den directionelle påstand svær at affærdige.
-- Det orange hedge-felt: vi siger eksplicit "forudsigelser, ikke målinger". Det skaber troværdighed for resten af sub-sektionen.
+- Tonen: ikke "tro mig" — "se hvad han siger, og hold det op mod hvad de andre frontier-CEO'er allerede har sagt".
+- Amodei-prediktionen er det stærkeste forward-looking signal vi har. 3-6 måneder er kort nok til at I selv kan vurdere det inden næste workshop.
+- Pointen: pricnt op mod testimonials-sub-section'en — Pichai 75 %, Brockman 80 %, Meta 75 %+, Anthropic Cowork. Når frontier-CEO'erne både rapporterer 75-80 % nu OG forudsiger 90 % på 3-6 måneder, er den directionelle påstand svær at affærdige.
+- Det orange hedge-felt: vi siger eksplicit "forudsigelse, ikke måling". Det skaber troværdighed for resten af sub-sektionen.
 -->
 
 ---
