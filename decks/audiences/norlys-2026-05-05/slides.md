@@ -240,7 +240,7 @@ source: oneusefulthing.org (Mollick, "jagged frontier"), Dell'Acqua, Mollick et 
 layout: section
 ---
 
-# Tech testimonials
+# Et par tech testimonials
 
 <!--
 - Sub-section break. Hidtil: hvad er agentic coding, og hvor er grænserne (jaggedness). Næste 3 slides: hvad CEO'erne selv siger om adoptionen i deres egne organisationer.
@@ -347,11 +347,11 @@ Forskellige målinger, samme retning: dyb adoption, hurtigt.
 # Husk: dette er frontier
 
 <div class="mt-8 text-lg">
-Google, OpenAI, Uber og Anthropic er alle virksomheder med store engineering-orgs, egne AI-research-teams, og en kultur for tidlig adoption. Disse vil naturligt være 
+Google, OpenAI, Uber og Anthropic er alle virksomheder med store engineering-orgs, egne AI-research-teams, og en kultur for tidlig adoption. Disse vil naturligt være på forkant.
 </div>
 
 <div class="mt-6 text-lg">
-Men, den bredere industri er på samme kurve. Adoptionen følger med og stiger, men har mange steder ikke nået samme kapacitet endnu. Flere virksomheder er stadig ved at finde ud af hvordan værktøjerne bedst bruges.
+<strong>Men, den bredere industri er på samme kurve.</strong><br/>Mange virksomheder er stadig ved at finde ud af hvordan de bedst bruger værktøjerne. 
 </div>
 
 <div class="absolute bottom-12 left-12 right-12 border-l-4 border-cyan-400 pl-4 italic text-base opacity-90">
@@ -369,12 +369,48 @@ Brug tallene som retning, ikke som målestok.
 layout: section
 ---
 
-# Nyt arbejde, ikke kun hurtigere
+# Volumen er kun halvdelen
+
+<div class="text-lg opacity-70 mt-4">Den anden halvdel handler ikke om mere arbejde, men om andet arbejde</div>
 
 <!--
 - Sub-section break. Pivoten er fra "samme arbejde, hurtigere" til "andet arbejde, som ikke ville eksistere uden AI".
-- To forskellige målinger der ofte rodes sammen. De fleste adoption-tal måler det første. Det næste tal måler det andet.
-- Hold det kort her — bare lad rummet registrere skiftet.
+- To forskellige målinger der ofte rodes sammen. De fleste adoption-tal måler det første (volumen). De næste slides måler det andet (novelty).
+- Bro til næste slide: "Lad os sætte de to halvdele op ved siden af hinanden."
+-->
+
+---
+
+# To slags forandring
+
+<div class="grid grid-cols-2 gap-12 mt-10 max-w-5xl mx-auto">
+
+<div class="border-l-4 border-cyan-400 pl-6">
+<div class="text-sm opacity-70 uppercase tracking-wide">Mere af det samme</div>
+<div class="mt-3 text-xl"><strong>Eksisterende arbejde laves nu med AI</strong></div>
+<div class="mt-4 space-y-1 text-base opacity-80">
+<div>Pichai: 75 % af ny kode på Google</div>
+<div>Brockman: 20 % → 80 % på en måned</div>
+<div>Cowork-team: et helt produkt på 1,5 uge</div>
+</div>
+</div>
+
+<div class="border-l-4 border-orange-500 pl-6">
+<div class="text-sm opacity-70 uppercase tracking-wide">Det der ikke ville ske</div>
+<div class="mt-3 text-xl"><strong>Arbejde der bliver til, fordi AI er der</strong></div>
+<div class="mt-6 text-base opacity-70 italic">
+Mere på næste slide →
+</div>
+</div>
+
+</div>
+
+<!--
+- Det her slide er hjertet i sub-sektionens framing. Pointen: der er to akser, ikke én. De fleste adoption-tal måler kun den venstre. Den højre er det der virkelig flytter projekter.
+- Venstre kolonne: ringer tilbage til testimonials vi lige har set. Hurtig genopfriskning, ikke ny information.
+- Højre kolonne: tease af 27 % som lander på næste slide. Lad nummeret stå et øjeblik som spørgsmål — "hvad ville ikke være sket uden agenten?".
+- Brug farverne: cyan = "mere", orange = "andet". Visuelt parallel.
+- Bro til næste slide: "Lad os zoome ind på den højre kolonne."
 -->
 
 ---
@@ -384,10 +420,10 @@ class: text-center
 
 <div class="text-9xl font-bold">27%</div>
 
-<div class="mt-6 text-2xl opacity-80">af AI-arbejde er ting der ellers ikke ville være lavet</div>
+<div class="mt-6 text-2xl opacity-80">af <em>"AI-assisted work"</em> er ting der ellers ikke ville være lavet</div>
 
 <div class="mt-10 text-base opacity-70 max-w-xl mx-auto">
-Skalerede projekter, nice-to-have værktøjer, eksperimenter, papercuts. Ting der før ikke var værd at fixe.
+Skalerede projekter, nice-to-have værktøjer, foretage eksperimenter, papercuts. Ting der før ikke var værd at fixe eller var tid til.
 </div>
 
 <div class="mt-16 text-sm opacity-60">Anthropic, januar 2026</div>
@@ -413,12 +449,12 @@ layout: center
 
 <div>
 <div class="mt-2 text-lg"><strong>Domæne-ekspert bygger selv</strong></div>
-<div class="mt-2 text-sm opacity-80">Flere ikke tekniske individer er begyndt at bruge værktøjet til at løse deres egne problemer. </div>
+<div class="mt-2 text-sm opacity-80">Flere ikke tekniske individer er begyndt at bruge værktøjet til at løse deres egne problemer. E.g. Anthropic's legal afdeling </div>
 </div>
 
 <div>
 <div class="mt-2 text-lg"><strong>Backlog-eliminering</strong></div>
-<div class="mt-2 text-sm opacity-80">Teknisk gæld der har ophobet sig i årevis fordi ingen havde tid bliver systematisk ryddet af agenter der kan arbejdee gennem backloggen.</div>
+<div class="mt-2 text-sm opacity-80">Teknisk gæld der har ophobet sig bliver systematisk ryddet op i af agenter der kan arbejde gennem backloggen.</div>
 </div>
 
 <div>
@@ -429,7 +465,7 @@ layout: center
 </div>
 
 <div class="mt-12 text-base opacity-80">
-Mønstret er ikke kun "samme arbejde, men hurtigere". Det er også <em>arbejde der ikke ville eksistere uden agenten</em>.
+Agent harnesses tilbyder ikke kun "samme arbejde, men hurtigere og mere". Det er også at løse <em>arbejde og opgaver der ikke ville blive prioriteret eller muligt uden agenten.</em>.
 </div>
 
 <!--
@@ -473,8 +509,6 @@ layout: section
 
 # With great power comes great responsibility
 
-<div class="text-lg opacity-70 mt-4">Slop, slop og mere slop...</div>
-
 <!--
 - Sub-section break: vi har set scale (Pichai, Uber) og novelty (27%, examples). Nu adresserer vi den anden side direkte: mere kode betyder også mere slop, hvis review-disciplinen ikke følger med.
 - Tonen: vi ducker IKKE bekymringen. Vi siger den højt før rummet skal sige den. Det giver troværdighed til resten af præsentationen.
@@ -485,41 +519,93 @@ layout: section
 
 ---
 
-# Volumen er det første der ændrer sig
+# Volumen flytter flaskehalsen
 
-<div class="grid grid-cols-2 gap-8 mt-8">
+<div class="grid grid-cols-3 gap-8 mt-16 text-center">
 
 <div>
-
-### Det der bliver hurtigere
-
-- 21% flere opgaver per udvikler
-- 98% flere PRs merged
-- Median PR-størrelse: +33%
-
+<div class="text-7xl font-bold">+91%</div>
+<div class="mt-3 text-base opacity-80">PR review-tid</div>
 </div>
 
 <div>
+<div class="text-7xl font-bold">+154%</div>
+<div class="mt-3 text-base opacity-80">PR-størrelse</div>
+</div>
 
-### Det der bliver langsommere
-
-- **PR review-tid: +91%**
-- Incidents per PR: +23.5%
-
+<div>
+<div class="text-7xl font-bold">+9%</div>
+<div class="mt-3 text-base opacity-80">bugs per udvikler</div>
 </div>
 
 </div>
 
-<div class="mt-12 text-lg">
-Mere kode kommer ind i den samme review-proces.
+<div class="mt-16 text-lg">
+Mere kode kommer ind i den samme review-proces.<br/>
+Organisatorisk produktivitet stiger ~10%, ikke 50.
+</div>
+
+<div class="mt-8 text-sm opacity-60">
+Faros, juli 2025 (10.000+ udviklere, 1.255 teams)<br/>
+Konsistent retning på tværs af 6 studier: DX, METR, NBER, DORA, JetBrains, Faros
 </div>
 
 <!--
-source: docs/internal/sources.md (Jellyfish 2025 AI Metrics in Review)
+source: docs/internal/sources.md (Faros AI Productivity Paradox Report 2025)
 
-- Faktisk pointe: AI fjerner ikke arbejde, det flytter det. Hvis I ikke designer review-processen til den nye volumen, drukner senior-udviklerne.
-- Tal med rummet: hvor i jeres flow tror I flaskehalsen ville flytte sig først?
-- Det her sætter scenen for hvorfor vi bruger 40 minutter på "best practices" senere — det er primært om review-disciplin og infrastruktur.
+- Tonen: ikke "AI er farligt". Tonen er "AI flytter omkostningen — hvis I ikke designer for det, drukner senior-udviklerne i review."
+- De tre tal er kerne-evidensen for slop-bekymringen:
+  - +91 % review-tid: review er nu flaskehalsen, ikke kodning. Det er præcis hvor jeres senior-tid går.
+  - +154 % PR-størrelse: bigger diffs = sværere review = lavere defect-detection (Cisco-tallet på næste slide rammer det her).
+  - +9 % bugs per udvikler: nogle bugs slipper igennem trods mere review-tid. Volumen vinder.
+- Konvergens-pointen ("~10 % organisatorisk produktivitet, ikke 50"): seks uafhængige studier (Faros, METR, NBER, DX, DORA m.fl.) lander på samme tal. DEN centrale 2026-paradoks: individuelle gevinster er reelle, men de bobler ikke op til organisatorisk niveau uden review-disciplin.
+- Caveat: Faros' tal er fra juni 2025, pre-december-inflection. Magnituden kan være anderledes nu — men retningen (mere kode → mere review-pres) er konsistent på tværs af alle 2026-studier.
+- Tal med rummet: hvor i jeres flow tror I flaskehalsen ville flytte sig først? (Forventeligt svar: review.)
+- Det her sætter scenen for hvorfor vi bruger 40 minutter på "best practices" — det er primært om at lukke gabet mellem individuelle gevinster og organisatorisk lift gennem review-disciplin og deterministisk infrastruktur.
+- Bro til næste slide: samme dynamik på en anden akse — sikkerheden.
+-->
+
+---
+
+# Volumen flytter også sikkerheden
+
+<div class="grid grid-cols-3 gap-8 mt-16 text-center">
+
+<div>
+<div class="text-7xl font-bold">+107%</div>
+<div class="mt-3 text-base opacity-80">vulnerabilities YoY i open source</div>
+</div>
+
+<div>
+<div class="text-7xl font-bold">≈3×</div>
+<div class="mt-3 text-base opacity-80">flere security-issues i AI-kode</div>
+</div>
+
+<div>
+<div class="text-7xl font-bold">45%</div>
+<div class="mt-3 text-base opacity-80">af AI-kode introducerer<br/>OWASP Top 10 flaws</div>
+</div>
+
+</div>
+
+<div class="mt-16 text-lg">
+Samme dynamik som review: mere kode kommer gennem samme security-proces.
+</div>
+
+<div class="mt-8 text-sm opacity-60">
+Black Duck OSSRA 2026, CodeRabbit (470 OSS PRs), Veracode (100+ LLMs, 80 opgaver)
+</div>
+
+<!--
+source: docs/internal/sources.md (Black Duck OSSRA 2026 via Dubach synthesis, CodeRabbit, Veracode)
+
+- Tonen: matter-of-fact, IKKE skræmmekampagne. Vi siger "samme dynamik, anden akse" — det er en proces-udfordring, ikke en grund til at undgå AI.
+- De tre tal er valgt fra tre forskellige vendor-typer (open-source security scanner, AI code review, application security testing) der alle peger i samme retning. Konvergens på tværs af konkurrerende vendors er det stærkeste signal vi har.
+- Vendor-caveat at sige højt: alle tre kilder er vendors der sælger relaterede produkter. De har en interesse i at vise tallet er højt. Men tre vendors med forskellige produkter der konvergerer er stadig signal — ikke bevis, men signal.
+- Konkret oversættelse for Norlys: jeres review-proces har sandsynligvis ikke samme density af security-tjek som af funktionel review. Hvis I scaler kodevolumen 2-3× uden at scale security-disciplinen, så stiger jeres exposure proportionelt.
+- For et regulatorisk-eksponeret shop som Norlys er pointen IKKE "stop med at bruge AI" — det er "byg security-disciplin ind i workflowet fra start". Det rammer best-practices-blokken: SAST/DAST i CI, security-checklister i review, threat-model på spec-niveau før agenten skriver kode.
+- Hvis nogen spørger om concrete actions: ProjectDiscovery-undersøgelsen (62 % af security-teams siger AI-volumen er sværere at følge med på) — det er governance-niveau, ikke developer-niveau, men det er samme grundlæggende problem.
+- Bro til næste slide: punch line — designe, ikke undgå.
 -->
 
 ---
@@ -527,46 +613,80 @@ layout: center
 class: text-center
 ---
 
-<div class="text-9xl font-bold">19%</div>
-
-<div class="mt-6 text-2xl opacity-80">langsommere med AI</div>
-
-<div class="mt-16 text-sm opacity-60">METR, juli 2025</div>
+<div class="text-5xl font-bold leading-tight">
+Pointen er ikke at undgå det.<br/>
+Det er at designe for det.
+</div>
 
 <!--
-source: docs/internal/sources.md (METR, to be added)
-
-- Stille slide. Lad tallet stå længere end komfortabelt.
-- Næste slide leverer den faktiske pointe.
+- Beat-slide. Lad linjen stå. Ingen tal, ingen distraction.
+- Det her er den centrale rammesætning for hele Best Practices-blokken: vi designer for problemet i stedet for at undgå det.
+- Hvis du vil markere det visuelt: pause i 3-5 sekunder før du går videre.
 -->
 
 ---
 
-# Det de troede — og det de målte
+# Det vi føler, og det vi måler
 
-<div class="grid grid-cols-2 gap-12 mt-12 text-center">
-
-<div>
-<div class="text-6xl font-bold opacity-80">+20%</div>
-<div class="mt-3 text-base opacity-80">følte sig <em>hurtigere</em></div>
-</div>
+<div class="grid grid-cols-2 gap-12 mt-16 text-center">
 
 <div>
-<div class="text-6xl font-bold">−19%</div>
-<div class="mt-3 text-base">var <em>langsommere</em></div>
+<div class="text-sm opacity-70 uppercase tracking-wide">Udviklere rapporterer</div>
+<div class="mt-3 text-7xl font-bold opacity-80">~50 %</div>
+<div class="mt-3 text-base opacity-80">gevinst</div>
+</div>
+
+<div>
+<div class="text-sm opacity-70 uppercase tracking-wide">Målbar organisatorisk gevinst</div>
+<div class="mt-3 text-7xl font-bold">~10 %</div>
+<div class="mt-3 text-base">på tværs af 6 uafhængige studier</div>
 </div>
 
 </div>
 
-<div class="mt-16 text-lg">
-Det er ikke en kritik af AI. Det er et argument <strong>for at måle</strong>.
+<div class="mt-8 text-sm opacity-60">
+Dubach 2026 (syntese af DX, Faros, METR, NBER, DORA, JetBrains)
 </div>
 
 <!--
-- 40 procentpoints gap mellem perception og virkelighed. Hos erfarne folk.
-- Implicit pointe: hvis I kun måler "føles det hurtigere" — og det er det de fleste teams gør — har I ingen idé om hvad I faktisk får ud af det.
-- Det her sætter også scenen for "Design dit eksperiment" senere: stop-kriterier og målbar succes er ikke bureaukratisk, det er den eneste måde at vide om det virker.
-- Forsigtig nuance: studiet er fra juli 2025, før december-skiftet Karpathy beskriver. Værktøjerne er bedre nu. Men dynamikken — at folk overvurderer egne gevinster — er konsistent på tværs af studier. Stop-kriteriet er pointen, ikke det specifikke tal.
+source: docs/internal/sources.md (Philippe Dubach March 2026 synthesis)
+
+- Pointen: et perception-vs-måling-gap på org-niveau. Folk RAPPORTERER store gevinster (de føler sig hurtigere, leverer mere). Når man måler hvad organisationen faktisk får ud af det, lander tallet ~10 %.
+- Det er ikke en modsigelse til volumen-slidene — individuelle gevinster ER reelle. Men de bobler ikke op til organisatorisk niveau uden review-disciplin og infrastruktur.
+- Implicit pointe: hvis I kun måler "føles det hurtigere" eller "skriver vi mere kode" — og det er det de fleste teams gør — har I ingen idé om hvad I faktisk får ud af det.
+- Det her sætter scenen for "Design dit eksperiment" senere: stop-kriterier og målbar succes er ikke bureaukratisk, det er den eneste måde at vide om det virker.
+- Backup hvis nogen spørger om individuelle udvikler-tal: METR juli 2025 fandt erfarne open-source-udviklere 19 % langsommere med AI trods følelse af 20 % hurtigere. Februar 2026 followup revideret ned til −4 % (ikke statistisk signifikant). Begge tal er konsistente med "perception > virkelighed", men retningen og magnituden er usikker — derfor bruger vi den robuste org-syntese på slidet.
+- Bro til næste slide: punch line — for at måle rigtigt.
+-->
+
+---
+layout: center
+class: text-center
+---
+
+<div class="text-5xl font-bold leading-tight">
+Det er ikke et argument mod AI.<br/>
+Det er et argument for at måle rigtigt.
+</div>
+
+<!--
+- Beat-slide. Lad linjen stå.
+- Det her primer hele "Design dit eksperiment"-blokken senere — stop-kriterier og målbar succes som modgift mod den 50/10-følelse.
+- Hvis du vil markere det visuelt: pause i 3-5 sekunder før du går videre.
+-->
+
+---
+layout: section
+---
+
+# Lad os prøve at forstå hvornår det går galt
+
+<div class="text-lg opacity-70 mt-4">Pattern-genkendelse, ikke regler</div>
+
+<!--
+- Beat-pause efter de fire number-slides. Lad rummet trække vejret.
+- Setup for de næste to slides: distributions-diagrammet (hvor agenter excellerer vs ikke) og fem konkrete starter-opgaver.
+- Tonen: nysgerrig, ikke advarende. Vi prøver at forstå mønsteret sammen, ikke recitere regler.
 -->
 
 ---
@@ -1136,6 +1256,94 @@ source: docs/internal/issue-coverage-plan.md (#11/#12 two-way critique)
 
 ---
 
+# Instruction-filen er din vigtigste investering
+
+<div class="text-base opacity-80 mt-4 mb-6">
+Det eneste sted hvor din viden persisterer mellem sessioner. Skriv den dårligt, og hver opgave starter forfra.
+</div>
+
+<div class="grid grid-cols-3 gap-4 mt-4">
+
+<div class="border-l-4 border-red-500 pl-4 py-2">
+<strong>For specifik</strong>
+<div class="mt-2 text-sm opacity-80"><em>"Brug altid camelCase i variabelnavne"</em></div>
+<div class="mt-2 text-sm">Det burde din linter håndhæve, ikke din instruction-fil.</div>
+</div>
+
+<div class="border-l-4 border-red-500 pl-4 py-2">
+<strong>For vag</strong>
+<div class="mt-2 text-sm opacity-80"><em>"Følg vores kodningskonventioner"</em></div>
+<div class="mt-2 text-sm">Agenten ved ikke hvad det betyder. Det gør jeg heller ikke.</div>
+</div>
+
+<div class="border-l-4 border-green-500 pl-4 py-2">
+<strong>Den rigtige højde</strong>
+<div class="mt-2 text-sm opacity-80"><em>"Domain-modeller i <code>src/domain/</code>. Adapters i <code>src/adapters/</code>. Aldrig krydsimport."</em></div>
+<div class="mt-2 text-sm">Konkret nok til handling, generelt nok til ikke at forfalde.</div>
+</div>
+
+</div>
+
+<div class="mt-8 text-base opacity-80">
+Operationelt: hold filerne korte og domæne-specifikke. Store monolitiske instruction-filer bliver ignoreret af modellen, hvad end den siger.
+</div>
+
+<!--
+source: docs/03-context-engineering.md (altitude-problemet) + docs/internal/further-reading.md (shanraisshan/claude-code-best-practice)
+
+- Det her er en af de højeste leverage-investeringer i en agentic workflow. Eneste sted hvor viden persisterer mellem sessioner.
+- Altitude-pointen: udviklere over-specificerer (low-trust) eller under-specificerer (håber på det bedste). Begge dele koster.
+- Konkret tip: jo flere "for specifikke" regler du har, jo mere bør flyttes til linter, type-system, formatter. Instruction-filen skal handle om det din linter ikke kan se.
+- Shanraisshan-rapporten foreslår ~60 linjer som tærskel for én fil. Mod-eksemplet: split i flere domæne-specifikke instruction-filer, ikke én monolit. Tærsklen er Claude-Sonnet-specifik; pointen om "hold dem korte" er generel.
+-->
+
+---
+
+# Fem prompt-mønstre der virker
+
+<div class="grid grid-cols-1 gap-2 mt-6">
+
+<div class="py-2">
+<strong>1. Reference et eksisterende mønster</strong>
+<div class="text-sm opacity-80 mt-1"><em>"Lav den nye endpoint som <code>/users/profile</code>, men for orders."</em></div>
+</div>
+
+<div class="py-2">
+<strong>2. Inkluder verifikationskriterier</strong>
+<div class="text-sm opacity-80 mt-1"><em>"Færdig betyder: tests passerer, endpoint returnerer 200, OpenAPI-spec opdateret."</em></div>
+</div>
+
+<div class="py-2">
+<strong>3. Adskil research fra implementation</strong>
+<div class="text-sm opacity-80 mt-1"><em>Trin 1: "Find ud af hvordan vi håndterer X i dag." Trin 2: "Implementér Y baseret på det."</em></div>
+</div>
+
+<div class="py-2">
+<strong>4. Scope opgaven eksplicit</strong>
+<div class="text-sm opacity-80 mt-1"><em>"Rør kun ved <code>src/billing/</code>. Ingen schema-ændringer."</em></div>
+</div>
+
+<div class="py-2">
+<strong>5. Giv constraints agenten ikke kan udlede</strong>
+<div class="text-sm opacity-80 mt-1"><em>"Vores Stripe-konto har ikke webhooks aktiveret. Brug polling i stedet."</em></div>
+</div>
+
+</div>
+
+<div class="mt-6 text-base opacity-80">
+Det er ikke prompt engineering. Det er at briefe en kollega der ikke har siddet med i samme møde som dig.
+</div>
+
+<!--
+source: docs/04-effective-prompting.md (de fem mønstre)
+
+- Hvert mønster løser en specifik failure-mode: vag spec, manglende "done"-definition, sammenblanding af research og implementation, scope-creep, manglende kontekst.
+- Pointen i bunden er den vigtigste rammesættelse: prompt engineering lyder som arkanvidenskab, men det er præcis det samme du gør når du briefer en junior.
+- Hvis I skal vælge ÉT mønster at adoptere først, så start med #2 (verifikationskriterier). Det er den der giver hurtigst feedback på om instruktionen var god nok.
+-->
+
+---
+
 # Failure mode #1: 9 sekunder
 
 <div class="mt-6">
@@ -1244,7 +1452,7 @@ source: docs/internal/issue-coverage-plan.md (#8 deterministic counterweight)
 </div>
 
 <div class="border-l-4 border-green-500 pl-4 py-2">
-<strong>Eval loops</strong> — gem prompts, tasks og resultater. Mål om kvaliteten faktisk er bedre næste uge end i dag.
+<strong>Eval loops</strong>: gem 10 task/output-par. Kør dem ugentligt mod ny prompt-version eller ny model. Mål om kvaliteten faktisk forbedres, frem for at gætte.
 </div>
 
 <div class="border-l-4 border-green-500 pl-4 py-2">
@@ -1260,6 +1468,119 @@ source: docs/internal/issue-coverage-plan.md (#8 deterministic counterweight)
 <!--
 - Patterns er ikke en udtømmende liste — det er fem mønstre der konsistent dukker op i de teams der får værdi.
 - AI-first prototyping er den der typisk surpriser folk fra trader-shops mest. Pointen: hvis det koster næsten ingenting at lave 5 versioner, så LAV 5 versioner. Det er en ny økonomi.
+-->
+
+---
+
+# Atomic agents: én opgave, ét ansvar
+
+```mermaid {scale: 0.85}
+flowchart LR
+    R[Research] --> P[Plan] --> I[Implement] --> Rv[Review] --> V[Verify]
+```
+
+<div class="mt-6 text-base">
+Hver agent: ét klart input, ét klart output. Outputtet fra én bliver inputtet til den næste.
+</div>
+
+<div class="mt-4 text-base opacity-80">
+Modsat: én stor agent der "klarer det hele" og samler kontekst-rod undervejs, indtil hverken du eller den selv kan rede tråden ud.
+</div>
+
+<div class="mt-8 text-base opacity-80">
+Mønstret ligner det en algotrader allerede gør med strategier: små komposable enheder med veldefinerede grænser, ikke én monolit.
+</div>
+
+<!--
+source: docs/14-software-distillation-and-atomic-agents.md (Single-Responsibility, Executive-Worker) + @PerceptualPeak (sub-agent context negotiation, ECC longform guide)
+
+- Det her er den modne form af agentic workflow. De fleste teams starter med "én chat, alt arbejde", og lærer den hårde vej at det går galt.
+- Hver fase har én tydelig output-artefakt: research-summary.md, plan.md, code-changes, review-comments.md, build-status.
+- Pointen for trader-shop: I tænker allerede sådan om kode (små strategier, klare interfaces). Tænk samme måde om agenter.
+- Det her er bro til "Design dit næste eksperiment": første eksperiment bør være ét enkelt skridt i pipelinen, ikke alle fem på én gang.
+-->
+
+---
+
+# Match modellen til opgaven
+
+<div class="text-base opacity-80 mt-4 mb-6">
+Den dyreste model er sjældent den rigtige. Match kapacitet til opgavens kompleksitet.
+</div>
+
+| Opgave | Model-niveau | Hvorfor |
+|---|---|---|
+| Fil-søgning, exploration | Lille (Haiku-class) | Hurtig, billig, godt nok til at finde filer |
+| Simple ændringer i én fil | Lille | Klar instruktion, snævert scope |
+| Multi-fil implementation | Mellem (Sonnet-class) | Bedste balance for kodning |
+| Arkitektur, debug på tværs af system | Stor (Opus-class) | Skal holde hele systemet i hovedet |
+| Security-kritisk kode | Stor | Pris på fejl er for høj |
+| Generering af docs | Lille | Strukturen er enkel |
+
+<div class="mt-6 text-base opacity-80">
+Default til mid-tier for 90% af opgaver. Opgrader når første forsøg fejler, opgaven spænder over 5+ filer, eller fejlen er dyr at lave.
+</div>
+
+<div class="mt-4 text-sm opacity-60">
+Anthropic pricing + everything-claude-code longform guide
+</div>
+
+<!--
+source: docs/13-observability-and-lifecycle.md (Model Routing) + docs/14 (Match model to task)
+
+- Token-økonomi er reel. Forskellen mellem at default'e til største model versus mid-tier kan være 10x på månedsregningen, uden mærkbar kvalitetsforskel for de fleste opgaver.
+- Pointen er ikke "vælg billigst altid". Det er "match kapacitet til opgaven".
+- For trader-shop: I forstår den her tankegang fra latency-tiering allerede. Samme mønster, anden ressource.
+- Konkret tip: review jeres top-10 dyreste sessioner ugentligt. Var de berettiget? Kunne de have været billigere med bedre prompting eller decomposition?
+-->
+
+---
+
+# Vælg din eval bevidst: pass@k vs pass^k
+
+<div class="grid grid-cols-2 gap-8 mt-8">
+
+<div>
+<div class="text-2xl"><strong>pass@k</strong></div>
+<div class="text-sm opacity-80 mt-2">Mindst ÉN ud af k forsøg lykkes</div>
+<div class="mt-4 font-mono text-base">
+k=1: 70%<br/>
+k=3: 91%<br/>
+k=5: 97%
+</div>
+<div class="mt-4 text-sm">Brug når et menneske vælger det bedste resultat.</div>
+</div>
+
+<div>
+<div class="text-2xl"><strong>pass^k</strong></div>
+<div class="text-sm opacity-80 mt-2">ALLE k forsøg skal lykkes</div>
+<div class="mt-4 font-mono text-base">
+k=1: 70%<br/>
+k=3: 34%<br/>
+k=5: 17%
+</div>
+<div class="mt-4 text-sm">Brug når kvaliteten skal holde over hundredvis af automatiserede kørsler.</div>
+</div>
+
+</div>
+
+<div class="mt-8 text-base opacity-80">
+Samme model, samme opgave, samme grundsucces-rate. Vidt forskellige tal afhængigt af hvordan du måler.
+</div>
+
+<div class="mt-6 text-sm opacity-60">
+Anthropic Engineering, "Demystifying evals for AI agents"
+</div>
+
+<!--
+source: Anthropic engineering, "Demystifying evals for AI agents" (https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents). Endnu ikke i playbook-dokumenterne (gap til 06-verification-and-quality.md).
+
+- Pointen er ikke matematikken. Pointen er at den samme grundmodel kan se brilliant eller elendig ud afhængigt af hvilken metric du vælger.
+- For trader-shop, konkret kalibrering:
+  - Rapport-generering, hvor analytikeren vælger den bedste version: pass@k.
+  - Strategi-deployment, hvor systemet kører ubemandet på production: pass^k.
+- Hvis I bygger jeres første eval-suite, så stil først spørgsmålet: hvad måler vi egentlig her? Et menneske der vælger udfald, eller et system der kører selv?
+- Det her er også svaret på "men benchmarks viser jo X%". Spørgsmålet er altid: målt hvordan?
 -->
 
 ---
@@ -1309,9 +1630,14 @@ source: docs/internal/sources.md (PyAI panel — Guido van Rossum quote)
 | Performance review | Eval-suites — målt opførsel over et fast task-set |
 | Peer review | Two-way critique — både agentens arbejde OG din spec |
 | Coaching | Feed corrections tilbage til instruktionerne, ikke kun til den aktuelle session |
+| Code ownership | Forhindre comprehension debt: hold styr på hvad jeres team faktisk kan forsvare |
 
 <div class="mt-6 text-base opacity-80">
-De skills der betyder noget er nu scoping, delegation, review og feedback — ikke tastehastighed.
+De skills der betyder noget er nu scoping, delegation, review og feedback, ikke tastehastighed.
+</div>
+
+<div class="mt-4 text-sm opacity-60">
+Anthropic 2026 Trends Report: udviklere bruger AI på ~60% af opgaverne, men kan kun delegere 0–20% fuldt ud. Mennesket holder stadig tråden.
 </div>
 
 <!--

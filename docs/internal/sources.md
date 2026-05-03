@@ -102,22 +102,54 @@ For resources we've flagged but haven't drawn from yet, see [`further-reading.md
 ### [Jellyfish — 2025 AI Metrics in Review](https://jellyfish.co/blog/2025-ai-metrics-in-review/)
 **Type:** vendor data report (engineering-metrics tooling)
 **Scope / year:** 2025, multi-customer aggregate
-**Key findings:**
-- Code-review-agent adoption grew 14.8% → 51.4% during 2025 (jump aligned with Copilot Code Review GA between Mar–Apr)
-- ~50% of companies have ≥50% AI-generated code, up from ~20% at start of year
-- Median PR size grew 33% (57 → 76 lines changed) Mar–Nov 2025
-- PRs per author up ~20% YoY, incidents per PR up 23.5%
-**Where useful:** the "agents amplify" pivot in issue #12. The PR-size + incident-rate pair is the cleanest "more code, more breakage" framing.
-**Caveats:** vendor-aggregated, so methodology is opaque, but the numbers have been widely re-cited and not seriously contested.
+**Key findings (verified Nov 2026 re-fetch):**
+- 90% of teams use AI in their workflows, up from 61% one year earlier
+- Code-assistant adoption: 49.2% (Jan) → 69% (Oct), peaked at 72.8% (Aug)
+- Code-review-agent adoption: 14.8% (Jan) → 51.4% (Oct)
+- Almost half of companies have ≥50% AI-generated code, vs ~20% at start of year
+- Tool share by Oct: GitHub Copilot 60% of AI-assisted PRs (down from 80% in Jan); Cursor ~40% (up from <20%)
+- **From their OpenAI partnership analysis:** PRs per engineer +113% (1.36 → 2.9) when adoption goes 0% → 100%; median cycle time −24% (16.7 → 12.7 hours); bug-fix share 7.5% → 9.5% at high-adoption companies
+**Where useful:** the adoption-curve numbers (51.4% review-agent growth, 50% companies stat) for the "the line crossed fast" framing. The OpenAI-partnership stats (113% PRs, 24% cycle time) are the cleanest "individual gains are real" anchor.
+**Caveats:** vendor-aggregated, methodology opaque. **The "33% PR size growth", "PRs per author +20% YoY", and "23.5% incidents per PR" numbers earlier attributed to Jellyfish in this entry have been moved — 23.5% incidents per PR is actually Cortex.io; the productivity-and-pain-point numbers (98% PRs, 91% review time, 154% PR size, 9% bugs) are Faros AI, not Jellyfish.** See dedicated entries below.
 **Used in:** issue #12
 
-### [DX — Q4 2025 AI Impact Report (cited in MIT Tech Review)](https://www.technologyreview.com/2025/12/15/1128352/rise-of-ai-coding-developers-2026/)
-**Type:** vendor data report
-**Scope / year:** 135k+ developers, Q4 2025
-**Key findings:** 91% AI adoption, **22% of merged code is AI-authored.**
-**Where useful:** the headline number for "AI-authored code is now a measurable fraction of production codebases."
-**Caveats:** vendor; cite via the MIT Tech Review piece if the primary report URL isn't stable.
-**Used in:** issue #12
+### [DX — AI Impact Reports (Q4 2025 + Nov 2025–Feb 2026)](https://getdx.com/research/)
+**Type:** vendor data reports (developer experience platform)
+**Scope / year:** Two reports —
+  - Q4 2025: 135k+ developers
+  - Nov 2025 – Feb 2026: **4.2M developers** (the largest empirical study post-December-inflection)
+**Key findings:**
+- **Q4 2025:** 91% AI adoption; 22% of merged code is AI-authored
+- **Nov 2025 – Feb 2026:** **26.9% of new production code is AI-authored** (up from 22% the previous quarter); **92.6% of developers use AI monthly**
+- Cited extensively in MIT Tech Review (Dec 2025) and Philippe Dubach's March 2026 synthesis
+**Where useful:** the freshest broad-industry adoption number we have, post-inflection. The 26.9% / 4.2M-developer measurement is the strongest "anno 2026" anchor — beats the Q4 2025 22% on recency, beats the BI/Brockman frontier-lab numbers on representativeness.
+**Caveats:** vendor; cite via MIT Tech Review (Dec 2025) for the Q4 2025 number if the primary URL isn't stable. The 4.2M-developer number comes from DX's instrumentation, not a survey — measurement methodology is more rigorous than self-report but population is biased toward DX customers (tend to be larger / more mature engineering orgs).
+**Used in:** Norlys deck (Volumen slide), issue #12.
+
+### [Faros AI — The AI Productivity Paradox Research Report](https://www.faros.ai/blog/ai-software-engineering)
+**Type:** vendor research report (engineering-intelligence platform)
+**Scope / year:** July 23, 2025; telemetry analysis of 10,000+ developers across 1,255 teams
+**Key findings:**
+- Teams with high AI adoption: **+21% tasks completed, +98% PRs merged, +91% PR review time, +154% average PR size, +9% bugs per developer**
+- Daily workflow: developers touch 9% more tasks and 47% more PRs per day
+- Over 75% of developers use AI coding assistants
+- Widespread usage (>60% weekly active users) only began in the last 2–3 quarters before publication
+- **No significant correlation between AI adoption and improvements at the company level** — the namesake "productivity paradox"
+**Where useful:** the canonical primary source for the "individual gains, no organizational lift" story. Numbers used on the Norlys deck Volumen slide. The +154% PR size and +91% review time are the cleanest "more code, same review process" framing in any single study.
+**Caveats:** vendor-published (Faros sells engineering-intelligence platforms — direct interest in showing that productivity needs measurement). Pre-December-inflection (data from June 2025) — the magnitudes may be different post-Opus-4.5 / Claude-Code-GA. Methodology is telemetry-based (more rigorous than survey) but customer-base is biased toward larger / more measurement-minded engineering orgs. Cite as **"Faros, juli 2025"** with sample size on the slide; pair with newer DX 2026 numbers when freshness matters.
+**Used in:** Norlys deck (Volumen slide), issue #12.
+
+### [Philippe Dubach — 93% of Developers Use AI Coding Tools. Productivity Hasn't Moved.](https://philippdubach.com/posts/93-of-developers-use-ai-coding-tools.-productivity-hasnt-moved./)
+**Type:** independent analyst synthesis
+**Scope / year:** March 2026; aggregates 19 studies (METR, DX, DORA, Faros, JetBrains, Bain, Veracode, NBER, MIT/Princeton/Wharton/Microsoft, etc.)
+**Key findings:**
+- **At 92.6% adoption and 27% AI-generated code, six independent research efforts converge on roughly 10% organizational productivity gains.** This is the central "AI Productivity Paradox of 2026" framing.
+- **METR February 2026 update:** the original July 2025 finding (developers 19% slower) has been revised to **−4% (CI: −15% to +9%)** — much weaker effect, no longer statistically significant.
+- NBER (Feb 2026, ~6,000 executives): 80%+ of firms report no productivity impact at the 3-year mark; expected 3-year improvement only **1.4%**.
+- MIT/Princeton/Wharton/Microsoft field experiment (4,867 developers): no significant gains for above-median-tenure developers.
+**Where useful:** the master synthesis source for the "anno 2026" picture. The "six independent studies converge on ~10%" line is the cleanest single statement of the 2026 paradox. Useful as a secondary / aggregator citation when we don't want to chase 19 primary URLs. **Critical for any update to the METR slide** — the Feb 2026 revision changes the headline number meaningfully.
+**Caveats:** independent analyst (Dubach is not academic), but the article is heavily linked to primary sources and the framing has become consensus across 2026 industry coverage. **Use as a secondary** when citing the convergent finding; for individual numbers, cite the primary source it aggregates (DX, Faros, METR, NBER, etc.) directly.
+**Used in:** Norlys deck (Volumen slide closing line "~10 %"), and a planned METR slide update.
 
 ### [CodeRabbit — State of AI vs. Human Code Generation](https://www.coderabbit.ai/blog/state-of-ai-vs-human-code-generation-report)
 **Type:** vendor report
