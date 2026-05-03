@@ -15,7 +15,7 @@ mdc: true
 # Agentic coding
 
 <div class="text-sm opacity-70 mt-6">
-Norlys · 5. maj 2026<br/>
+Norlys, 5. maj 2026<br/>
 Rasmus Krebs, syv.ai
 </div>
 
@@ -43,7 +43,6 @@ Speaker notes:
 - Started i syv.ai i April 2024
 - Arbejdede knap 2 år som ML engineer-contractor hos Apple
 - Arbejder dagligt med agentic coding tools og vi i syv.ai har bygget flere værktøjer for at gøre hverdagen med disse nemmere (dash, sonar, m.m.)
-- Cykelglad
 
 </div>
 
@@ -111,7 +110,7 @@ layout: center
 
 <div>
 <div class="text-sm opacity-60">2024</div>
-<div class="mt-2 text-lg"><strong>Cursor · ChatGPT</strong></div>
+<div class="mt-2 text-lg"><strong>Cursor, ChatGPT</strong></div>
 <div class="mt-2 text-sm opacity-80"> Hjælpsomt til boilerplate, men fald fra hinanden i større codebases.</div>
 </div>
 
@@ -148,7 +147,7 @@ Andrej Karpathy, februar 2026<sup>*</sup>
 </div>
 
 <!--
-source: x.com/karpathy/status/2026731645169185220 · GAI Insights (Paul Baier, jan 2026) for SWE-bench-tallet og Opus 4.5-konteksten
+source: x.com/karpathy/status/2026731645169185220, GAI Insights (Paul Baier, jan 2026) for SWE-bench-tallet og Opus 4.5-konteksten
 asset: ../../assets/andrej-karpathy-agentic-coding-didnt-work-before-december.png
 
 - Lad billedet stå et par sekunder uden kommentar.
@@ -174,7 +173,7 @@ To ting kom på plads samtidig i 2025:
 </div>
 
 <div class="mt-6 text-md italic">
-Før: tekst ind, tekst ud. Nu: bash, grep, git. En del af det system du arbejder i.
+Før: tekst ind, tekst ud. <br/>Nu: bash, grep, git. En del af det system du arbejder i.
 </div>
 
 <div class="mt-4 flex justify-center">
@@ -195,8 +194,9 @@ graph LR
 <sup>\*</sup> En **harness** er softwaren der wrapper sprogmodellen og giver den værktøjer, context management og et execution environment. Modellen leverer reasoning.
 
 </div>
+
 <!--
-source: docs/01-the-agentic-loop.md (the agent harness + loop concept) · Karpathy, januar 2026
+source: docs/01-the-agentic-loop.md (the agent harness + loop concept), Karpathy, januar 2026
 
 - Hvad er en "agent harness"? Fra playbook M01: harnessen er softwaren der *wrapper* sproget-modellen og giver den værktøjer, context management og et execution environment. Modellen leverer reasoning, harnessen leverer alt det andet — filer, shell, search, web access, git, kode-intelligens. Claude Code er en harness. Cursor er en harness. Codex CLI er en harness.
 - Slidet svarer på "hvad skiftede faktisk?" uden at postulere. To ting kom på plads sammen i 2025:
@@ -206,7 +206,6 @@ source: docs/01-the-agentic-loop.md (the agent harness + loop concept) · Karpat
 - For trader-shops: jeres eksisterende deterministiske infrastruktur (linters, type checkers, CI, monitoring) bliver pludselig *læselig FOR agenten*. Det gør jeres infrastruktur til en multiplikator, ikke en barriere — vi kommer tilbage til det i best practices.
 - Karpathys eksempel fra forrige slide (30 min. DGX Spark setup): det er præcis det her loop der lukker. Han formulerede det i naturligt sprog fordi harnessen havde shell-adgang, kunne læse docs, debugge fejl, dokumentere — uden at miste tråden.
 -->
-
 
 ---
 
@@ -228,7 +227,7 @@ Agenten kan løse en kompleks opgave til perfektion, og snuble i en triviel deta
  </div>
 
 <!--
-source: oneusefulthing.org (Mollick, "jagged frontier") · Dell'Acqua, Mollick et al., 2023
+source: oneusefulthing.org (Mollick, "jagged frontier"), Dell'Acqua, Mollick et al., 2023
 
 - "Jagged frontier" er Mollicks formulering: AI er god til ting der virker svære, og dårlig til ting der virker lette. Du kan ikke se grænsen før du krydser den.
 - Det her er DEN vigtigste konceptuelle slide i opvarmningen. Den adresserer bekymringen direkte: ja, agenten er smart. Nej, du kan ikke regne med at den er smart hver gang.
@@ -282,8 +281,8 @@ source: docs/internal/sources.md (Business Insider, May 2026 — Brockman/Pichai
 Business insider article: https://www.businessinsider.com/google-ai-generated-code-75-gemini-agents-software-2026-4
 
 - Tre tal, tre år. Lad kurven stå.
-- Pointen er IKKE "I skal være på 75% i morgen". Pointen er at kurven er stejl, og at den ikke er stoppet — det her er Google, men Brockman (OpenAI) sagde nyligt at deres tal gik fra 20% til 80% bare gennem december. Meta har sat mål om at 65% af engineers i creation-org skal skrive 75%+ af deres kode med AI.
-- Vendor-caveat at sige højt: alle de her tal kommer fra CEO-udtalelser ved konferencer, ikke målte studier. Hver eneste sælger AI. Men styrken er at konkurrenter er enige om retningen — når Google, OpenAI, Meta og Anthropic alle siger 75–90% mod deres egne kryds-incitamenter, er signalet svært at affærdige.
+- Pointen er IKKE "I skal være på 75% i morgen". Pointen er at kurven er stejl, og at den ikke er stoppet — det her er Google, men Brockman (OpenAI) sagde nyligt at deres tal gik fra 20% til 80% bare gennem december.
+- Vendor-caveat at sige højt: alle de her tal kommer fra CEO-udtalelser ved konferencer, ikke målte studier. Hver eneste sælger AI. Men styrken er at konkurrenter er enige om retningen — når Google, OpenAI og Anthropic alle siger 75–90% mod deres egne kryds-incitamenter, er signalet svært at affærdige.
 - Det lille footer-tal (DX Q4 2025: 22%) er bredt-industri-baseline — 135.000 udviklere på tværs af firmaer. Det er IKKE samme måling som Pichais 75% (Google internt). Sammenhold dem: bred industri var ved 22% sent 2025; frontier-labs er ved 75–80% i dag. I ligger sandsynligvis et sted imellem.
 - Spørgsmål til rummet: hvor tror I jeres egen kurve står? (Stryger man hånden op for "har du AI-værktøj installeret?" → 100%. "Har du brugt det denne uge?" → mange. "Skriver det majoriteten af din nye kode?" → få. Det er gabet.)
 - Næste slide anker det aggregerede tal til en konkret virksomhed (Uber, marts 2026).
@@ -316,23 +315,17 @@ asset: ../../assets/uber-cto-tweet-about-agentic-coding-at-uber.png
 
 # Andre frontier-virksomheder
 
-<div class="mt-10 grid grid-cols-3 gap-6">
+<div class="mt-10 grid grid-cols-2 gap-12 max-w-5xl mx-auto">
 
 <div>
-<div class="text-sm opacity-60">Greg Brockman · OpenAI, maj 2026</div>
-<img src="/openai-ceo-20-to-80-percent.png" class="mt-2 rounded-lg shadow-md bg-white p-1 max-h-[14rem] mx-auto" />
+<div class="text-sm opacity-60">Greg Brockman, OpenAI, maj 2026</div>
+<img src="/openai-ceo-20-to-80-percent.png" class="mt-2 shadow-md max-h-[16rem] mx-auto" />
 <div class="mt-2 text-sm opacity-80 italic">"From writing 20 % of your code to writing 80 %."</div>
 </div>
 
 <div>
-<div class="text-sm opacity-60">Meta · creation-org · Business Insider, marts 2026</div>
-<div class="mt-2 text-lg"><strong>65 % af engineers, 75 %+ AI-kode</strong></div>
-<div class="mt-2 text-sm opacity-80">Mål for H1 2026: 65 % af engineers i creation-organisationen skal skrive 75 %+ af deres committed kode med AI.</div>
-</div>
-
-<div>
-<div class="text-sm opacity-60">Anthropic · Cowork-projekt, 2026</div>
-<img src="/claude-code-wrote-cowork.jpeg" class="mt-2 rounded-lg shadow-md bg-white p-1 max-h-[14rem] mx-auto" />
+<div class="text-sm opacity-60">Anthropic Cowork-team, januar 2026</div>
+<img src="/claude-code-wrote-cowork.jpeg" class="mt-2 shadow-md max-h-[16rem] mx-auto" />
 <div class="mt-2 text-sm opacity-80">4-mands team byggede Cowork end-to-end — al kode skrevet af Claude Code.</div>
 </div>
 
@@ -343,11 +336,8 @@ Forskellige målinger, samme retning: dyb adoption, hurtigt.
 </div>
 
 <!--
-source: docs/internal/sources.md (Business Insider maj 2026 for Brockman/Meta · Anthropic 2026 Trends Report Trend 2 / GAI Insights for Cowork)
-
-- Tre korte testimonials fra de tre frontier-virksomheder vi nævner i disclaimer på næste slide. Pointen: når Google, OpenAI, Meta og Anthropic alle siger lignende ting mod kryds-incitamenter, er den directionelle påstand svær at affærdige.
-- Brockman: vendor-caveat — han taler om OpenAI's egen agentic-coding-segment, ikke en målt branche-tal. Men "in December" framingen er konsistent med Karpathy fra tidligere.
-- Meta: dette er et *mål* fra et internt Meta-dokument set af Business Insider (Hugh Langley, marts 2026), ikke en målt baseline. Sig det eksplicit hvis nogen spørger. Det er ét af flere mål i samme dokument — andre eksempler: 55 % af kode-ændringer companywide skal være agent-assisteret, 80 % af mid-til-senior engineers skal adoptere AI-værktøjer. BI noterer at det er uklart om målene er bundet til performance reviews.
+- To korte testimonials fra to af de andre frontier-virksomheder. Pointen: når Google, OpenAI og Anthropic alle siger lignende ting mod kryds-incitamenter, er den directionelle påstand svær at affærdige.
+- Brockman: vendor-caveat — han taler om OpenAI's egen agentic-coding-segment, ikke et målt branche-tal. Men "in December"-framingen er konsistent med Karpathy fra tidligere.
 - Anthropic Cowork: konkret og målbart — 4 mennesker, 1,5 uge, et helt produkt. Parallel til Uber's "1.800/uge". Bind tilbage til Trend 3 (lang-løbende agenter, Rakuten 7-timers run) hvis nogen vil have mere kontekst.
 - Bro til næste slide: "Det er hvad de selv siger. Lad os huske at de ER frontier — ikke median."
 -->
@@ -357,11 +347,11 @@ source: docs/internal/sources.md (Business Insider maj 2026 for Brockman/Meta ·
 # Husk: dette er frontier
 
 <div class="mt-8 text-lg">
-De foregående tal kommer fra <strong>Google, OpenAI, Meta, Uber, Anthropic</strong> — virksomheder med store engineering-orgs, egne AI-research-teams, og en kultur for tidlig adoption.
+Google, OpenAI, Uber og Anthropic er alle virksomheder med store engineering-orgs, egne AI-research-teams, og en kultur for tidlig adoption. Disse vil naturligt være 
 </div>
 
 <div class="mt-6 text-lg">
-Den bredere industri er på samme kurve. Adoptionen følger med og stiger, men har endnu ikke nået samme kapacitet. Manger virksomheder er stadig ved at finde ud af hvordan værktøjerne bedst bruges.
+Men, den bredere industri er på samme kurve. Adoptionen følger med og stiger, men har mange steder ikke nået samme kapacitet endnu. Flere virksomheder er stadig ved at finde ud af hvordan værktøjerne bedst bruges.
 </div>
 
 <div class="absolute bottom-12 left-12 right-12 border-l-4 border-cyan-400 pl-4 italic text-base opacity-90">
@@ -400,7 +390,7 @@ class: text-center
 Skalerede projekter, nice-to-have værktøjer, eksperimenter, papercuts. Ting der før ikke var værd at fixe.
 </div>
 
-<div class="mt-16 text-sm opacity-60"> Agentic Coding Trends Report, Anthropic, Januar 2026</div>
+<div class="mt-16 text-sm opacity-60">Anthropic, januar 2026</div>
 
 <!--
 source: docs/internal/sources.md (Anthropic 2026 Trends Report, Trend 6, p.13)
@@ -541,7 +531,7 @@ class: text-center
 
 <div class="mt-6 text-2xl opacity-80">langsommere med AI</div>
 
-<div class="mt-16 text-sm opacity-60">METR · juli 2025 · randomized study af erfarne open-source-udviklere</div>
+<div class="mt-16 text-sm opacity-60">METR, juli 2025</div>
 
 <!--
 source: docs/internal/sources.md (METR, to be added)
@@ -673,7 +663,7 @@ Skriv det ned. Vi vender tilbage til det senere — i best practices og når I d
 </div>
 
 <div class="mt-8 text-sm opacity-60">
-5 minutter · grupper á 3–4
+5 minutter, grupper á 3–4
 </div>
 
 <!--
@@ -708,7 +698,7 @@ class: text-center
 # De der bygger det, tror kurven fortsætter
 
 <div class="mt-16 max-w-4xl mx-auto border-l-4 border-cyan-400 pl-8 text-left">
-<div class="text-base opacity-70">Dario Amodei · Anthropic CEO</div>
+<div class="text-base opacity-70">Dario Amodei, Anthropic CEO</div>
 <div class="mt-3 text-2xl italic">"AI vil skrive 90 % af koden inden for 3–6 måneder. Inden for 12 måneder skriver den i praksis al koden."</div>
 </div>
 
@@ -721,7 +711,7 @@ source: docs/internal/sources.md (Business Insider, maj 2026 — Amodei blog pos
 
 - Tonen: ikke "tro mig" — "se hvad han siger, og hold det op mod hvad de andre frontier-CEO'er allerede har sagt".
 - Amodei-prediktionen er det stærkeste forward-looking signal vi har. 3-6 måneder er kort nok til at I selv kan vurdere det inden næste workshop.
-- Pointen: pricnt op mod testimonials-sub-section'en — Pichai 75 %, Brockman 80 %, Meta 75 %+, Anthropic Cowork. Når frontier-CEO'erne både rapporterer 75-80 % nu OG forudsiger 90 % på 3-6 måneder, er den directionelle påstand svær at affærdige.
+- Pointen: print op mod testimonials-sub-section'en — Pichai 75 %, Brockman 80 %, Anthropic Cowork. Når frontier-CEO'erne både rapporterer 75-80 % nu OG forudsiger 90 % på 3-6 måneder, er den directionelle påstand svær at affærdige.
 - Det orange hedge-felt: vi siger eksplicit "forudsigelse, ikke måling". Det skaber troværdighed for resten af sub-sektionen.
 -->
 
@@ -734,19 +724,19 @@ layout: center
 <div class="mt-10 grid grid-cols-3 gap-6">
 
 <div>
-<div class="text-sm opacity-60">Trends Report · Trend 2</div>
+<div class="text-sm opacity-60">Anthropic, januar 2026</div>
 <div class="mt-2 text-lg"><strong>Multi-agent</strong></div>
 <div class="mt-2 text-sm opacity-80">Enkelte agenter bliver til koordinerede teams. Mønster: orchestrator + specialister, hver med deres eget kontekst-vindue.</div>
 </div>
 
 <div>
-<div class="text-sm opacity-60">Trends Report · Trend 3</div>
+<div class="text-sm opacity-60">Anthropic, januar 2026</div>
 <div class="mt-2 text-lg"><strong>Lang-løbende agenter</strong></div>
 <div class="mt-2 text-sm opacity-80">Opgave-horisonter går fra minutter til dage. Rakuten: 7 timers autonom kørsel på et komplekst teknisk problem, 99,9% præcision.</div>
 </div>
 
 <div>
-<div class="text-sm opacity-60">Trends Report · Trend 7</div>
+<div class="text-sm opacity-60">Anthropic, januar 2026</div>
 <div class="mt-2 text-lg"><strong>Nye brugere</strong></div>
 <div class="mt-2 text-sm opacity-80">Resten af jeres org får værktøjerne. Domæne-eksperter bygger deres egne automationer uden engineering-team.</div>
 </div>
@@ -827,7 +817,7 @@ class: text-center
 Cyklus-tid: <strong>uger–måneder</strong> → <strong>timer–dage</strong>. Sekventielle handoffs bliver til en flydende agent-flow.
 </div>
 
-<div class="mt-3 text-sm opacity-60">Anthropic 2026 Agentic Coding Trends Report · Trend 1, p.5</div>
+<div class="mt-3 text-sm opacity-60">Anthropic, januar 2026</div>
 
 <!--
 source: docs/internal/sources.md (Anthropic 2026 Trends Report, Trend 1, p.5)
@@ -932,7 +922,7 @@ layout: section
 
 # Hands-on exploration
 
-<div class="text-lg opacity-70 mt-4">0:25 – 1:05 · 40 min</div>
+<div class="text-lg opacity-70 mt-4">0:25 – 1:05, 40 min</div>
 
 <!--
 - Det her er det vigtigste 40-minutters segment. Hvis I ikke gør det her godt, bliver de næste 90 minutter en præsentation i stedet for en workshop.
@@ -1068,7 +1058,7 @@ layout: section
 
 # Best practices
 
-<div class="text-lg opacity-70 mt-4">1:05 – 1:45 · 40 min</div>
+<div class="text-lg opacity-70 mt-4">1:05 – 1:45, 40 min</div>
 
 <!--
 - Det her er den længste sammenhængende præsentations-blok. Brug pauser. Stop hvert 5.-7. minut og spørg: "giver det mening i jeres kontekst?"
@@ -1105,7 +1095,7 @@ Sweet spot: 200–400 linjer per review, under 300 LOC/time.
 </div>
 
 <div class="mt-12 text-sm opacity-60">
-Cisco/SmartBear · 2.500 reviews · 3,2M LOC
+Cisco/SmartBear, 2.500 reviews, 3,2M LOC
 </div>
 
 <!--
@@ -1219,7 +1209,7 @@ Det her er broen til næste slide: infrastructure as deterministic counterweight
 ```mermaid {scale: 0.75}
 flowchart TD
     Need[En korrekthedscheck<br/>er nødvendig] --> Q{Kan det gøres<br/>deterministisk?}
-    Q -->|ja| Det[Linter · type checker<br/>generated client · CI test<br/><i>samme svar hver gang</i>]
+    Q -->|ja| Det[Linter, type checker<br/>generated client, CI test<br/><i>samme svar hver gang</i>]
     Q -->|nej — kræver judgment| Prob[Agent + menneske-review<br/><i>probabilistisk; pålideligt<br/>kun når det reviewes</i>]
     Det --> Scale[Skalerer frit<br/>ingen review-skat]
     Prob --> Tax[Betaler review-skat<br/>på hver ændring]
@@ -1337,7 +1327,7 @@ layout: section
 
 # Design dit næste eksperiment
 
-<div class="text-lg opacity-70 mt-4">1:45 – 2:20 · 35 min</div>
+<div class="text-lg opacity-70 mt-4">1:45 – 2:20, 35 min</div>
 
 <!--
 - Det her segment er hvad der gør forskellen mellem "en interessant eftermiddag" og "noget der ændrer hvordan I koder næste uge".
@@ -1487,7 +1477,7 @@ layout: section
 
 # Wrap
 
-<div class="text-lg opacity-70 mt-4">2:20 – 2:30 · 10 min</div>
+<div class="text-lg opacity-70 mt-4">2:20 – 2:30, 10 min</div>
 
 ---
 
@@ -1539,7 +1529,7 @@ Tænk over: hvilken én observation fra de sidste 150 minutter ville du dele med
 <div class="mt-8">
 
 **Rasmus Krebs**<br/>
-AI Engineer · syv.ai<br/>
+AI Engineer, syv.ai<br/>
 rasmus@syv.ai
 
 </div>
