@@ -243,14 +243,11 @@ layout: section
 
 # Tech testimonials
 
-<div class="text-lg opacity-70 mt-4">Frontier-virksomhederne, i deres egne ord</div>
-
 <!--
 - Sub-section break. Hidtil: hvad er agentic coding, og hvor er grænserne (jaggedness). Næste 3 slides: hvad CEO'erne selv siger om adoptionen i deres egne organisationer.
 - Strukturen i sub-sektionen: 1) Pichai-trajectory (Google 25→50→75%), 2) Uber-eksempel (konkret adoption fra Uber CTO), 3) frontier-disclaimer (vi er ikke dem, men kurven er den samme).
 - Tonen: nøgtern data, ikke salgs-pitch. Vi viser hvad navngivne CEO'er rapporterer — så rummet selv kan vægte vendor-incitamentet.
 -->
-
 
 ---
 layout: center
@@ -322,21 +319,21 @@ asset: ../../assets/uber-cto-tweet-about-agentic-coding-at-uber.png
 <div class="mt-10 grid grid-cols-3 gap-6">
 
 <div>
-<div class="text-sm opacity-60">OpenAI · Greg Brockman, maj 2026</div>
-<div class="mt-2 text-lg"><strong>20 % → 80 % i én måned</strong></div>
-<div class="mt-2 text-sm opacity-80 italic">"I løbet af december gik vi fra at agentic coding-værktøjer skrev 20 % af din kode til at de skrev 80 %."</div>
+<div class="text-sm opacity-60">Greg Brockman · OpenAI, maj 2026</div>
+<img src="/openai-ceo-20-to-80-percent.png" class="mt-2 rounded-lg shadow-md bg-white p-1 max-h-[14rem] mx-auto" />
+<div class="mt-2 text-sm opacity-80 italic">"From writing 20 % of your code to writing 80 %."</div>
 </div>
 
 <div>
-<div class="text-sm opacity-60">Meta · creation-org, marts 2026</div>
+<div class="text-sm opacity-60">Meta · creation-org · Business Insider, marts 2026</div>
 <div class="mt-2 text-lg"><strong>65 % af engineers, 75 %+ AI-kode</strong></div>
-<div class="mt-2 text-sm opacity-80">65 % af engineers i creation-organisationen forventes at skrive 75 %+ af deres committed kode med AI.</div>
+<div class="mt-2 text-sm opacity-80">Mål for H1 2026: 65 % af engineers i creation-organisationen skal skrive 75 %+ af deres committed kode med AI.</div>
 </div>
 
 <div>
 <div class="text-sm opacity-60">Anthropic · Cowork-projekt, 2026</div>
-<div class="mt-2 text-lg"><strong>4 personer · 1,5 ugers sprint</strong></div>
-<div class="mt-2 text-sm opacity-80">Et 4-mands team byggede Cowork end-to-end med Claude Code til al kode-generering.</div>
+<img src="/claude-code-wrote-cowork.jpeg" class="mt-2 rounded-lg shadow-md bg-white p-1 max-h-[14rem] mx-auto" />
+<div class="mt-2 text-sm opacity-80">4-mands team byggede Cowork end-to-end — al kode skrevet af Claude Code.</div>
 </div>
 
 </div>
@@ -350,7 +347,7 @@ source: docs/internal/sources.md (Business Insider maj 2026 for Brockman/Meta ·
 
 - Tre korte testimonials fra de tre frontier-virksomheder vi nævner i disclaimer på næste slide. Pointen: når Google, OpenAI, Meta og Anthropic alle siger lignende ting mod kryds-incitamenter, er den directionelle påstand svær at affærdige.
 - Brockman: vendor-caveat — han taler om OpenAI's egen agentic-coding-segment, ikke en målt branche-tal. Men "in December" framingen er konsistent med Karpathy fra tidligere.
-- Meta: dette er en *forventning* (target), ikke en målt baseline. Sig det eksplicit hvis nogen spørger.
+- Meta: dette er et *mål* fra et internt Meta-dokument set af Business Insider (Hugh Langley, marts 2026), ikke en målt baseline. Sig det eksplicit hvis nogen spørger. Det er ét af flere mål i samme dokument — andre eksempler: 55 % af kode-ændringer companywide skal være agent-assisteret, 80 % af mid-til-senior engineers skal adoptere AI-værktøjer. BI noterer at det er uklart om målene er bundet til performance reviews.
 - Anthropic Cowork: konkret og målbart — 4 mennesker, 1,5 uge, et helt produkt. Parallel til Uber's "1.800/uge". Bind tilbage til Trend 3 (lang-løbende agenter, Rakuten 7-timers run) hvis nogen vil have mere kontekst.
 - Bro til næste slide: "Det er hvad de selv siger. Lad os huske at de ER frontier — ikke median."
 -->
