@@ -88,11 +88,34 @@ layout: center
 
 </div>
 
+<!--
+- Mange har givet udtryk for agentic coding ikke er tilstrækkelig godt nok, eller ikke producerer værdi. 
+- Hvis folk har forsøgt sig med agentic coding ville de nok.
+- Hvis vi kigger på indløbet til 2026, så er der god grund til at man måske har haft denne oplevelse. De havde nemlig ret i den kontekst de mødte det.
+- pointen er at sige: hvis du ikke har testet det her i de sidste 4–5 måneder, så har du testet noget andet end det vi taler om i dag.
+- Bro til næste slide: håndsoprækning. Det varmer rummet op før Karpathy.
+-->
+
+---
+layout: center
+class: text-center
+---
+
+# Har I prøvet en eller flere af disse?
+
+<div class="mt-12 text-xl opacity-80">
+Der er ingen rigtige svar — bare en håndsoprækning.
+</div>
+
+<div class="mt-16 text-base opacity-60 max-w-xl mx-auto">
+Mange har mødt agentic coding før december 2025 og er kommet ud med "det her er ikke klar endnu". I havde ret i den kontekst.
+</div>
 
 <!--
-- Audience-bro. Mange i rummet er sandsynligvis kommet ud af en eller flere af de tre bølger med "det her er ikke klar endnu".
-- De havde ret — i den kontekst de mødte det. Pointen er ikke at modsige dem; pointen er at sige: hvis du ikke har testet det her i de sidste 4–5 måneder, så har du testet noget andet end det vi taler om i dag.
-- Lad gerne rummet bekræfte med håndsoprækning: "hvor mange har prøvet en eller flere af disse?" — det varmer den næste slide op.
+- Lad et par sekunder gå før du beder om hænder.
+- Spørg trinvist for stille engagement: "hvem har prøvet GitHub Copilot?", "Cursor eller ChatGPT i kode?", "en agentisk CLI som Claude Code eller Codex CLI?"
+- Pointen: validere rummets erfaring før vi siger "men det her er anderledes nu". Modsat de fleste tech-præsentationer der siger "alt I har prøvet før var dårligt" — vi siger "I havde ret, og NU er det skiftet".
+- Bro til Karpathy-slidet: "lad os høre fra én af de mest dokumenterede skeptikere i feltet — og hvad der ændrede sig for ham."
 -->
 
 ---
@@ -385,7 +408,30 @@ source: docs/internal/sources.md (Anthropic 2026 Trends Report — Trend 3 p.9, 
 - Backlog: det her er hvor rummet kender sig selv igen. Hvert team har en "ville-være-rart-men-ingen-har-tid"-bunke. 27% er den bunke der pludselig får ben at gå på.
 - Zapier: ikke kun for designere. Samme dynamik gælder hvis I demonstrerer et koncept til en kunde, en intern stakeholder, eller en regulator — fungerende prototype i et møde flytter en samtale ti gange længere end et statisk mockup.
 - Vendor-caveat: alle tre eksempler er fra Anthropic Trends Report, så det er Anthropic der har valgt at fremhæve dem. Brug det til at sige "her er retningen — find jeres eget eksempel inden næste workshop".
-- Spørgsmål til rummet (hvis tid): nævn ét stykke arbejde I IKKE laver i dag, som I ville lave hvis tærsklen var halvdelen så høj. Det er kandidaten til jeres første eksperiment.
+- Bro til næste slide: spørgsmål til rummet — find jeres eget backlog-eksempel.
+-->
+
+---
+layout: center
+class: text-center
+---
+
+# Hvad ligger i jeres backlog?
+
+<div class="mt-10 text-2xl opacity-80">
+"Det ville være rart, men ingen har tid."
+</div>
+
+<div class="mt-16 text-base opacity-70 max-w-xl mx-auto">
+Find ét stykke arbejde I IKKE laver i dag, som I ville lave hvis tærsklen var halvdelen så høj. Det er kandidaten til jeres første eksperiment.
+</div>
+
+<!--
+- Lad spørgsmålet stå et øjeblik. Hvis rummet er stille, sig: "tænk hver for jer i 30 sekunder."
+- Det her primer "Design dit næste eksperiment"-blokken senere — folk går derned med en kandidat allerede i baghovedet.
+- Eksempler at give hvis rummet trænger til en kickstart: en intern dashboard ingen havde tid til at bygge, log-analyse-script til incidents, automatisk PR-summary, en migration der har ligget i to år.
+- Hvis nogen siger "vi har ingen backlog" → spørg "hvad afviser I oftest med 'det kan vi ikke nå'?"
+- Hvis tid er knap: spring videre efter 30 sekunder. Pointen er at plante frøet, ikke at få svar her.
 - Bro til næste slide: men det udvidede scope og det øgede tempo kommer ikke gratis. Næste slide viser regningen.
 -->
 
@@ -537,6 +583,133 @@ audience-specific: do not promote to canonical
 - Det her er audience-specifikt for en trading-/energi-kontekst. Eksemplerne er designet til at lyde lavrisiko og samtidig genkendelige.
 - Pointer at notere: ingen af de fem er "skriv en ny matching-engine". Det er den fede midte.
 - Hvis nogen siger "men jeg bruger ikke OpenAPI" — perfekt, så er det ikke deres første step. Pointen er taksonomien, ikke den specifikke liste.
+- Bro til næste sub-section: "Det var hvor I kan starte i dag. Lad os zoome ud — hvad er retningen i de næste 12 måneder?"
+-->
+
+---
+layout: section
+---
+
+# Hvor er det på vej hen?
+
+<div class="text-lg opacity-70 mt-4">2026, ifølge dem der bygger og bruger det</div>
+
+<!--
+- Sub-section break inden for "Anno 2026". Hidtil: hvor vi STÅR. Næste 4-5 minutter: hvor det ER PÅ VEJ HEN.
+- Tonen: forudsigelser, ikke målinger. Vi flagger usikkerheden eksplicit på de næste slides.
+-->
+
+---
+layout: center
+class: text-center
+---
+
+# De der bygger det, tror kurven fortsætter
+
+<div class="grid grid-cols-2 gap-12 mt-12 text-left">
+
+<div class="border-l-4 border-cyan-400 pl-6">
+<div class="text-base opacity-70">Dario Amodei · Anthropic CEO</div>
+<div class="mt-2 text-lg italic">"AI vil skrive 90% af koden inden for 3–6 måneder. Inden for 12 måneder skriver den i praksis al koden."</div>
+</div>
+
+<div class="border-l-4 border-cyan-400 pl-6">
+<div class="text-base opacity-70">Greg Brockman · OpenAI president</div>
+<div class="mt-2 text-lg italic">"I løbet af december gik vi fra at agentic coding-værktøjer skrev 20% af din kode til at de skrev 80%."</div>
+</div>
+
+</div>
+
+<div class="absolute bottom-12 left-12 right-12 border-l-4 border-orange-500 pl-4 italic text-sm opacity-80">
+Forudsigelser, ikke målinger. Men retningen er konsistent på tværs af konkurrerende laboratorier.
+</div>
+
+<!--
+source: docs/internal/sources.md (Business Insider, maj 2026 — Brockman/Amodei)
+
+- Tonen: ikke "tro mig" — "se hvad de siger, og bemærk at de er enige mod kryds-incitamenter".
+- Amodei: blog post tidligt i 2026, plus tidligere konference-udtalelser. Forudsigelse, så kan tages med skepsis. Men 3-måneders-tidshorisonten er kort nok til at I kan vurdere selv inden næste workshop.
+- Brockman: Sequoia Capital talk, maj 2026. "Over the course of December" — han taler om den agentic-coding-segment han ser.
+- Pointen: når Anthropic, OpenAI og (på Pichai-slidet tidligere) Google alle siger 75–90%+ mod hinandens kommercielle interesser, er den directionelle påstand svær at affærdige.
+- Det orange hedge-felt: vi siger eksplicit "forudsigelser, ikke målinger". Det skaber troværdighed for resten af sub-sektionen.
+-->
+
+---
+layout: center
+---
+
+# Tre ting at holde øje med
+
+<div class="mt-10 grid grid-cols-3 gap-6">
+
+<div>
+<div class="text-sm opacity-60">Trends Report · Trend 2</div>
+<div class="mt-2 text-lg"><strong>Multi-agent</strong></div>
+<div class="mt-2 text-sm opacity-80">Enkelte agenter bliver til koordinerede teams. Mønster: orchestrator + specialister, hver med deres eget kontekst-vindue.</div>
+</div>
+
+<div>
+<div class="text-sm opacity-60">Trends Report · Trend 3</div>
+<div class="mt-2 text-lg"><strong>Lang-løbende agenter</strong></div>
+<div class="mt-2 text-sm opacity-80">Opgave-horisonter går fra minutter til dage. Rakuten: 7 timers autonom kørsel på et komplekst teknisk problem, 99,9% præcision.</div>
+</div>
+
+<div>
+<div class="text-sm opacity-60">Trends Report · Trend 7</div>
+<div class="mt-2 text-lg"><strong>Nye brugere</strong></div>
+<div class="mt-2 text-sm opacity-80">Resten af jeres org får værktøjerne. Domæne-eksperter bygger deres egne automationer uden engineering-team.</div>
+</div>
+
+</div>
+
+<div class="mt-12 text-base opacity-80">
+Det er ikke nye teknologier — det er allerede sket i frontier-virksomheder. Spørgsmålet er hvor hurtigt det normaliseres.
+</div>
+
+<!--
+source: docs/internal/sources.md (Anthropic 2026 Trends Report — Trend 2 p.8, Trend 3 p.9, Trend 7 p.14)
+
+- Multi-agent: pointen er ikke "kør 100 agenter parallelt for sjov". Det er at task-decomposition og koordination bliver en kerne-skill. Orchestrator-agent dekomponerer, specialist-agenter løser, resultater samles tilbage.
+- Lang-løbende: Rakuten er den stærkeste case-study i Trends Report. Claude Code færdiggjorde aktiverings-vektor-extraction i vLLM (12.5M LOC OSS-bibliotek) i 7 timer autonomt arbejde. 99,9% numerisk præcision sammenlignet med reference-metoden.
+- Nye brugere: ringer tilbage til Anthropic-juridisk-eksemplet fra "Hvad ser det ud som?". Næste år har en af jeres operations- eller compliance-folk sandsynligvis bygget noget I ikke regnede med.
+- Hedge i bunden: alle tre er ALLEREDE i produktion hos frontier-virksomheder. Spørgsmålet er normaliserings-hastighed, ikke om det sker.
+-->
+
+---
+
+# Hvad forbliver menneske?
+
+<div class="mt-8 text-xl">
+Mængden af AI-genereret arbejde stiger. Det betyder ikke at menneske-rollen forsvinder — den koncentreres.
+</div>
+
+<div class="mt-10">
+
+| Det agenter overtager | Det mennesker bevarer |
+| --- | --- |
+| Tactical implementation | Arkitektur og system-design |
+| Boilerplate, scaffolding, glue-code | Domæne-modellering og produkt-beslutninger |
+| Test-skrivning, refactoring | Hvad der overhovedet skal bygges |
+| Bug-fix, log-analyse | Hvilke trade-offs der er acceptable |
+
+</div>
+
+<div class="mt-10 text-lg italic">
+Skiftet er fra "skal jeg overse?" til "<strong>hvad</strong> skal jeg overse?"
+</div>
+
+<div class="absolute bottom-12 left-12 right-12 border-l-4 border-cyan-400 pl-4 italic text-sm opacity-80">
+Det er ikke et færdigt billede. Det er en retning.
+</div>
+
+<!--
+source: docs/internal/sources.md (Anthropic 2026 Trends Report — Trend 4 p.10)
+
+- Det her slide ringer tilbage til "PhD og 10-årig". Samme pointe, ny formulering: human-in-loop forsvinder ikke, den koncentrerer sig der hvor judgment matters.
+- Trend 4 navngiver det "Human oversight scales through intelligent collaboration". Ikke fjerne mennesker, men gøre menneske-opmærksomheden vigtig hvor den faktisk betyder noget.
+- Tabellen er ikke en hård linje — det er en distribution. Alle fire venstre-rækker har edge-cases hvor mennesker stadig er kritiske. Alle fire højre-rækker har bits agenter kan automatisere. Det er retningen, ikke reglen.
+- Citatet i bunden ("Det er ikke et færdigt billede") er hedge. Vi laver forudsigelser i den her sub-section — vær eksplicit om at det ER forudsigelser.
+- Bro til Hands-on: "Lad os prøve nogle af de her værktøjer i praksis. I de næste 40 minutter eksperimenterer I med jeres egen kandidat-opgave."
 -->
 
 ---
