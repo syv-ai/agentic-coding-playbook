@@ -96,41 +96,24 @@ layout: center
 - Bro til næste slide: håndsoprækning. Det varmer rummet op før Karpathy.
 -->
 
----
-layout: center
-class: text-center
----
-
-# Har I prøvet en eller flere af disse?
-
-<div class="mt-12 text-xl opacity-80">
-Der er ingen rigtige svar — bare en håndsoprækning.
-</div>
-
-<div class="mt-16 text-base opacity-60 max-w-xl mx-auto">
-Mange har mødt agentic coding før december 2025 og er kommet ud med "det her er ikke klar endnu". I havde ret i den kontekst.
-</div>
-
-<!--
-- Lad et par sekunder gå før du beder om hænder.
-- Spørg trinvist for stille engagement: "hvem har prøvet GitHub Copilot?", "Cursor eller ChatGPT i kode?", "en agentisk CLI som Claude Code eller Codex CLI?"
-- Pointen: validere rummets erfaring før vi siger "men det her er anderledes nu". Modsat de fleste tech-præsentationer der siger "alt I har prøvet før var dårligt" — vi siger "I havde ret, og NU er det skiftet".
-- Bro til Karpathy-slidet: "lad os høre fra én af de mest dokumenterede skeptikere i feltet — og hvad der ændrede sig for ham."
--->
 
 ---
 layout: center
 class: text-center
 ---
 
-![Andrej Karpathy tweet, januar 2026](/andrej-karpathy-agentic-coding-didnt-work-before-december.png){class="max-h-[40rem] mx-auto rounded-lg shadow-md"}
+![Andrej Karpathy tweet, januar 2026](/andrej-karpathy-agentic-coding-didnt-work-before-december.png){class="max-h-[36rem] mx-auto rounded-lg shadow-md"}
 
-<div class="mt-6 text-base opacity-70">
-Andrej Karpathy, Februar 2026
+<div class="mt-4 text-base opacity-70 text-center">
+Andrej Karpathy, februar 2026<sup>*</sup>
+</div>
+
+<div class="mt-6 text-xs opacity-60 max-w-3xl mx-auto text-center">
+<sup>*</sup> Hvad ændrede sig konkret i december? Claude <strong>Opus 4.5</strong> udkom november 2025 og var den første model der brød 80 % på SWE-bench Verified (80,9 %). Sammen med det modne agent-harnesser (Claude Code) gav det stabilt langhorisont-arbejde for første gang. Næste slide går i dybden.
 </div>
 
 <!--
-source: x.com/karpathy/status/2026731645169185220
+source: x.com/karpathy/status/2026731645169185220 · GAI Insights (Paul Baier, jan 2026) for SWE-bench-tallet og Opus 4.5-konteksten
 asset: ../../assets/andrej-karpathy-agentic-coding-didnt-work-before-december.png
 
 - Lad billedet stå et par sekunder uden kommentar.
@@ -138,7 +121,8 @@ asset: ../../assets/andrej-karpathy-agentic-coding-didnt-work-before-december.pn
 - Han har 11 måneders dokumenteret skepsis før dette indlæg. Det er det der gør timingen vigtig.
 - Det centrale citat: "Coding agents basically didn't work before December and basically work since." (Læs det højt for de bagerste rækker — tweet-billedet er nok læsbart op til ~midten af et stort rum.)
 - Hans egen formulering andetsteds: "In December is when it really just... something flipped where I kind of went from 80–20 of writing code myself versus just delegating to agents to like 20–80." Forholdet inverterede og blev der.
-- Næste slide har et konkret eksempel fra det samme indlæg.
+- Footnote-detaljer: Opus 4.5 udkom 24. november 2025. Det var den første model der brød 80% på SWE-bench Verified (80,9%) — branche-standard benchmarken for end-to-end software-engineering-opgaver. Zach Loyd (Warp CEO): "Opus 4.5 excels at long-horizon, autonomous tasks, especially those requiring sustained reasoning." Sergey Karayev kaldte det "a watershed moment, moving software creation from an artisanal, craftsman activity to a true industrial process".
+- Næste slide har en mere udfoldet "hvad ændrede sig" — fokus på model + harness sammen.
 -->
 
 ---
@@ -205,7 +189,7 @@ Agenten kan løse en kompleks opgave til perfektion, og snuble i en triviel deta
 
 <div class="absolute bottom-12 left-12 right-12 border-l-4 border-orange-500 pl-4 italic text-sm opacity-80">
 "AI has a jagged frontier. It is good at some things that seem very hard, and bad at some things that seem really easy."
-<div class="not-italic mt-1 text-xs opacity-70">Ethan Mollick, Wharton</div>
+<div class="not-italic mt-1 text-xs opacity-70">Ethan Mollick</div>
  </div>
 
 <!--
@@ -215,7 +199,21 @@ source: oneusefulthing.org (Mollick, "jagged frontier") · Dell'Acqua, Mollick e
 - Det her er DEN vigtigste konceptuelle slide i opvarmningen. Den adresserer bekymringen direkte: ja, agenten er smart. Nej, du kan ikke regne med at den er smart hver gang.
 - Pointen er IKKE "det er for risikabelt". Pointen er "det er ikke autopilot, og det er ok". Værdien er allerede der hvis I styrer det. De næste slides viser hvad folk faktisk bruger det til, og hvor stor adoptionen allerede er.
 - "PhD og 10-årig" er det jeg vil have rummet til at huske. Hvis nogen senere siger "men kan vi stole på den?", så er svaret: "ja, til X. Nej, til Y. Du sidder stadig ved rorret." Det vi bruger best practices-blokken på er præcis det: review-disciplin, deterministisk infrastruktur, instruktioner der får agenten til at flagge sin egen tvivl.
-- Bro til næste slide: trods jaggedness adopteres det her hurtigt. Lad os først se landskabet (hvad bruger folk), så adoption-tallene.
+- Bro til næste sub-section: trods jaggedness adopteres det her hurtigt. Lad os først se kategorierne af værktøjer, så adoption-tallene.
+-->
+
+---
+layout: section
+---
+
+# Hvor langt er det kommet?
+
+<div class="text-lg opacity-70 mt-4">Først kategorierne, så tallene</div>
+
+<!--
+- Sub-section break. Hidtil: hvad er agentic coding, og hvor er grænserne (jaggedness). Næste 4-5 slides: hvor er adoptionen kommet hen i industrien.
+- Strukturen i sub-sektionen: 1) taxonomi (hvad bruger folk), 2) Pichai-trajectory (Google 25→50→75%), 3) Uber-eksempel (konkret adoption), 4) frontier-disclaimer (vi er ikke dem, men kurven er den samme).
+- Tonen: nøgtern data, ikke salgs-pitch. Vi laver ikke en hype-præsentation. Vi viser hvad der er sket, og hvad det betyder for et team som Norlys.
 -->
 
 ---
@@ -233,7 +231,7 @@ source: oneusefulthing.org (Mollick, "jagged frontier") · Dell'Acqua, Mollick e
 </div>
 
 <div class="mt-10 text-base opacity-80">
-December-skiftet handler især om de to sidste kategorier — agenter der gennemfører multi-step opgaver uden at miste tråden.
+December-skiftet gjord især de to sidste kategorier dominerende.
 </div>
 
 <!--
@@ -270,7 +268,7 @@ class: text-center
 
 <div class="mt-12 text-2xl">af ny kode på Google er AI-genereret</div>
 
-<div class="mt-10 text-sm opacity-60">Sundar Pichai, Google CEO · Maj 2026 · bredt-industri-baseline (DX Q4 2025): 22 %</div>
+<div class="mt-10 text-sm opacity-60">Sundar Pichai, Google CEO, Maj 2026</div>
 
 <!--
 source: docs/internal/sources.md (Business Insider, May 2026 — Brockman/Pichai/Meta/Amodei)
@@ -292,7 +290,7 @@ class: text-center
 ![Praveen Neppalli (Uber CTO) on agentic coding adoption at Uber](/uber-cto-tweet-about-agentic-coding-at-uber.png){class="max-h-[28rem] mx-auto rounded-lg shadow-md"}
 
 <div class="mt-6 text-base opacity-70">
-Praveen Neppalli, Uber CTO · 16. marts 2026
+Praveen Neppalli, Uber CTO, Marts 2026
 </div>
 
 <!--
@@ -355,7 +353,7 @@ class: text-center
 Skalerede projekter, nice-to-have værktøjer, eksperimenter, papercuts. Ting der før ikke var værd at fixe.
 </div>
 
-<div class="mt-16 text-sm opacity-60">Anthropic 2026 Agentic Coding Trends Report · intern Anthropic-data</div>
+<div class="mt-16 text-sm opacity-60"> Agentic Coding Trends Report, Anthropic, Januar 2026</div>
 
 <!--
 source: docs/internal/sources.md (Anthropic 2026 Trends Report, Trend 6, p.13)
@@ -377,27 +375,24 @@ layout: center
 <div class="mt-10 grid grid-cols-3 gap-6">
 
 <div>
-<div class="text-sm opacity-60">Anthropic · juridisk team</div>
 <div class="mt-2 text-lg"><strong>Domæne-ekspert bygger selv</strong></div>
-<div class="mt-2 text-sm opacity-80">En jurist uden kode-baggrund byggede triage-værktøjer der bringer marketing-review fra 2–3 dage til 24 timer.</div>
+<div class="mt-2 text-sm opacity-80">Flere ikke tekniske individer er begyndt at bruge værktøjet til at løse deres egne problemer. </div>
 </div>
 
 <div>
-<div class="text-sm opacity-60">Trends Report · Trend 3</div>
 <div class="mt-2 text-lg"><strong>Backlog-eliminering</strong></div>
-<div class="mt-2 text-sm opacity-80">Teknisk gæld der har ophobet sig i årevis fordi ingen havde tid bliver systematisk ryddet af agenter der arbejder gennem backloggen.</div>
+<div class="mt-2 text-sm opacity-80">Teknisk gæld der har ophobet sig i årevis fordi ingen havde tid bliver systematisk ryddet af agenter der kan arbejdee gennem backloggen.</div>
 </div>
 
 <div>
-<div class="text-sm opacity-60">Zapier · design-teams</div>
 <div class="mt-2 text-lg"><strong>Prototyper i real-tid</strong></div>
-<div class="mt-2 text-sm opacity-80">Bygger fungerende artefakter under kunde-interviews — koncepter der normalt ville tage uger at illustrere.</div>
+<div class="mt-2 text-sm opacity-80">Det er nu muligt at bringe sine ideer og visioner til livs på rekord tid.</div>
 </div>
 
 </div>
 
 <div class="mt-12 text-base opacity-80">
-Mønstret er ikke "samme arbejde, hurtigere". Det er <em>arbejde der ikke ville eksistere uden agenten</em>.
+Mønstret er ikke kun "samme arbejde, men hurtigere". Det er også <em>arbejde der ikke ville eksistere uden agenten</em>.
 </div>
 
 <!--

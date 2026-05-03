@@ -183,6 +183,19 @@ For resources we've flagged but haven't drawn from yet, see [`further-reading.md
 > [!info] Active tension with the DX Q4 2025 entry below
 > The Brockman / Pichai numbers (75–80% AI-authored at frontier labs, May 2026) are not directly comparable to the DX 22% (broad-industry, Q4 2025). Different populations, different methods. Treat the DX number as the *broad-industry baseline* and the BI numbers as the *frontier-lab leading edge* — together they tell a trajectory, but presenting either alone is misleading. Update DX's "headline number" framing accordingly when citing in new modules.
 
+### [GAI Insights — The Claude Code and Cowork Moment](https://gaiinsights.substack.com/p/the-claude-code-and-cowork-moment)
+**Type:** analyst newsletter (Paul Baier, GAI Insights — AI strategy consultancy)
+**Scope / year:** January 19, 2026; analysis of the November 2025 Opus 4.5 release and its perceived inflection effect on agentic coding viability.
+**Key findings:**
+- **Claude Opus 4.5 released November 2025** — first frontier model to break 80% on SWE-bench Verified, scoring **80.9%**. This is the cleanest concrete technical anchor in the literature for the "December inflection" framing that Karpathy and others reported.
+- **Sergey Karayev:** *"Claude Code with Opus 4.5 is a watershed moment, moving software creation from an artisanal, craftsman activity to a true industrial process."*
+- **Zach Loyd (Warp CEO):** *"Claude Opus 4.5 excels at long-horizon, autonomous tasks, especially those requiring sustained reasoning."*
+- **Boris Cherny (Head of Claude Code) on Claude Cowork:** *"All of it [Claude Cowork code]… We had to plan, design, and go back and forth with Claude."*
+- **Claude Cowork case study:** 4-person Anthropic team built the product end-to-end in a 1.5-week sprint using Claude Code for complete code generation. Concrete proof of the "long-horizon autonomous work" claim.
+**Where useful:** answers the "why did agentic coding start working in late 2025?" question with concrete technical anchors (Opus 4.5, SWE-bench 80.9%, model + harness convergence). Slot 1: the Karpathy slide footnote in the Norlys deck — provides the "what changed in November" detail behind Karpathy's "started working in December" claim. Slot 2: the "Hvad har ændret sig?" slide — could supplement with the SWE-bench number as the model-side anchor. Slot 3: the "where it's heading" sub-section — the 80.9% SWE-bench anchor pairs naturally with the Amodei/Brockman trajectory predictions ("here's where the curve crossed; here's where they think it goes next").
+**Caveats:** **Analyst newsletter**, not peer-reviewed research. Paul Baier runs GAI Insights, a paid AI-strategy consultancy with commercial interest in being seen as credible in the space; tends to write favorably about frontier AI labs. The quoted voices (Karayev, Loyd, Cherny) are all Anthropic-adjacent: Karayev runs an Anthropic-aligned startup, Loyd's Warp partners with Anthropic, Cherny works at Anthropic. Treat the directional framing as commentary, not independent verification. **The 80.9% SWE-bench number is verifiable from Anthropic's own model card** and is the strongest single claim to cite — quote it with the source named so the audience can weigh it. Pair the "watershed moment" framing with external practitioner voices (Karpathy, Mollick) when used in front of a sceptical audience. The "industrial process" metaphor is the article's editorial thesis, not a measured finding.
+**Used in:** Norlys deck Karpathy slide footnote (`decks/audiences/norlys-2026-05-05/`). Cross-relevant to the Anthropic 2026 Trends Report entry above — both anchor the late-2025 inflection from different angles (Trends Report is forward-looking predictions; this is backward-looking explanation of what crossed the threshold).
+
 ---
 
 ## Practitioner perspectives
