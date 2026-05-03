@@ -289,11 +289,11 @@ asset: ../../assets/uber-cto-tweet-about-agentic-coding-at-uber.png
 # Husk: dette er frontier
 
 <div class="mt-8 text-lg">
-De foregående tal kommer fra <strong>Google, OpenAI, Meta, Uber, Anthropic</strong>. Virksomheder med store engineering-orgs, egne AI-research-teams, og kultur for tidlig adoption.
+De foregående tal kommer fra <strong>Google, OpenAI, Meta, Uber, Anthropic</strong> — virksomheder med store engineering-orgs, egne AI-research-teams, og en kultur for tidlig adoption.
 </div>
 
 <div class="mt-6 text-lg">
-I er sandsynligvis 1–2 år bagud på samme kurve. Det er forventeligt. Og det er en fordel: I bygger ovenpå værktøjer der allerede er blevet testet og pillet ved af de første mover-teams.
+Den bredere industri er på samme kurve. Adoptionen følger med og stiger, men har endnu ikke nået samme kapacitet. Manger virksomheder er stadig ved at finde ud af hvordan værktøjerne bedst bruges.
 </div>
 
 <div class="absolute bottom-12 left-12 right-12 border-l-4 border-cyan-400 pl-4 italic text-base opacity-90">
@@ -301,10 +301,9 @@ Brug tallene som retning, ikke som målestok.
 </div>
 
 <!--
-- Det her slide er calibration, ikke deflation. Tonen: nøgtern, ikke undskyldende.
-- Sig det højt: "I er ikke Google. Det skal I heller ikke være. Men retningen er den samme — I er bare et stykke længere tilbage på kurven."
-- Konkret: Google rapporterede 25% i 2024, 50% i 2025, 75% i dag. Hvis I gætter at I er hvor Google var for 18 måneder siden, er det måske 5–15% af jeres nye kode i dag. Det er en realistisk baseline.
-- Modargumentet I møder: "Vi er bagud, så det giver ikke mening at investere endnu". Modsvar: jo længere bagud, jo mere lærings-ammunition fra dem der gik først. I behøver ikke begå deres fejl. Det her workshop er en del af det.
+- Det her slide er calibration, ikke pege-finger. Tonen: nøgtern observation om hvor frontier er, og hvor det står for resten.
+- Pointen: kurven er den samme — Google rapporterede 25% i 2024, 50% i 2025, 75% i dag. Resten af industrien følger samme retning, bare med forsinkelse, og med mere usikkerhed om "hvordan bruger vi det her godt?".
+- Modargumentet man møder: "Det er for tidligt for os at investere". Modsvar: tidlig nok til at det betaler sig, sent nok til at man ikke behøver gentage de første-mover-fejl. Workshoppen er en del af det — vi destillerer hvad der virker, så I ikke selv skal teste det fra bunden.
 - Bro til næste slide: "Indtil nu har vi set HVOR MEGET af eksisterende arbejde der nu laves med AI. Næste tal måler noget andet — hvor meget arbejde AI får os til at lave, som ikke ville være lavet ellers."
 -->
 
@@ -343,7 +342,51 @@ source: docs/internal/sources.md (Anthropic 2026 Trends Report, Trend 6, p.13)
 - Vendor-caveat (siges højt): tallet kommer fra Anthropics egen interne research. De har en kommerciel interesse i at få adoption op, så jeg har navngivet kilden så I selv kan vægte den. Selv hvis tallet skal trækkes ned med 5–10 procentpoints, er den kvalitative pointe konsistent med både METR (kommer på næste slide), Jellyfish-volumen-tallene og det rummet selv vil genkende fra eget arbejde.
 - Konkrete eksempler at give: en lille intern dashboard ingen havde tid til at bygge, et log-analyse-script til at finde mønstre i incidents, en automatisk PR-summary, en migration der lå på backloggen i to år.
 - Norlys-spørgsmål til rummet: hvad ligger i jeres backlog som "ville være rart, men ingen har tid"? Det er den 27% i jeres kontekst.
-- Bro til næste slide: men volumen og det udvidede scope kommer ikke gratis. Næste slide viser regningen.
+- Bro til næste slide: tre konkrete eksempler på hvad de 27% ser ud som i praksis.
+-->
+
+---
+layout: center
+---
+
+# Hvad ser det ud som?
+
+<div class="mt-10 grid grid-cols-3 gap-6">
+
+<div>
+<div class="text-sm opacity-60">Anthropic · juridisk team</div>
+<div class="mt-2 text-lg"><strong>Domæne-ekspert bygger selv</strong></div>
+<div class="mt-2 text-sm opacity-80">En jurist uden kode-baggrund byggede triage-værktøjer der bringer marketing-review fra 2–3 dage til 24 timer.</div>
+</div>
+
+<div>
+<div class="text-sm opacity-60">Trends Report · Trend 3</div>
+<div class="mt-2 text-lg"><strong>Backlog-eliminering</strong></div>
+<div class="mt-2 text-sm opacity-80">Teknisk gæld der har ophobet sig i årevis fordi ingen havde tid bliver systematisk ryddet af agenter der arbejder gennem backloggen.</div>
+</div>
+
+<div>
+<div class="text-sm opacity-60">Zapier · design-teams</div>
+<div class="mt-2 text-lg"><strong>Prototyper i real-tid</strong></div>
+<div class="mt-2 text-sm opacity-80">Bygger fungerende artefakter under kunde-interviews — koncepter der normalt ville tage uger at illustrere.</div>
+</div>
+
+</div>
+
+<div class="mt-12 text-base opacity-80">
+Mønstret er ikke "samme arbejde, hurtigere". Det er <em>arbejde der ikke ville eksistere uden agenten</em>.
+</div>
+
+<!--
+source: docs/internal/sources.md (Anthropic 2026 Trends Report — Trend 3 p.9, Trend 7 p.14)
+
+- Tre eksempler, samme tema: agenten gør arbejde *muligt*, ikke bare hurtigere.
+- Anthropic-juridisk: pointen er IKKE "kig hvor smart Anthropic er". Pointen er at en domæne-ekspert uden engineering-team kunne bygge sit eget værktøj. Norlys-oversættelse: en regulatory-specialist der bygger sin egen compliance-checker, en trader der bygger sin egen backtest-runner, en operations-person der bygger sin egen monitoring-dashboard.
+- Backlog: det her er hvor rummet kender sig selv igen. Hvert team har en "ville-være-rart-men-ingen-har-tid"-bunke. 27% er den bunke der pludselig får ben at gå på.
+- Zapier: ikke kun for designere. Samme dynamik gælder hvis I demonstrerer et koncept til en kunde, en intern stakeholder, eller en regulator — fungerende prototype i et møde flytter en samtale ti gange længere end et statisk mockup.
+- Vendor-caveat: alle tre eksempler er fra Anthropic Trends Report, så det er Anthropic der har valgt at fremhæve dem. Brug det til at sige "her er retningen — find jeres eget eksempel inden næste workshop".
+- Spørgsmål til rummet (hvis tid): nævn ét stykke arbejde I IKKE laver i dag, som I ville lave hvis tærsklen var halvdelen så høj. Det er kandidaten til jeres første eksperiment.
+- Bro til næste slide: men det udvidede scope og det øgede tempo kommer ikke gratis. Næste slide viser regningen.
 -->
 
 ---
