@@ -10,14 +10,12 @@ transition: slide-left
 mdc: true
 ---
 
-<img src="../../assets/syv-logo.svg" class="h-10 absolute top-8 right-8" />
+![syv.ai logo](/syv-logo.svg){class="h-10 absolute top-8 right-8"}
 
 # Agentic coding
 
-### Fra "jeg prøver lidt Copilot" til "AI er en team-kapabilitet"
-
-<div class="text-sm opacity-70 mt-12">
-Norlys · Track 2 · 5. maj 2026<br/>
+<div class="text-sm opacity-70 mt-6">
+Norlys · 5. maj 2026<br/>
 Rasmus Krebs, syv.ai
 </div>
 
@@ -36,7 +34,7 @@ Speaker notes:
 
 | | | |
 |---|---|---|
-| **0:00 – 0:25** | Reality check & framing | 25 min |
+| **0:00 – 0:25** | Agentic coding anno 2026 | 25 min |
 | **0:25 – 1:05** | Hands-on exploration | 40 min |
 | **1:05 – 1:45** | Best practices | 40 min |
 | **1:45 – 2:20** | Design dit næste eksperiment | 35 min |
@@ -55,43 +53,265 @@ Spørgsmål undervejs er bedre end spørgsmål til sidst.
 layout: section
 ---
 
-# Reality check
-
-<div class="text-lg opacity-70 mt-4">0:00 – 0:25 · 25 min</div>
+# Agentic coding anno 2026
 
 <!--
-- Skift gear: tonen her er ikke salgs-pitch. Det er "hvad ved vi faktisk om det her?"
+- Sektionen åbner med tal. Lad dem lande før kommentar — METR-slidet er rummets første test af om vi taler ærligt om data eller pakker det ind.
+- Tonen her er ikke salgs-pitch. Det er "hvad ved vi faktisk om det her?"
+-->
+
+---
+layout: center
+---
+
+# "Agentic coding er der bare ikke endnu"
+
+<div class="mt-12 grid grid-cols-3 gap-6">
+
+<div>
+<div class="text-sm opacity-60">2023</div>
+<div class="mt-2 text-lg"><strong>Github Copilot</strong></div>
+<div class="mt-2 text-sm opacity-80">Avanceret autocomplete. Smart, men lavede ofte fejl og var langsomt.</div>
+</div>
+
+<div>
+<div class="text-sm opacity-60">2024</div>
+<div class="mt-2 text-lg"><strong>Cursor · ChatGPT</strong></div>
+<div class="mt-2 text-sm opacity-80"> Hjælpsomt til boilerplate, men fald fra hinanden i større codebases.</div>
+</div>
+
+<div>
+<div class="text-sm opacity-60">tidligt 2025</div>
+<div class="mt-2 text-lg"><strong>Tidlige agenter</strong></div>
+<div class="mt-2 text-sm opacity-80">Imponerende demoer. Fungerede ikke optimalt  på rigtige opgaver.</div>
+</div>
+
+</div>
+
+
+<!--
+- Audience-bro. Mange i rummet er sandsynligvis kommet ud af en eller flere af de tre bølger med "det her er ikke klar endnu".
+- De havde ret — i den kontekst de mødte det. Pointen er ikke at modsige dem; pointen er at sige: hvis du ikke har testet det her i de sidste 4–5 måneder, så har du testet noget andet end det vi taler om i dag.
+- Lad gerne rummet bekræfte med håndsoprækning: "hvor mange har prøvet en eller flere af disse?" — det varmer den næste slide op.
+-->
+
+---
+layout: center
+class: text-center
+---
+
+![Andrej Karpathy tweet, januar 2026](/andrej-karpathy-agentic-coding-didnt-work-before-december.png){class="max-h-[28rem] mx-auto rounded-lg shadow-md"}
+
+<div class="mt-6 text-base opacity-70">
+Andrej Karpathy, Februar 2026
+</div>
+
+<!--
+source: x.com/karpathy/status/2026731645169185220
+asset: ../../assets/andrej-karpathy-agentic-coding-didnt-work-before-december.png
+
+- Lad billedet stå et par sekunder uden kommentar.
+- Karpathy er en troværdig stemme i det her rum — co-founder af OpenAI, ex-Tesla AI director, ikke en hype-stemme.
+- Han har 11 måneders dokumenteret skepsis før dette indlæg. Det er det der gør timingen vigtig.
+- Det centrale citat: "Coding agents basically didn't work before December and basically work since." (Læs det højt for de bagerste rækker — tweet-billedet er nok læsbart op til ~midten af et stort rum.)
+- Hans egen formulering andetsteds: "In December is when it really just... something flipped where I kind of went from 80–20 of writing code myself versus just delegating to agents to like 20–80." Forholdet inverterede og blev der.
+- Næste slide har et konkret eksempel fra det samme indlæg.
 -->
 
 ---
 
-# METR-overraskelsen
+# Hvad har ændret sig?
 
-<div class="text-2xl mt-8 mb-8">
-Erfarne udviklere blev <strong>19% langsommere</strong> med AI-værktøjer.
+<div class="mt-6">
+
+To ting kom på plads samtidig i 2025:
+
+- **Modeller** (*Opus 4.5*) der kan holde tråden over lange, multi-step opgaver
+- **Agent harnesser**<sup>\*</sup> (*Claude Code, Codex CLI*) der wrapper modellen med værktøjer og adgang til dit system
+
 </div>
 
-<div class="text-xl opacity-80">
-…og rapporterede selv at de følte sig <strong>20% hurtigere</strong>.
+<div class="mt-6 text-md italic">
+Før: tekst ind, tekst ud. Nu: bash, grep, git. En del af det system du arbejder i.
 </div>
 
-<div class="text-sm opacity-60 mt-12">
-METR, juli 2025 · randomized study af erfarne open-source-udviklere
+<div class="mt-4 flex justify-center">
+
+```mermaid {scale: 0.7}
+graph LR
+    Task[Task] --> Gather[Gather context]
+    Gather --> Act[Take action<br/>create, edit, run]
+    Act --> Verify[Verify<br/>test, compile]
+    Verify -->|fix| Gather
+    Verify -->|done| Done[Done]
+```
+
 </div>
+
+<div class="mt-6 text-sm opacity-60">
+
+<sup>\*</sup> En **harness** er softwaren der wrapper sprogmodellen og giver den værktøjer, context management og et execution environment. Modellen leverer reasoning.
+
+</div>
+<!--
+source: docs/01-the-agentic-loop.md (the agent harness + loop concept) · Karpathy, januar 2026
+
+- Hvad er en "agent harness"? Fra playbook M01: harnessen er softwaren der *wrapper* sproget-modellen og giver den værktøjer, context management og et execution environment. Modellen leverer reasoning, harnessen leverer alt det andet — filer, shell, search, web access, git, kode-intelligens. Claude Code er en harness. Cursor er en harness. Codex CLI er en harness.
+- Slidet svarer på "hvad skiftede faktisk?" uden at postulere. To ting kom på plads sammen i 2025:
+  1. Model-side: Opus 4.5 (sen 2025) gav lang-horisont coherence — agenten holder tråden over 30+ minutters arbejde uden at miste plot.
+  2. Harness-side: Claude Code (GA 2025), Codex CLI og lignende gav modellen system-adgang — filer, shell, grep, ps, netværk, git. Tidligere måtte du copy-paste kode ud af din editor og ind i en chat. Nu sidder agenten i den terminal hvor du arbejder.
+- Game-changer-pointen: harnessen er det der gav modellen *hænder*. Før: tekst ind, tekst ud. Nu: agenten kan selv læse den fil den mangler, køre den test den vil verificere, tjekke det log der har konteksten. Det er det, der lukker loopen.
+- For trader-shops: jeres eksisterende deterministiske infrastruktur (linters, type checkers, CI, monitoring) bliver pludselig *læselig FOR agenten*. Det gør jeres infrastruktur til en multiplikator, ikke en barriere — vi kommer tilbage til det i best practices.
+- Karpathys eksempel fra forrige slide (30 min. DGX Spark setup): det er præcis det her loop der lukker. Han formulerede det i naturligt sprog fordi harnessen havde shell-adgang, kunne læse docs, debugge fejl, dokumentere — uden at miste tråden.
+-->
+
+
+---
+
+# PhD og 10-årig. På samme tid.
+
+<div class="mt-8 text-xl">
+Agenten kan løse en kompleks opgave til perfektion, og snuble i en triviel detalje fem minutter senere.
+</div>
+
+<v-click>
+<div class="mt-10 text-lg">
+<b class="text-2xl underline flex justify-center">Vi er ikke på autopilot endnu.</b><br/>Vi er stadig nødsaget til at sidde ved roret. Men værdien er allerede der, på flere måder end mange tror.
+</div>
+</v-click>
+
+<div class="absolute bottom-12 left-12 right-12 border-l-4 border-orange-500 pl-4 italic text-sm opacity-80">
+"AI has a jagged frontier. It is good at some things that seem very hard, and bad at some things that seem really easy."
+<div class="not-italic mt-1 text-xs opacity-70">Ethan Mollick, Wharton</div>
+ </div>
 
 <!--
-source: docs/internal/sources.md (METR, to be added)
+source: oneusefulthing.org (Mollick, "jagged frontier") · Dell'Acqua, Mollick et al., 2023
 
-Dette er ikke et argument MOD AI — det er et argument FOR at måle. Hvis erfarne folk tager fejl på 40 procentpoint om deres egen produktivitet, så er "jeg synes det går hurtigere" ikke et data point der bærer en beslutning.
-
-Pointe til rummet: vi går ikke ind i det her med "AI gør alle hurtigere". Vi går ind i det her med "AI ændrer hvor flaskehalsen ligger — og hvis I ikke designer for det, mister I tiden et andet sted".
-
-Bemærk: det her er fra juli 2025. Værktøjerne er bedre i dag, men dynamikken — at folk overvurderer egne gevinster — er konsistent på tværs af studier.
+- "Jagged frontier" er Mollicks formulering: AI er god til ting der virker svære, og dårlig til ting der virker lette. Du kan ikke se grænsen før du krydser den.
+- Det her er DEN vigtigste konceptuelle slide i opvarmningen. Den adresserer bekymringen direkte: ja, agenten er smart. Nej, du kan ikke regne med at den er smart hver gang.
+- Pointen er IKKE "det er for risikabelt". Pointen er "det er ikke autopilot, og det er ok". Værdien er allerede der hvis I styrer det. De næste slides viser hvad folk faktisk bruger det til, og hvor stor adoptionen allerede er.
+- "PhD og 10-årig" er det jeg vil have rummet til at huske. Hvis nogen senere siger "men kan vi stole på den?", så er svaret: "ja, til X. Nej, til Y. Du sidder stadig ved rorret." Det vi bruger best practices-blokken på er præcis det: review-disciplin, deterministisk infrastruktur, instruktioner der får agenten til at flagge sin egen tvivl.
+- Bro til næste slide: trods jaggedness adopteres det her hurtigt. Lad os først se landskabet (hvad bruger folk), så adoption-tallene.
 -->
 
 ---
 
-# Hvor flytter flaskehalsen sig hen?
+# Hvad bruger folk faktisk?
+
+<div class="mt-6">
+
+| Kategori | Eksempler | Hvad det er |
+|---|---|---|
+| **Chat** | ChatGPT · Claude.ai · Google Gemini | Copy-paste-workflow |
+| **Autocomplete** | GitHub Copilot · Cursor tab | Forslag mens du skriver |
+| **Chat-in-IDE** | Cursor · Windsurf · Cline | Du beder; det redigerer din kode |
+| **Agentic CLI** | Claude Code · Codex CLI · Aider | Multi-step opgaver i terminalen |
+</div>
+
+<div class="mt-10 text-base opacity-80">
+December-skiftet handler især om de to sidste kategorier — agenter der gennemfører multi-step opgaver uden at miste tråden.
+</div>
+
+<!--
+- Hurtigt landskabs-overview. Pointen er IKKE at evaluere de enkelte værktøjer — det er at give rummet et fælles vokabular.
+- Hvis nogen i rummet kun har prøvet kategori 1 (autocomplete), så har de testet en lille del af det vi taler om i dag.
+- Forblive neutral: vi anbefaler ikke specifikke værktøjer. Bedst er det værktøj de selv bruger og kan vurdere kritisk.
+- "Cloud chat" er indgangen for mange udviklere uden at de tænker på det som agentic. Det er det ikke i fuld forstand, men workflowet vænner folk til at uddelegere opgaver.
+- Hvis de spørger til specifikke værktøjer: hold det kort. Spørg hvad DE bruger og bind tilbage til kategorien.
+-->
+
+---
+layout: center
+class: text-center
+---
+
+<div class="grid grid-cols-3 gap-12 mt-8">
+
+<div>
+<div class="text-7xl font-bold opacity-50">25%</div>
+<div class="mt-3 text-base opacity-70">2024</div>
+</div>
+
+<div>
+<div class="text-7xl font-bold opacity-75">50%</div>
+<div class="mt-3 text-base opacity-80">2025</div>
+</div>
+
+<div>
+<div class="text-7xl font-bold">75%</div>
+<div class="mt-3 text-base">2026</div>
+</div>
+
+</div>
+
+<div class="mt-12 text-2xl">af ny kode på Google er AI-genereret</div>
+
+<div class="mt-10 text-sm opacity-60">Sundar Pichai, Google CEO · Maj 2026 · bredt-industri-baseline (DX Q4 2025): 22 %</div>
+
+<!--
+source: docs/internal/sources.md (Business Insider, May 2026 — Brockman/Pichai/Meta/Amodei)
+Business insider article: https://www.businessinsider.com/google-ai-generated-code-75-gemini-agents-software-2026-4
+
+- Tre tal, tre år. Lad kurven stå.
+- Pointen er IKKE "I skal være på 75% i morgen". Pointen er at kurven er stejl, og at den ikke er stoppet — det her er Google, men Brockman (OpenAI) sagde nyligt at deres tal gik fra 20% til 80% bare gennem december. Meta har sat mål om at 65% af engineers i creation-org skal skrive 75%+ af deres kode med AI.
+- Vendor-caveat at sige højt: alle de her tal kommer fra CEO-udtalelser ved konferencer, ikke målte studier. Hver eneste sælger AI. Men styrken er at konkurrenter er enige om retningen — når Google, OpenAI, Meta og Anthropic alle siger 75–90% mod deres egne kryds-incitamenter, er signalet svært at affærdige.
+- Det lille footer-tal (DX Q4 2025: 22%) er bredt-industri-baseline — 135.000 udviklere på tværs af firmaer. Det er IKKE samme måling som Pichais 75% (Google internt). Sammenhold dem: bred industri var ved 22% sent 2025; frontier-labs er ved 75–80% i dag. I ligger sandsynligvis et sted imellem.
+- Spørgsmål til rummet: hvor tror I jeres egen kurve står? (Stryger man hånden op for "har du AI-værktøj installeret?" → 100%. "Har du brugt det denne uge?" → mange. "Skriver det majoriteten af din nye kode?" → få. Det er gabet.)
+- Næste slide anker det aggregerede tal til en konkret virksomhed (Uber, marts 2026).
+-->
+
+---
+
+# Uber · marts 2026
+
+![Praveen Neppalli (Uber CTO) on agentic coding adoption at Uber](/uber-cto-tweet-about-agentic-coding-at-uber.png){class="max-h-[28rem] mx-auto rounded-lg shadow-lg opacity-100 bg-white p-2"}
+
+<div class="mt-4 text-sm opacity-70 text-center">
+Praveen Neppalli, Uber CTO · 16. marts 2026
+</div>
+
+<!--
+source: tweet by @praveenTweets, 2026-03-16
+asset: ../../assets/uber-cto-tweet-about-agentic-coding-at-uber.png
+
+- Læs det højt for rummet:
+  - 1.800 code changes per uge skrevet *udelukkende* af Ubers interne background-coding-agent
+  - 95% af deres ingeniører bruger AI hver måned på tværs af alle deres tracked tools
+- Pointen: 22%-tallet er ikke en abstrakt branche-statistik. Det er Uber. Det er sandsynligvis dine konkurrenter. Det er allerede sket.
+- Trader-relevant nuance: Uber er ikke et lavrisiko-shop — de håndterer realtime-pricing, betalinger, regulatorisk komplekse markeder. Hvis det virker for dem på 1.800 changes/uge, er argumentet "vores domæne er for risikabelt" ikke længere selvfølgeligt.
+- Hvis nogen spørger om kvalitet: "background coding agent" implicerer det er ikke ucontrolleret — det kører gennem deres normale review/CI. Vi kommer tilbage til det i best practices.
+-->
+
+---
+layout: center
+class: text-center
+---
+
+<div class="text-9xl font-bold">27%</div>
+
+<div class="mt-6 text-2xl opacity-80">af AI-arbejde er ting der ellers ikke ville være lavet</div>
+
+<div class="mt-10 text-base opacity-70 max-w-xl mx-auto">
+Skalerede projekter, nice-to-have værktøjer, eksperimenter, papercuts. Ting der før ikke var værd at fixe.
+</div>
+
+<div class="mt-16 text-sm opacity-60">Anthropic 2026 Agentic Coding Trends Report · intern Anthropic-data</div>
+
+<!--
+source: docs/internal/sources.md (Anthropic 2026 Trends Report, Trend 6, p.13)
+
+- Pointen: 27% er IKKE "AI gør arbejdet hurtigere". Det er "AI udvider hvad der overhovedet er værd at lave".
+- Det matcher Mollicks framing fra forrige slide. Når AI er god til ting der før var dyre for mennesker, flytter grænsen for hvad der er økonomisk meningsfuldt at lave. Mollick kalder det "reverse salients" i hans "Shape of AI"-essay — flaskehalse der bryder, og pludselig bliver projekter der ikke var værd at lave for ét år siden, billige nok til at lave i dag.
+- Vendor-caveat (siges højt): tallet kommer fra Anthropics egen interne research. De har en kommerciel interesse i at få adoption op, så jeg har navngivet kilden så I selv kan vægte den. Selv hvis tallet skal trækkes ned med 5–10 procentpoints, er den kvalitative pointe konsistent med både METR (kommer på næste slide), Jellyfish-volumen-tallene og det rummet selv vil genkende fra eget arbejde.
+- Konkrete eksempler at give: en lille intern dashboard ingen havde tid til at bygge, et log-analyse-script til at finde mønstre i incidents, en automatisk PR-summary, en migration der lå på backloggen i to år.
+- Norlys-spørgsmål til rummet: hvad ligger i jeres backlog som "ville være rart, men ingen har tid"? Det er den 27% i jeres kontekst.
+- Bro til næste slide: men volumen og det udvidede scope kommer ikke gratis. Næste slide viser regningen.
+-->
+
+---
+
+# Volumen er det første der ændrer sig
 
 <div class="grid grid-cols-2 gap-8 mt-8">
 
@@ -101,7 +321,7 @@ Bemærk: det her er fra juli 2025. Værktøjerne er bedre i dag, men dynamikken 
 
 - 21% flere opgaver per udvikler
 - 98% flere PRs merged
-- Mere kode skrives, hurtigere
+- Median PR-størrelse: +33%
 
 </div>
 
@@ -111,7 +331,6 @@ Bemærk: det her er fra juli 2025. Værktøjerne er bedre i dag, men dynamikken 
 
 - **PR review-tid: +91%**
 - Incidents per PR: +23.5%
-- Median PR-størrelse: +33%
 
 </div>
 
@@ -122,11 +341,58 @@ Mere kode kommer ind i den samme review-proces.
 </div>
 
 <!--
-source: docs/internal/sources.md (Jellyfish 2025 AI Metrics in Review, DX Q4 2025)
+source: docs/internal/sources.md (Jellyfish 2025 AI Metrics in Review)
 
 - Faktisk pointe: AI fjerner ikke arbejde, det flytter det. Hvis I ikke designer review-processen til den nye volumen, drukner senior-udviklerne.
 - Tal med rummet: hvor i jeres flow tror I flaskehalsen ville flytte sig først?
 - Det her sætter scenen for hvorfor vi bruger 40 minutter på "best practices" senere — det er primært om review-disciplin og infrastruktur.
+-->
+
+---
+layout: center
+class: text-center
+---
+
+<div class="text-9xl font-bold">19%</div>
+
+<div class="mt-6 text-2xl opacity-80">langsommere med AI</div>
+
+<div class="mt-16 text-sm opacity-60">METR · juli 2025 · randomized study af erfarne open-source-udviklere</div>
+
+<!--
+source: docs/internal/sources.md (METR, to be added)
+
+- Stille slide. Lad tallet stå længere end komfortabelt.
+- Næste slide leverer den faktiske pointe.
+-->
+
+---
+
+# Det de troede — og det de målte
+
+<div class="grid grid-cols-2 gap-12 mt-12 text-center">
+
+<div>
+<div class="text-6xl font-bold opacity-80">+20%</div>
+<div class="mt-3 text-base opacity-80">følte sig <em>hurtigere</em></div>
+</div>
+
+<div>
+<div class="text-6xl font-bold">−19%</div>
+<div class="mt-3 text-base">var <em>langsommere</em></div>
+</div>
+
+</div>
+
+<div class="mt-16 text-lg">
+Det er ikke en kritik af AI. Det er et argument <strong>for at måle</strong>.
+</div>
+
+<!--
+- 40 procentpoints gap mellem perception og virkelighed. Hos erfarne folk.
+- Implicit pointe: hvis I kun måler "føles det hurtigere" — og det er det de fleste teams gør — har I ingen idé om hvad I faktisk får ud af det.
+- Det her sætter også scenen for "Design dit eksperiment" senere: stop-kriterier og målbar succes er ikke bureaukratisk, det er den eneste måde at vide om det virker.
+- Forsigtig nuance: studiet er fra juli 2025, før december-skiftet Karpathy beskriver. Værktøjerne er bedre nu. Men dynamikken — at folk overvurderer egne gevinster — er konsistent på tværs af studier. Stop-kriteriet er pointen, ikke det specifikke tal.
 -->
 
 ---
@@ -801,7 +1067,7 @@ Tænk over: hvilken én observation fra de sidste 150 minutter ville du dele med
 
 # Tak
 
-<img src="../../assets/syv-logo.svg" class="h-12 mt-8" />
+![syv.ai logo](/syv-logo.svg){class="h-12 mt-8"}
 
 <div class="mt-8">
 
