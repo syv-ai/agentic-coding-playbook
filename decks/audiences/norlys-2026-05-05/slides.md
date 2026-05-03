@@ -30,7 +30,42 @@ Speaker notes:
 
 ---
 
-# Hvad vi gennemgår
+# Rasmus Krebs
+
+<div class="grid grid-cols-2 gap-12 mt-8">
+
+<div>
+
+<div class="text-lg opacity-80">ML Engineer hos syv.ai</div>
+
+<div class="mt-6 space-y-3 text-base">
+
+- Started i syv.ai i April 2024
+- Arbejdede knap 2 år som ML engineer-contractor hos Apple
+- Arbejder dagligt med agentic coding tools og vi i syv.ai har bygget flere værktøjer for at gøre hverdagen med disse nemmere (dash, sonar, m.m.)
+- Cykelglad
+
+</div>
+
+</div>
+
+<div>
+
+<!-- Drop portrait at decks/audiences/norlys-2026-05-05/public/rasmus-krebs.jpg and uncomment: -->
+<!-- <img src="/rasmus-krebs.jpg" class="rounded-lg shadow-lg max-h-[24rem] mx-auto" /> -->
+
+</div>
+
+</div>
+
+<!--
+- Hold det kort: 60 sekunder. Tre linjer, intet mere.
+- Apple-baggrunden er social proof uden at være selvros — lad det stå uden uddybning.
+-->
+
+---
+
+# Agenda
 
 | | | |
 |---|---|---|
@@ -182,8 +217,8 @@ Agenten kan løse en kompleks opgave til perfektion, og snuble i en triviel deta
 </div>
 
 <v-click>
-<div class="mt-10 text-lg">
-<b class="text-2xl underline flex justify-center">Vi er ikke på autopilot endnu.</b><br/>Vi er stadig nødsaget til at sidde ved roret. Men værdien er allerede der, på flere måder end mange tror.
+<div class="mt-10 text-lg text-center">
+<b class="text-2xl underline mt-4">Vi er ikke på autopilot endnu.</b><br/>Vi er stadig nødt til at sidde ved roret. Men værdien er der, på flere måder end mange tror.
 </div>
 </v-click>
 
@@ -199,48 +234,23 @@ source: oneusefulthing.org (Mollick, "jagged frontier") · Dell'Acqua, Mollick e
 - Det her er DEN vigtigste konceptuelle slide i opvarmningen. Den adresserer bekymringen direkte: ja, agenten er smart. Nej, du kan ikke regne med at den er smart hver gang.
 - Pointen er IKKE "det er for risikabelt". Pointen er "det er ikke autopilot, og det er ok". Værdien er allerede der hvis I styrer det. De næste slides viser hvad folk faktisk bruger det til, og hvor stor adoptionen allerede er.
 - "PhD og 10-årig" er det jeg vil have rummet til at huske. Hvis nogen senere siger "men kan vi stole på den?", så er svaret: "ja, til X. Nej, til Y. Du sidder stadig ved rorret." Det vi bruger best practices-blokken på er præcis det: review-disciplin, deterministisk infrastruktur, instruktioner der får agenten til at flagge sin egen tvivl.
-- Bro til næste sub-section: trods jaggedness adopteres det her hurtigt. Lad os først se kategorierne af værktøjer, så adoption-tallene.
+- Bro til næste sub-section: trods jaggedness adopteres det her hurtigt. Lad os se hvad CEO'erne selv rapporterer fra deres egne organisationer.
 -->
 
 ---
 layout: section
 ---
 
-# Hvor langt er det kommet?
+# Tech testimonials
 
-<div class="text-lg opacity-70 mt-4">Først kategorierne, så tallene</div>
-
-<!--
-- Sub-section break. Hidtil: hvad er agentic coding, og hvor er grænserne (jaggedness). Næste 4-5 slides: hvor er adoptionen kommet hen i industrien.
-- Strukturen i sub-sektionen: 1) taxonomi (hvad bruger folk), 2) Pichai-trajectory (Google 25→50→75%), 3) Uber-eksempel (konkret adoption), 4) frontier-disclaimer (vi er ikke dem, men kurven er den samme).
-- Tonen: nøgtern data, ikke salgs-pitch. Vi laver ikke en hype-præsentation. Vi viser hvad der er sket, og hvad det betyder for et team som Norlys.
--->
-
----
-
-# Hvad bruger folk faktisk?
-
-<div class="mt-6">
-
-| Kategori | Eksempler | Hvad det er |
-|---|---|---|
-| **Chat** | ChatGPT · Claude.ai · Google Gemini | Copy-paste-workflow |
-| **Autocomplete** | GitHub Copilot · Cursor tab | Forslag mens du skriver |
-| **Chat-in-IDE** | Cursor · Windsurf · Cline | Du beder; det redigerer din kode |
-| **Agentic CLI** | Claude Code · Codex CLI · Aider | Multi-step opgaver i terminalen |
-</div>
-
-<div class="mt-10 text-base opacity-80">
-December-skiftet gjord især de to sidste kategorier dominerende.
-</div>
+<div class="text-lg opacity-70 mt-4">Frontier-virksomhederne, i deres egne ord</div>
 
 <!--
-- Hurtigt landskabs-overview. Pointen er IKKE at evaluere de enkelte værktøjer — det er at give rummet et fælles vokabular.
-- Hvis nogen i rummet kun har prøvet kategori 1 (autocomplete), så har de testet en lille del af det vi taler om i dag.
-- Forblive neutral: vi anbefaler ikke specifikke værktøjer. Bedst er det værktøj de selv bruger og kan vurdere kritisk.
-- "Cloud chat" er indgangen for mange udviklere uden at de tænker på det som agentic. Det er det ikke i fuld forstand, men workflowet vænner folk til at uddelegere opgaver.
-- Hvis de spørger til specifikke værktøjer: hold det kort. Spørg hvad DE bruger og bind tilbage til kategorien.
+- Sub-section break. Hidtil: hvad er agentic coding, og hvor er grænserne (jaggedness). Næste 3 slides: hvad CEO'erne selv siger om adoptionen i deres egne organisationer.
+- Strukturen i sub-sektionen: 1) Pichai-trajectory (Google 25→50→75%), 2) Uber-eksempel (konkret adoption fra Uber CTO), 3) frontier-disclaimer (vi er ikke dem, men kurven er den samme).
+- Tonen: nøgtern data, ikke salgs-pitch. Vi viser hvad navngivne CEO'er rapporterer — så rummet selv kan vægte vendor-incitamentet.
 -->
+
 
 ---
 layout: center
@@ -268,7 +278,7 @@ class: text-center
 
 <div class="mt-12 text-2xl">af ny kode på Google er AI-genereret</div>
 
-<div class="mt-10 text-sm opacity-60">Sundar Pichai, Google CEO, Maj 2026</div>
+<div class="mt-10 text-sm opacity-60">Sundar Pichai, Google CEO, April 2026</div>
 
 <!--
 source: docs/internal/sources.md (Business Insider, May 2026 — Brockman/Pichai/Meta/Amodei)
@@ -427,7 +437,23 @@ Find ét stykke arbejde I IKKE laver i dag, som I ville lave hvis tærsklen var 
 - Eksempler at give hvis rummet trænger til en kickstart: en intern dashboard ingen havde tid til at bygge, log-analyse-script til incidents, automatisk PR-summary, en migration der har ligget i to år.
 - Hvis nogen siger "vi har ingen backlog" → spørg "hvad afviser I oftest med 'det kan vi ikke nå'?"
 - Hvis tid er knap: spring videre efter 30 sekunder. Pointen er at plante frøet, ikke at få svar her.
-- Bro til næste slide: men det udvidede scope og det øgede tempo kommer ikke gratis. Næste slide viser regningen.
+- Bro til næste sub-section: regningen for det udvidede scope og det øgede tempo. Slop, kvalitet, perception-gap.
+-->
+
+---
+layout: section
+---
+
+# With great power comes great responsibility
+
+<div class="text-lg opacity-70 mt-4">Slop, slop og mere slop...</div>
+
+<!--
+- Sub-section break: vi har set scale (Pichai, Uber) og novelty (27%, examples). Nu adresserer vi den anden side direkte: mere kode betyder også mere slop, hvis review-disciplinen ikke følger med.
+- Tonen: vi ducker IKKE bekymringen. Vi siger den højt før rummet skal sige den. Det giver troværdighed til resten af præsentationen.
+- Slop-framingen er bevidst — det er det ord rummet bruger om dårlig AI-kode internt. Ved at navngive det viser vi at vi ved hvad de tænker på, og at vi tager det seriøst.
+- Bro fra backlog-slidet: "Det var løftet om hvad I kan få. Lad os nu se på prisen — fordi der er en pris."
+- Bro til Volumen-slidet: "Lad os starte med det enkleste at måle: volumen, og hvad der ændrer sig når den stiger."
 -->
 
 ---
@@ -578,7 +604,50 @@ audience-specific: do not promote to canonical
 - Det her er audience-specifikt for en trading-/energi-kontekst. Eksemplerne er designet til at lyde lavrisiko og samtidig genkendelige.
 - Pointer at notere: ingen af de fem er "skriv en ny matching-engine". Det er den fede midte.
 - Hvis nogen siger "men jeg bruger ikke OpenAPI" — perfekt, så er det ikke deres første step. Pointen er taksonomien, ikke den specifikke liste.
-- Bro til næste sub-section: "Det var hvor I kan starte i dag. Lad os zoome ud — hvad er retningen i de næste 12 måneder?"
+- Bro til næste slide: 5 minutters diskussion — lad rummet selv samle deres bekymringer og erfaringer op før vi går videre.
+-->
+
+---
+
+# 5 minutter med jeres sidemand
+
+<div class="mt-8 grid grid-cols-2 gap-8">
+
+<div>
+
+### Hvad virker allerede?
+
+Hvor bruger I AI eller agentic tools i dag, og hvor giver det reel værdi?
+
+</div>
+
+<div>
+
+### Hvor stopper I — kvalitet/risiko?
+
+Hvilke opgaver tør I ikke uddelegere? Hvor er bekymringerne størst?
+
+</div>
+
+</div>
+
+<div class="mt-12 text-base opacity-80">
+Skriv det ned. Vi vender tilbage til det senere — i best practices og når I designer jeres eksperiment.
+</div>
+
+<div class="mt-8 text-sm opacity-60">
+5 minutter · grupper á 3–4
+</div>
+
+<!--
+- Det her er Step 1's discussion-prompter fra brief'en, samlet på ét slide. Vi gør pause i dataen og lader rummet tale.
+- Lad dem selv finde grupper. 3-4 per gruppe er sweet spot — stort nok til diversitet, lille nok til at alle får ordet på 5 min.
+- Bed dem skrive ned. Det er ikke for vores skyld — det er for at de selv har noget at forholde sig til når vi vender tilbage senere.
+- Hold tiden stramt. 5 min betyder 5 min. Hvis grupperne er optaget, lad dem fortsætte mens du går videre — pointen er at få frøene plantet, ikke at få "rigtige svar".
+- Tilbageblik undervejs:
+  1. I Best Practices: når vi taler om patterns, bind tilbage — "kan I genkende nogen af jeres bekymringer i de her patterns?"
+  2. I Design Eksperiment: brug deres egne nedskrevne bekymringer som input til guardrails i deres eksperimenter.
+- Bro til næste sub-section: "Det var nutiden. Lad os zoome ud — hvor er det på vej hen?"
 -->
 
 ---
@@ -704,7 +773,130 @@ source: docs/internal/sources.md (Anthropic 2026 Trends Report — Trend 4 p.10)
 - Trend 4 navngiver det "Human oversight scales through intelligent collaboration". Ikke fjerne mennesker, men gøre menneske-opmærksomheden vigtig hvor den faktisk betyder noget.
 - Tabellen er ikke en hård linje — det er en distribution. Alle fire venstre-rækker har edge-cases hvor mennesker stadig er kritiske. Alle fire højre-rækker har bits agenter kan automatisere. Det er retningen, ikke reglen.
 - Citatet i bunden ("Det er ikke et færdigt billede") er hedge. Vi laver forudsigelser i den her sub-section — vær eksplicit om at det ER forudsigelser.
-- Bro til Hands-on: "Lad os prøve nogle af de her værktøjer i praksis. I de næste 40 minutter eksperimenterer I med jeres egen kandidat-opgave."
+- Bro til næste sub-section: "Lad os samle det vi har dækket i ét billede — hvordan ser hele lifecyclen ud nu?"
+-->
+
+---
+layout: section
+---
+
+# Den nye software-lifecycle
+
+<div class="text-lg opacity-70 mt-4">Fra uger og måneder til timer og dage</div>
+
+<!--
+- Sub-section break: synthesis af alt vi har dækket. Vi har set scale, novelty, cost, fit og forward. Nu samler vi det i ét billede: hvordan lifecyclen ser ud, når agenter er en del af den.
+- Tonen: ikke "alt er anderledes nu", men "her er det mønster der kommer ud af alle de tal vi lige har set".
+-->
+
+---
+layout: center
+class: text-center
+---
+
+![SDLC før vs efter agentic coding tools](/sdlc-anthropic-trends-2026.png){class="max-h-[36rem] mx-auto rounded-lg shadow-lg opacity-100 bg-white p-6"}
+
+<div class="mt-6 text-base opacity-80 max-w-2xl mx-auto">
+Cyklus-tid: <strong>uger–måneder</strong> → <strong>timer–dage</strong>. Sekventielle handoffs bliver til en flydende agent-flow.
+</div>
+
+<div class="mt-3 text-sm opacity-60">Anthropic 2026 Agentic Coding Trends Report · Trend 1, p.5</div>
+
+<!--
+source: docs/internal/sources.md (Anthropic 2026 Trends Report, Trend 1, p.5)
+asset: ../../public/sdlc-anthropic-trends-2026.png
+
+- Lad billedet stå et øjeblik. Peg derefter på venstre kolonne: traditional SDLC, sequential handoffs, lifecycle på uger/måneder.
+- Højre kolonne: agentic SDLC. Express intent → agent understands → agent implements → agent tests + docs → human review → deploy. Cyklus på timer/dage.
+- De vigtigste forskelle markeret i diagrammet:
+  1. Sequential handoffs → fluid agent flow
+  2. Human codes everything → human guides, agent executes
+  3. Docs as afterthought → docs generated inline
+  4. Manual incident response → agent-assisted remediation
+- Pointen: det er IKKE at hvert step bliver hurtigere. Det er at HELE strukturen ændrer sig. Compression handler ikke om at skrive kode hurtigere — det handler om at hand-offs forsvinder.
+- Næste slide: hvad betyder det konkret for en hverdag.
+-->
+
+---
+
+# Hvad ændrer det for jer?
+
+<div class="mt-8 grid grid-cols-2 gap-8">
+
+<div>
+
+### Færre handoffs
+
+Spec → kode → tests → docs sker i én session. Den traditionelle "vent på næste persons del" forsvinder for store dele af arbejdet.
+
+</div>
+
+<div>
+
+### Docs som default
+
+Dokumentation, changelogs og kommentarer bliver genereret inline, ikke som efterskelet. "Docs er noget vi skal nå" bliver "docs er en del af outputtet".
+
+</div>
+
+<div>
+
+### Review er flaskehalsen
+
+Når implementation tager minutter, bliver human review den langsomste del af cyklen. Det er præcis det Volumen-slidet viste: review-tid +91 %.
+
+</div>
+
+<div>
+
+### Monitoring → iteration
+
+Agent-assisteret incident-respons gør at observability-data flyder direkte tilbage i næste iteration, ikke som en separat post-mortem-aktivitet.
+
+</div>
+
+</div>
+
+<div class="mt-10 text-base opacity-80 italic text-center">
+Ikke "vi koder hurtigere". Mere: "lifecyclen har ændret form".
+</div>
+
+<!--
+- Det her slide er hvor den abstrakte lifecycle bliver konkret for rummet.
+- Færre handoffs: store dele af "skriv kode → bed kollega om review → vent → fix → re-review" kan kollapse i én session. Best practices-blokken senere handler om hvordan man bevarer kvaliteten i den kollapsede form.
+- Docs inline: gæld der akkumulerede tidligere fordi "vi når at skrive docs senere" — det "senere" forsvinder.
+- Review som flaskehals: ringer tilbage til Volumen-slidet (PR review-tid +91%). Det er den centrale udfordring i den nye lifecycle, og det er en stor del af hvad de næste 40 minutter (Best practices) handler om.
+- Monitoring → iteration: pre-agent skulle observability-data gennem en menneske-process før det blev til en kode-ændring. Med agent-assisteret remediation kan loop'et lukke direkte.
+- 20–40 % uplift-rammen (siges højt, ikke på slide): industri-rapporter peger på 20–40 % produktivitets-uplift som realistisk for teams der adopterer AI seriøst — men det forudsætter workflow-redesign. Uden redesign får du måske 5–10 %. Det her diagram er det redesign.
+- Bro til næste slide: "Det er teorien. Lad os se et konkret eksempel på, hvordan vi selv arbejder agentisk hos syv.ai."
+-->
+
+---
+
+# Sådan bruger vi det selv hos syv.ai
+
+<div class="mt-8 text-lg opacity-80">
+[FILL IN: én sætning der framer eksemplet — fx "ét konkret eksempel fra vores eget arbejde"]
+</div>
+
+<div class="mt-8 space-y-3 text-base">
+
+- [FILL IN: hvad opgaven var]
+- [FILL IN: hvilket setup I brugte (model, harness, tools, hooks)]
+- [FILL IN: hvad I lærte — hvad fungerede, hvad ikke]
+
+</div>
+
+<div class="mt-10 text-base opacity-80 italic">
+[FILL IN: takeaway eller invitation — fx "spørg os om mere efter session" eller en pointe der binder tilbage til workshoppen]
+</div>
+
+<!--
+- Det her er Step 1's "demo/perspektiv af hvordan syv.ai arbejder" fra brief'en — placeret som lukkeren på Anno 2026 så det knytter teorien til en konkret case.
+- Hold det konkret. Ikke "vi laver mange ting med AI" — én case, ét lærings-punkt.
+- Pointen er IKKE at sælge syv.ai. Det er at give et nært eksempel der gør resten af deck'en mindre abstrakt.
+- 60–90 sekunder. Hvis det varer længere bliver det reklame.
+- Bro til Hands-on: "Det er hvordan vi selv arbejder. Nu skal I prøve det — i de næste 40 minutter eksperimenterer I med jeres egen kandidat-opgave."
 -->
 
 ---

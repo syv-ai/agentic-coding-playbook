@@ -150,6 +150,38 @@ This is the success-metric section. If they don't leave with something they'll a
 2. **Sources for the METR slide.** Cite as "MIT/METR, July 2025" with the arxiv link and `sources.md`-style caveat. Confirm the framing isn't too punchy for this room ("they thought they were faster, they were measurably slower" is a strong move).
 3. **War-story slides — by failure mode, not by brand** *(decided 2026-04-29)*. Lead with the shape of the failure. Speaker notes carry the source citations for anyone who asks; slide titles and headlines name the failure mode. The story is interesting because of the mechanism, not the size of the company.
 
+## Playbook drawdown notes
+
+The playbook (`docs/00`–`docs/14`) is the canonical knowledge base. Below: which playbook material to draw on when we hit each deck section. Surfaced during the slide walkthrough on 2026-04-29 — incorporate as we revise each section.
+
+### Section 1 — Agentic coding anno 2026
+
+- **Module 01 — the agentic loop** (`gather → act → verify → repeat`). Add a slide between audience-arc and Karpathy that introduces the loop. Reframes Karpathy's claim from "models got better" to "the architecture finally closes end-to-end without losing the thread." Highest-leverage missing concept in this section.
+- **Module 01 — harness taxonomy** (terminal-based / IDE-integrated / cloud-based). Realign the "Hvad bruger folk faktisk?" tooling slide to this taxonomy — playbook is more architecturally rigorous than my four-category split (autocomplete / chat-in-IDE / agentic CLI / cloud chat). Could keep the four-row structure but tag each row with its harness type, or replace outright.
+- **Module 00 — "Why now" framing**. The five drivers (mainstream agents, context engineering as core skill, parallel execution normal, AGENTS.md standard, quality gates essential) underpin the whole "anno 2026" claim. Use as speaker-note talking points, not slide content — they thread through later sections.
+- **Module 01 — autocomplete vs. autonomy**. Module 01 frames this as an *architectural* difference, not a capability one. Worth strengthening the audience-arc closing: "earlier wasn't even trying to do this" lands harder than "earlier was less capable."
+
+### Section 3 — Best practices
+
+- **Module 00 — Five principles** (Context is the product · Verify, then trust · Start minimal, add when it breaks · Treat instructions like code · Delegate, don't dictate). These are the playbook's spine. Several already implicit in the deck; surfacing them explicitly would tighten the section.
+- **Module 06 — Verification and Quality Gates**. The two-way critique slide draws from `issue-coverage-plan.md`, but the actual published module has more material. Re-read before finalizing best-practices section.
+- **Module 01 — "You are part of the loop"** ("delegating to a capable colleague... it's a dialogue, not a command-and-response pattern"). Direct support for the engineering-manager analogy slide — strengthens the framing.
+- **Module 08 — Long-running agents**. Karpathy's "16 hours a day" workflow lives here. Relevant for the volume-paradox slide and any extension on what sustained agentic work looks like.
+
+### Section 4 — Design dit næste eksperiment
+
+- **Module 04 — Effective Prompting for Agents**. The "from vague requests to precise, verifiable task specs" framing is exactly what the design template demands. Re-read 04 before finalizing the falsifiable-experiment slide.
+- **Module 00 — Principle "Start minimal, add when it breaks"**. Direct match for the "smaller than you think" line in the sample experiments slide. Worth surfacing.
+
+### Section 5 — Wrap
+
+- **Module 00 — Five principles** as an alternative or augmentation to the current "Tre ting at tage med." The five principles are tighter and more transferable than the three takeaways; could replace, or could complement them.
+
+### Optional / cross-cutting
+
+- **Module 01 — pagination example** as an alternative concrete demo if Karpathy's DGX Spark example feels too DevOps-shaped for this audience. The pagination one is universally relatable for developers; keep as a fallback.
+- **`docs/research-summary.md`** — citations are well-curated there; align deck source attributions to that file's wording when possible.
+
 ## Workshop repo for Scenario A
 
 Decided 2026-04-29: prepare a small Python repo with 4 starter tasks (~20 min each). Lives at the repo root in `agentic-coding-workshop/` so it's easy to `mv` into a standalone public repository before the workshop. Tasks:
