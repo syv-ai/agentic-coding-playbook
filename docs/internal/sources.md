@@ -147,6 +147,28 @@ For resources we've flagged but haven't drawn from yet, see [`further-reading.md
 
 ---
 
+## Industry trends and adoption (cross-cutting)
+
+### [2026 Agentic Coding Trends Report](https://resources.anthropic.com/2026-agentic-coding-trends-report)
+**Type:** vendor research report (Anthropic)
+**Scope / year:** 2026 predictions across eight named trends (foundation / capability / impact), drawing on internal Anthropic Societal Impacts research and named customer case studies. 17-page PDF.
+**Key findings:**
+- **Collaboration paradox** (Foreword p.3, Trend 4 p.10): engineers report using AI in roughly 60% of their work but being able to "fully delegate" only 0–20% of tasks. Effective use requires "thoughtful set-up and prompting, active supervision, validation, and human judgment — especially for high-stakes work."
+- **27% of AI-assisted work is tasks that wouldn't have been done otherwise** (Trend 6, p.13) — scaling projects, nice-to-have tools, exploratory work. Productivity comes "primarily through greater output — more features shipped, more bugs fixed, more experiments run — rather than simply doing the same work faster."
+- **Onboarding collapse, weeks → hours** (Trend 1, p.5–6). Sidebar: an Augment Code customer finished a project the CTO had estimated at 4–8 months in 2 weeks using Claude.
+- **Role transformation: implementer → orchestrator** (Trend 1, p.6) — named framing.
+- **Long-running agents handle multi-hour work**: Rakuten — Claude Code completed a complex activation-vector extraction in vLLM (12.5M LOC OSS library) in 7 hours of autonomous work, single run, 99.9% numerical accuracy. (Trend 3, p.9)
+- **Multi-agent coordination case**: Fountain — 50% faster screening, 40% quicker onboarding, 2× candidate conversions; one logistics customer cut fulfillment-center staffing from "one or more weeks to less than 72 hours." (Trend 2, p.8)
+- **Regulated-domain case**: CRED (Indian fintech, 15M+ users) doubled execution speed "without eliminating human involvement, but by shifting developers toward higher-value work." (Trend 4, p.10)
+- **Telecoms case**: TELUS — 13,000+ custom AI solutions, 500,000+ hours saved, code shipped 30% faster, average 40 min saved per AI interaction. (Trend 6, p.13)
+- **Non-technical adoption case**: Zapier — 89% AI adoption org-wide with 800+ AI agents deployed internally. (Trend 7, p.14)
+- **Anthropic-internal engineer quote** (Trend 4, p.10): *"I'm primarily using AI in cases where I know what the answer should be or should look like. I developed that ability by doing software engineering 'the hard way.'"*
+**Where useful:** load-bearing for the "AI Coding anno 2026" framing in workshop decks (adoption depth + value beyond velocity). The collaboration-paradox stat is the strongest single citation for the "we're not at autopilot, but value is real" framing. The named case studies (CRED, TELUS, Rakuten, Fountain, Zapier, Augment Code) give domain anchors — fintech, telecoms, logistics, OSS infrastructure — for audience-specific decks. The 27% wouldn't-have-been-done number is the cleanest "value beyond velocity" anchor in the literature.
+**Caveats:** **Anthropic-published** — they have a direct commercial interest in adoption growing. Treat the *case studies* (CRED, TELUS, Rakuten, Fountain, Zapier, Legora, Augment Code) as the load-bearing evidence: those are externally verifiable claims attributed to named organisations. Treat *Anthropic's internal claims* (60%/0–20% split, the 27% number, the productivity-through-volume framing) as legitimate but vendor-sourced — when citing on a slide, name Anthropic as the source so the audience can weigh it. Pair Anthropic-internal claims with an external practitioner voice (Mollick, Karpathy, Pydantic panel) to avoid sole-source bias. Predictions framed as "we expect X in 2026" are forecasts, not measurements — don't cite them as facts.
+**Used in:** Norlys deck (`decks/audiences/norlys-2026-05-05/`), `docs/research-summary.md` entry #16. Cross-relevant to issues #4 (culture), #7 (developer-as-manager), #9 (who codes), #12 (volume).
+
+---
+
 ## Practitioner perspectives
 
 ### [Pydantic — Code Review in the Age of AI: PyAI Panel Discussion](https://pydantic.dev/articles/pyai-oss-panel)
