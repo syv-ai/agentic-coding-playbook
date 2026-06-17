@@ -218,4 +218,3 @@ Can't check all the boxes? You skipped TDD. Start over.
 ## Related skills
 
 - **systematic-debugging** — when a test surfaces a bug, debug it to root cause; write the regression test here.
-- **checklist** — verify the suite actually passes before you claim it.

@@ -61,7 +61,7 @@ The mechanism differs per ecosystem; the principle is identical — run the fast
 - **Run, in order, cheapest first:** auto-format → lint / type-check → the fast test subset. Keep it fast; push slow/e2e tests to CI.
 - **Mirror the same checks in CI** so the gate can't be skipped with `--no-verify`.
 
-Confirm the gate works by making a commit that violates a rule and watching it get blocked, then a clean one that passes. (Use the **checklist** skill — don't claim it works without seeing the block.)
+Confirm the gate works by making a commit that violates a rule and watching it get blocked, then a clean one that passes. Don't claim it works without seeing the block — run it and read the output, never from memory.
 
 ## Done when
 
@@ -75,4 +75,3 @@ Confirm the gate works by making a commit that violates a rule and watching it g
 
 - **grill-me** — the interview technique used on the new-project path.
 - **tdd** — once the test runner is wired, build features test-first.
-- **checklist** — verify the gate actually blocks before claiming setup is done.

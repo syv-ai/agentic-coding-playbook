@@ -34,8 +34,10 @@ Then, inside Claude Code in your project:
 **Quality & verification**
 - [`tdd`](tdd/) — disciplined red-green-refactor with behavior-first, tracer-bullet tests.
 - [`systematic-debugging`](systematic-debugging/) — reproduce → minimise → hypothesise → instrument → fix → regression-test.
-- [`checklist`](checklist/) — evidence before assertions: run the verification, confirm the output, then claim done.
 - [`receiving-code-review`](receiving-code-review/) — process review feedback with rigor, not performative agreement.
+
+**Safety**
+- [`guardrails`](guardrails/) — lock down a repo/session: install deterministic hooks that hard-block destructive commands, plus a ruthlessly-conservative posture that demands explicit approval before touching remote DBs, internal systems, production, secrets, or PII. *(User-only command.)*
 
 **Architecture, lifecycle & meta**
 - [`improve-codebase-architecture`](improve-codebase-architecture/) — find shallow modules, propose deeper ones.

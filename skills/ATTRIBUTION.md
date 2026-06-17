@@ -21,7 +21,7 @@ every skill stands on its own.
 | Skill | Origin |
 |---|---|
 | `grill-me` | mattpocock/skills (`grill-me`), with the CONTEXT.md glossary idea folded in from `grill-with-docs` |
-| `brainstorming` | obra/superpowers (`brainstorming`, incl. the visual-companion server) |
+| `brainstorming` | obra/superpowers (`brainstorming`); the visual companion was reworked from the Node WebSocket server to static HTML + `AskUserQuestion` |
 | `to-prd` | mattpocock/skills (`to-prd`), decoupled from the setup/issue-tracker config machinery |
 | `to-issues` | mattpocock/skills (`to-issues`), decoupled from the setup/issue-tracker config machinery |
 | `writing-plans` | obra/superpowers (`writing-plans`) |
@@ -30,11 +30,11 @@ every skill stands on its own.
 | `zoom-out` | mattpocock/skills (`zoom-out`) |
 | `tdd` | **Merge** of obra/superpowers (`test-driven-development`) + mattpocock/skills (`tdd` and its reference files) |
 | `systematic-debugging` | **Merge** of obra/superpowers (`systematic-debugging`) + mattpocock/skills (`diagnose`) |
-| `checklist` | Generalized from obra/superpowers (`verification-before-completion`) |
 | `receiving-code-review` | obra/superpowers (`receiving-code-review`) |
 | `improve-codebase-architecture` | mattpocock/skills (`improve-codebase-architecture`) |
 | `handoff` | mattpocock/skills (`handoff`) |
 | `write-a-skill` | **Merge** of mattpocock/skills (`write-a-skill`) + obra/superpowers (`writing-skills`) |
+| `guardrails` | Syv.ai original — extends mattpocock/skills (`git-guardrails-claude-code`) into a broader project/session safety skill |
 | `setup` | Syv.ai original (purpose absorbed from mattpocock/skills `setup-pre-commit`, generalized) |
 | `setup-syv-skills` | Syv.ai original |
 

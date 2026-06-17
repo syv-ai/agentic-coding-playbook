@@ -61,7 +61,8 @@ After all tasks complete and verified:
 
 ## Integration
 
+**Before claiming a task complete:** run the actual verification (tests, build, the task's acceptance check) and read the output — never claim from memory or "should pass".
+
 **Related workflow skills:**
 - **writing-plans** - Creates the plan this skill executes
 - **tdd** - The test-first loop each task step follows
-- **checklist** - Verify the work is genuinely complete before claiming it is

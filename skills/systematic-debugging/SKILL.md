@@ -185,5 +185,4 @@ If you catch yourself thinking:
 ## Related skills
 
 - **tdd** — for writing the failing regression test in Phase 6.
-- **checklist** — verify the fix actually worked before claiming success.
 - **improve-codebase-architecture** — when the post-mortem reveals a structural cause.
