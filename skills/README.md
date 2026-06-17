@@ -11,6 +11,16 @@ verification. Tool-agnostic in spirit; written for Claude Code.
 npx skills add syv-ai/agentic-coding-playbook   # puts the collection on disk
 ```
 
+**On Windows**, pin the agent and copy instead of symlinking — Windows blocks
+symlink creation without Developer Mode / admin rights:
+
+```bash
+npx skills add syv-ai/agentic-coding-playbook --agent claude-code --copy
+```
+
+Requires Node.js 18+. (`--agent claude-code` also ensures the skills land in
+`.claude/skills/` rather than a generic agent directory.)
+
 Then, inside Claude Code in your project:
 
 ```
