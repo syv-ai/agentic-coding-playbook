@@ -162,6 +162,33 @@ For resources we've flagged but haven't drawn from yet, see [`further-reading.md
 
 ---
 
+## Software design fundamentals & workshop anchors (modules 01, 03, 04, 06, 12)
+
+Anchors surfaced while hardening the N.C. Nielsen session 1.1 content. Ousterhout and the Pragmatic Programmer are now cited directly in module 12; Pocock informs the framing of several modules. Not yet promoted to `research-summary.md` (manual editorial step).
+
+### [John Ousterhout — A Philosophy of Software Design](https://web.stanford.edu/~ouster/cgi-bin/aposd.php)
+**Type:** book (2018)
+**Key findings:** Complexity is anything about a system's structure that makes it hard to understand and change. Argues for *deep modules* (simple interfaces over substantial implementation) against shallow ones — which is exactly the structure agents default to (lots of interface, scattered dependencies).
+**Where useful:** 12 "Why Healthy Code Wins" ([^9]); the design-principles fix behind the implosion/velocity-inversion argument; 06 refactoring-first.
+**Caveats:** pre-AI; applied by analogy to agent behaviour. Use as vocabulary for module *size/boundaries*, not as tiny-class SRP (which it argues against).
+**Used in:** module 12 ([^9]); workshop 1.1
+
+### [Andrew Hunt & David Thomas — The Pragmatic Programmer](https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/)
+**Type:** book (1999 / 2019 20th-anniversary ed.)
+**Key findings:** Software entropy / "broken windows" — every change made without regard for the whole degrades the design, and decay compounds. Also "don't outrun your headlights" (moving faster than your feedback loop allows).
+**Where useful:** 12 "Why Healthy Code Wins" ([^8]) and the "agents add entropy fast" point; 06 feedback loops / TDD.
+**Caveats:** general-purpose classic; cite for the entropy framing, not as AI-specific evidence.
+**Used in:** module 12 ([^8]); workshop 1.1
+
+### [Matt Pocock — "Software Fundamentals Matter More Than Ever" (talk + aihero.dev)](https://www.youtube.com/watch?v=v4F1gFy-hqg)
+**Type:** conference talk + practitioner blog
+**Key claims:** AI does the tactical work; design, architecture, quality, and contracts stay human ("bad code is the most expensive it's ever been"). The alignment interview (grill-me), smart-zone vs dumb-zone, slim instruction files, hooks as deterministic guardrails, the build-then-rebuild stance.
+**Where useful:** workshop 1.1 hard content and its echoes in modules 01 (leverage upstream), 03 (context rot), 04 (alignment interview, plan mode), 12 (build-rebuild). The outside-authority voice for the strategic/tactical split.
+**Caveats:** explicitly aimed at senior engineers; split the transferable principle from the senior-dev framing and the model-specific numbers before porting. Practitioner, not research.
+**Used in:** workshop 1.1; modules 01, 03, 04, 12 (framing)
+
+---
+
 ## How to add a new source
 
 1. Pick the right section (or add one if no existing topic fits).

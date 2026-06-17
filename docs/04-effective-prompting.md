@@ -79,6 +79,8 @@ Run tests after each step.
 
 Most agentic tools have a "plan mode" that restricts the agent to read-only analysis [^1]. Use it for Phase 1. Review the plan, refine it through conversation, then let the agent implement.
 
+Plan mode does more than hold the agent back from editing. It forces the agent to work the whole task out in advance instead of discovering the codebase as it goes, and the exploration it does to write the plan *primes its context*, so when you switch to implementation it already knows the files it needs. It's a forcing function for you, too: you often don't know exactly what you want until you see the plan laid out, and a gap is far cheaper to catch in a plan than in a diff. Because of that priming, don't clear the session between planning and implementing, you'd throw away the context that makes the plan worth having.
+
 ### 4. Scope the Work Explicitly
 
 Agents sometimes do more than you asked. They "helpfully" refactor surrounding code, add error handling you didn't request, or clean up imports in files they didn't need to touch. This creates noise in your diffs and potential regressions.
@@ -127,6 +129,20 @@ instead of creating a new one.
 Each exchange gives the agent more context. This is normal and expected. Treat the first prompt as a starting direction, not a complete specification.
 
 You can also interrupt. If the agent is heading in the wrong direction (you can see it reading files that aren't relevant, or making changes you disagree with), just type your correction and hit enter. The agent stops and adjusts [^1].
+
+## Align Before You Build
+
+The most common reason an agent "does the wrong thing" isn't a coding failure, it's that you and the agent never shared the same picture of the task. The fix is to close that gap *before* any code exists, by having the agent interview you.
+
+Instead of describing the task and hoping, ask the agent to grill you on it: walk down each branch of the decision tree, one question at a time, surfacing the choices you haven't actually made yet. Resolving an ambiguity in a question costs a sentence; resolving it after the agent has built on a wrong assumption costs a rewrite, and every blind rewrite adds entropy. The interview forces you to think, and the agent will routinely raise angles you hadn't considered.
+
+A few rules keep it productive:
+
+- **It's a conversation, not an interrogation.** Steer it, and stop once the genuinely open questions are settled. Don't grill detail you've already decided.
+- **Grill the low-fidelity, prototype the high-fidelity.** Names, rules, edge cases, and boundaries have precise answers, so grill those. "How should it *feel*?" doesn't, it needs a quick mockup, not more questions (see [Module 11](./11-from-business-context-to-agent-tasks.md)).
+- **Don't throw the alignment away.** A finished interview is a context window full of exactly the decisions the build needs. Continue into implementation in the same session, or capture it as a spec, rather than clearing it and starting cold.
+
+In Claude Code this is the `grill-me` skill, a few lines telling the agent to interview you relentlessly until the plan is unambiguous; the technique transfers to any tool you can tell to ask before it acts.
 
 ## Triggering Tools Creatively
 

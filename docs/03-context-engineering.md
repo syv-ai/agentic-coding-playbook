@@ -160,6 +160,16 @@ This mirrors how humans work. You don't memorize an entire codebase before start
 
 This means your project's organization is itself a form of context engineering. Clear naming conventions, consistent folder structure, and well-placed README files all help the agent navigate efficiently.
 
+### Keep Docs Alive, or Delete Them
+
+There's a sharp edge to this: the agent treats your documentation as ground truth. It reads a `CONVENTIONS.md` or an architecture note and acts on it the same way it acts on the code. So a stale doc isn't merely dead weight, it's actively misleading, steering the agent confidently in the wrong direction. A wrong comment a human skims past is a wrong instruction the agent follows.
+
+This sounds like it contradicts "keep the instruction file lean," but it's the same principle from the other side: keep *few* docs, and keep the ones you keep alive. The discipline:
+
+- **Treat docs like code.** Version them, review them, and update them in the same change that makes the underlying thing change. The PR that renames a pattern updates the doc that describes it.
+- **Let the agent maintain them.** "Update the architecture note to match what we just changed" is a reasonable task to hand the agent at the end of a piece of work.
+- **Prune ruthlessly.** A research note that was useful for one sprint becomes a liability the next. Delete it. Prefer docs the agent generates just-in-time during exploration over a pile of markdown that quietly rots.
+
 ## Exercises
 
 1. Audit your current instruction file (or create one). Is anything in there that the agent could infer from reading the code? Remove it.

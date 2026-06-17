@@ -85,6 +85,12 @@ The scheduling mechanism varies by tool:
 | GitHub Actions cron | CI pipeline | Tasks tied to your repository |
 | Loop commands | Current CLI session | Quick polling while you're working |
 
+## Incident Response
+
+The same pattern, an agent triggered by an event rather than by you, extends past CI into operations. When an alert fires, an agent can do the first-responder legwork: pull the relevant logs and metrics (often through an MCP connection to your observability stack), correlate them with recent deploys, form a ranked set of hypotheses, propose a mitigation, and draft the incident write-up for a human to approve.
+
+This is real but early, and it sits at the high-autonomy, high-blast-radius end of everything in this workshop. An agent with the access to diagnose production also has the access to make an outage worse. So it only belongs behind the controls from the rest of this module and [Module 02](./02-environment-setup.md): scoped, least-privilege credentials, hard guardrails on destructive actions, and a human approval gate before anything it proposes touches production. Let it investigate and recommend freely; keep the act-on-it step gated.
+
 ## Team Standardization
 
 When a team adopts agentic coding, consistency matters more than individual optimization. Three practices help:

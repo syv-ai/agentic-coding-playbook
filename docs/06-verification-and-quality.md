@@ -64,6 +64,12 @@ Practical tips for reviewing agent-generated code:
 
 **Question new dependencies.** If the agent added a package to solve a problem, check whether the problem could have been solved with existing code.
 
+### Agent Review: A Fresh Pair of Eyes
+
+Human review is the irreplaceable layer, but it shouldn't be the *only* review. Run an agent over the diff too, as a fresh, separate session that did not write the code. An agent that helped implement a change is anchored: it tends to defend its own choices. One that sees only the diff, with no memory of the implementation conversation, reviews without that bias and catches things the author (human or agent) glossed over.
+
+Make it routine, on every change, not just the big ones. It's cheap and tireless. It doesn't replace your review; it raises the floor before you look, so your attention goes to the judgment calls instead of the obvious misses. And hold it to a fair standard: human PR review was never perfect either. Agent reviewers aren't strictly better or worse, they fail *differently*, which is exactly why pairing one with a human catches more than either alone. In Claude Code this is the `code-review` skill (`/code-review`, or `/code-review ultra` for a deeper multi-agent pass); in CI it's the automated review step from [Module 09](./09-production-workflows.md).
+
 ## The Refactoring-First Approach
 
 CodeScene's research highlights an important pattern: agents perform significantly better on well-structured code [^1]. When code health is low (large complex functions, deep nesting, tight coupling), agents produce worse output and burn more tokens trying.
@@ -111,6 +117,19 @@ Unit tests verify individual functions. But agents can also do higher-level veri
 5. Report whether the feature works end-to-end
 
 This is especially valuable for frontend work where visual correctness matters and unit tests only tell part of the story [^4].
+
+## Debugging Methodically
+
+When an agent's fix doesn't work, the worst thing you can say is "it still doesn't work, fix it." Vague reports get vague, wrong fixes: the agent guesses, piles on changes, and often makes things worse. Give it evidence, not vibes.
+
+A reliable debugging loop:
+
+1. **Reproduce** the failure with a minimal, repeatable case. If you can't reproduce it on demand, you can't tell whether it's fixed.
+2. **Instrument instead of guessing.** Add logging, read the actual stack trace and error text, use the debugger or browser DevTools, or have the agent insert temporary `print` / `console.log` statements to see what's really happening, then hand it the output.
+3. **Find the root cause, not the symptom.** A fix that makes the error message disappear is not the same as a fix that addresses why it happened.
+4. **Add a regression test** so the bug can't come back silently.
+
+The reframe for delegation: a good bug report to an agent looks like a good bug report to a colleague. A repro, the actual error, and what you've already ruled out gives it everything; "doesn't work" gives it nothing. In Claude Code this loop is packaged as the `systematic-debugging` skill, but the discipline is tool-independent.
 
 ## Building a Quality Pipeline
 

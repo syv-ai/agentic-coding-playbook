@@ -105,6 +105,17 @@ This is the "spec-driven development" model:
 
 The spec file evolves as you learn things during implementation. When requirements change or gaps are discovered, update the spec and explicitly tell the agent: "The spec has been updated. Here's what changed. Adjust the remaining plan accordingly."
 
+### Disposable Interactive Mockups
+
+A written spec is the right artifact for behaviour and rules. For anything you need to *see*, prose is slow and ambiguous, and the fastest way to align is a throwaway interactive mockup. Ask the agent to generate a small, self-contained HTML file, a clickable UI sketch, a chart of a dataset, a working demo of a flow, and open it in a browser. Reacting to something concrete collapses a dozen rounds of "no, more like this" into one.
+
+Two things make it work:
+
+- **It's disposable.** The mockup exists to settle one question. Once you've decided, delete it; don't let it accrete into something you feel obliged to maintain.
+- **It's not just for UI.** The same trick explains *anything*, a data shape, a state machine, an algorithm, faster than a paragraph, and a self-contained HTML file needs only a browser to open, which also makes it a low-friction thing to hand a non-technical colleague.
+
+Any agent that can write a file can do this; Claude Code packages it as the `prototype` and `brainstorming` skills.
+
 ## Using Agents to Write Specs
 
 Here's the part people miss: agents are good at expanding specifications. You don't have to write the full detailed spec yourself.

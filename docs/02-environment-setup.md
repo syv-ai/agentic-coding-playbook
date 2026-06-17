@@ -115,6 +115,10 @@ The general pattern across tools:
 
 Start with the defaults. As you build comfort with the tool, expand what it can do autonomously. The goal is to minimize interruptions for routine operations while keeping a check on anything that touches shared systems (pushing to remote, deploying, modifying databases).
 
+**Match the level to the blast radius.** The right amount of autonomy depends on what a wrong action could damage. In a throwaway branch or an isolated worktree, let the agent run freely; the worst case is you delete the branch. Against anything real (shared databases, deploys, production config) keep approval on, or stay in a read-only plan mode. Choose the mode by asking "if this goes wrong, what does it touch?"
+
+**Watch for approval fatigue.** Ask-before-acting only protects you while you're actually reading the prompts. Approve fifty trivial actions in a row and you stop reading; the fifty-first slips through unexamined. Too many prompts is its own failure mode: it trains you to rubber-stamp. Better to auto-approve the genuinely safe, routine commands and reserve real approval for the actions that matter, so each prompt still earns your attention. Whatever level you pick, you own the outcome; "the agent did it" is not an explanation anyone accepts.
+
 ## Your First Session
 
 Once your tool is installed and you've created a basic instruction file, try this:

@@ -28,6 +28,17 @@ When agents work on unhealthy code, three things happen [^2]:
 2. **Token consumption inflates.** The agent needs more context, more iterations, more back-and-forth to get it right.
 3. **Changes are fragile.** The agent's modifications work for the immediate task but introduce subtle regressions.
 
+### Why Healthy Code Wins
+
+The scores above describe *what* happens; the classic literature explains *why*. Two ideas predate AI and matter more because of it:
+
+- **Software entropy.** Every change made without regard for the whole degrades the design a little [^8]. Agents change code fast, so without discipline they add entropy fast.
+- **Deep vs. shallow modules.** Left to their own devices, agents gravitate toward shallow modules, lots of interface over little behaviour, with logic scattered across files [^9]. Change one thing and three others break.
+
+This is why vibe coding feels great and then stalls: the velocity curve inverts. You move fastest at the start, when there's little structure to respect, and slowest later, when every change fights the accumulated mess. **Bad code is the most expensive it has ever been**, precisely because a codebase that's hard to change is one the agent can't work in effectively.
+
+The durable fix is the unglamorous one: the design principles that predate AI. SOLID, DRY, KISS, YAGNI, and clear contracts at module boundaries give the agent clean seams to work and test within. You don't apply them by hand, you direct the agent to, but you do need to recognise when they're being violated.
+
 ### The Refactoring-First Workflow
 
 The implication is clear: code health improvement must precede agentic acceleration, not follow it [^2].
@@ -150,6 +161,8 @@ Enterprise teams often resist discarding agent-generated code. It feels wasteful
 
 If the agent can rebuild a component in 20 minutes, the cost of discarding and rebuilding is low. The cost of maintaining a bad implementation is high. This makes "build, evaluate, rebuild if needed" a rational strategy in ways it wasn't when building meant days of human effort.
 
+Think of the first build as a *probe*: its job is to teach you what the real requirements and the right design are, not to be the thing you ship. The discipline is that this is a *deliberate* throwaway with an intended rebuild, not a licence to accept slop or quietly promote the prototype to production.
+
 Practically:
 
 **Prototype with agents, then evaluate.** Let the agent build a first pass. Review it critically. If the approach is wrong, discard and redirect. The time lost is minimal.
@@ -180,3 +193,7 @@ Practically:
 [^6]: Anthropic, "2026 Agentic Coding Trends Report," Trend 6: Productivity gains reshape software development economics, 2026. https://resources.anthropic.com/2026-agentic-coding-trends-report
 
 [^7]: "Coding with AI Agents: Best Practices for 2026," *Nimbalyst*, 2026. https://nimbalyst.com/blog/coding-with-ai-agents-best-practices-2026/
+
+[^8]: Andrew Hunt and David Thomas, *The Pragmatic Programmer*, Addison-Wesley, 1999/2019. (Software entropy; the "broken windows" theory of code decay.)
+
+[^9]: John Ousterhout, *A Philosophy of Software Design*, 2018. (Complexity; deep vs. shallow modules.)

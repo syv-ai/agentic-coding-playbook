@@ -75,6 +75,14 @@ Think of it like delegating to a capable colleague. You describe what you want, 
 
 The best agentic coding sessions are conversational. You give an initial task, the agent makes progress, you refine the direction, it adjusts. It's a dialogue, not a command-and-response pattern.
 
+## The Leverage Moved Upstream
+
+When the agent writes the code, the quality of the result is decided *before* it types a single line. The expensive, high-leverage work moved upstream: into defining the problem, the design, and what "done" means. The typing, which used to be most of the job, is now the cheap part.
+
+This has a blunt corollary: an agent amplifies whatever process you bring to it. Clear thinking in, clear output out. Vague thinking in, confident and wrong output out, at machine speed. The agent doesn't fix a muddled idea; it executes it faster.
+
+So delegate the typing, not the judgment. It's tempting to "just start", because starting is now so cheap, but a fast start on an unclear problem mostly produces work you throw away once you realize what you actually needed. Think first. Much of the rest of this workshop, grilling the task, writing a spec, planning before executing, is machinery for doing that thinking deliberately instead of skipping it.
+
 ## What This Means in Practice
 
 Here's a concrete example. Say you want to add pagination to an API endpoint.
