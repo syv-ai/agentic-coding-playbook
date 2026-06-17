@@ -1,0 +1,40 @@
+{
+  "name": "syv-skills",
+  "description": "Syv.ai's curated agentic-coding skills collection — the practical companion to the Agentic Coding Playbook. A best-of-breed set of skills for planning, execution, quality, and verification with any agentic coding harness.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Syv.ai",
+    "email": "nicolai@syv.ai"
+  },
+  "homepage": "https://github.com/syv-ai/agentic-coding-playbook",
+  "repository": "https://github.com/syv-ai/agentic-coding-playbook",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "agentic-coding",
+    "tdd",
+    "debugging",
+    "planning",
+    "code-review",
+    "workshop"
+  ],
+  "skills": [
+    "./skills/grill-me",
+    "./skills/brainstorming",
+    "./skills/to-prd",
+    "./skills/to-issues",
+    "./skills/writing-plans",
+    "./skills/prototype",
+    "./skills/executing-plans",
+    "./skills/zoom-out",
+    "./skills/tdd",
+    "./skills/systematic-debugging",
+    "./skills/receiving-code-review",
+    "./skills/improve-codebase-architecture",
+    "./skills/guardrails",
+    "./skills/handoff",
+    "./skills/write-a-skill",
+    "./skills/setup",
+    "./skills/setup-syv-skills"
+  ]
+}

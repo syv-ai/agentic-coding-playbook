@@ -1,0 +1,20 @@
+{
+  "name": "syv-skills",
+  "description": "Syv.ai's curated agentic-coding skills collection — the practical companion to the Agentic Coding Playbook.",
+  "owner": {
+    "name": "Syv.ai",
+    "email": "nicolai@syv.ai"
+  },
+  "plugins": [
+    {
+      "name": "syv-skills",
+      "description": "Best-of-breed agentic-coding skills for planning, execution, quality, and verification with any agentic coding harness.",
+      "version": "0.1.0",
+      "source": "./",
+      "author": {
+        "name": "Syv.ai",
+        "email": "nicolai@syv.ai"
+      }
+    }
+  ]
+}

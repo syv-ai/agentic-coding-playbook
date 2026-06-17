@@ -98,6 +98,24 @@ Complete annotated bibliography of all 26 primary sources organized by theme. Ke
 
 ---
 
+## Skills
+
+A companion **[skills collection](skills/)** ships alongside the modules — a curated, best-of-breed set of agentic-coding skills (planning, execution, quality, verification) distilled from [`mattpocock/skills`](https://github.com/mattpocock/skills) and [`obra/superpowers`](https://github.com/obra/superpowers), plus skills written for this playbook. Where the modules teach the *why*, the skills are the *how* — installable workflows your agent runs.
+
+Install into any project:
+
+```bash
+npx skills add syv-ai/agentic-coding-playbook
+```
+
+Then, inside Claude Code:
+
+```
+/setup-syv-skills
+```
+
+The collection is self-contained and tool-agnostic in spirit. See [skills/README.md](skills/README.md) for the full catalog and [skills/ATTRIBUTION.md](skills/ATTRIBUTION.md) for provenance and licensing.
+
 ## How to Use This
 
 **As a workshop facilitator.** Each module works as a standalone 20–30 minute presentation unit. The docs are the leave-behind reference material. Build slides and visuals on top of these. Part 1 and 2 cover a half-day. Parts 3 and 4 fill a second half-day or can be split across sessions.
