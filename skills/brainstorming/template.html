@@ -2,18 +2,17 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Superpowers Brainstorming</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brainstorming</title>
   <style>
     /*
-     * BRAINSTORM COMPANION FRAME TEMPLATE
+     * STATIC BRAINSTORM COMPANION TEMPLATE
      *
-     * This template provides a consistent frame with:
-     * - OS-aware light/dark theming
-     * - Fixed header and selection indicator bar
-     * - Scrollable main content area
-     * - CSS helpers for common UI patterns
+     * Self-contained: no server, no build, no dependencies. Open the file
+     * directly in a browser. Selection highlighting is cosmetic only — the
+     * decision is captured in the terminal via the agent's ask-the-user tool.
      *
-     * Content is injected via placeholder comment in #claude-content.
+     * Inject your content fragment where the <!-- CONTENT --> marker is.
      */
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -73,11 +72,9 @@
       flex-shrink: 0;
     }
     .header h1 { font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); }
-    .header .status { font-size: 0.7rem; color: var(--success); display: flex; align-items: center; gap: 0.4rem; }
-    .header .status::before { content: ''; width: 6px; height: 6px; background: var(--success); border-radius: 50%; }
 
     .main { flex: 1; overflow-y: auto; }
-    #claude-content { padding: 2rem; min-height: 100%; }
+    #content { padding: 2rem; min-height: 100%; }
 
     .indicator-bar {
       background: var(--bg-secondary);
@@ -86,14 +83,7 @@
       flex-shrink: 0;
       text-align: center;
     }
-    .indicator-bar span {
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-    }
-    .indicator-bar .selected-text {
-      color: var(--accent);
-      font-weight: 500;
-    }
+    .indicator-bar span { font-size: 0.75rem; color: var(--text-secondary); }
 
     /* ===== TYPOGRAPHY ===== */
     h2 { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
@@ -196,19 +186,32 @@
 </head>
 <body>
   <div class="header">
-    <h1><a href="https://github.com/obra/superpowers" style="color: inherit; text-decoration: none;">Superpowers Brainstorming</a></h1>
-    <div class="status">Connected</div>
+    <h1>Brainstorming</h1>
   </div>
 
   <div class="main">
-    <div id="claude-content">
+    <div id="content">
       <!-- CONTENT -->
     </div>
   </div>
 
   <div class="indicator-bar">
-    <span id="indicator-text">Click an option above, then return to the terminal</span>
+    <span>Look this over, then give your answer in the terminal.</span>
   </div>
 
+  <script>
+    // Cosmetic only: highlight the clicked option/card. There is no server and
+    // nothing is sent anywhere — the agent captures your decision in the
+    // terminal via its ask-the-user tool. Add `data-multiselect` to a container
+    // to allow selecting more than one.
+    function toggleSelect(el) {
+      var container = el.closest('.options') || el.closest('.cards');
+      var multi = container && container.dataset.multiselect !== undefined;
+      if (container && !multi) {
+        container.querySelectorAll('.option, .card').forEach(function (o) { o.classList.remove('selected'); });
+      }
+      if (multi) { el.classList.toggle('selected'); } else { el.classList.add('selected'); }
+    }
+  </script>
 </body>
 </html>

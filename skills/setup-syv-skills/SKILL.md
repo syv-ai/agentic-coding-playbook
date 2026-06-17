@@ -22,7 +22,7 @@ Run these and report a short PASS/ACTION line for each — don't fix silently:
 
 - **Git** — `git rev-parse --is-inside-work-tree`. If this isn't a repo, offer to `git init` (ask first).
 - **GitHub CLI** — `gh --version`, then `gh auth status`. The `to-prd` / `to-issues` skills default to publishing via `gh`. If `gh` is missing or unauthenticated, tell the user to run `gh auth login` themselves (it's interactive — they should run it, e.g. by typing `! gh auth login`). Note that these skills fall back to writing markdown under `docs/` if `gh` stays unavailable, so this is a recommendation, not a blocker.
-- **Platform note (Windows):** if the user is on Windows, remind them that any bash-based skill hooks or scripts (e.g. the brainstorming visual-companion server, shell scripts in skills) run under **WSL or Git Bash**, and `node` must be on PATH for the brainstorming server.
+- **Platform note (Windows):** on native Windows, prefer a skill's PowerShell variant where one exists (e.g. `guardrails` ships both). Any bash-based script a skill installs needs **WSL or Git Bash**. The `brainstorming` visual companion is static HTML (no Node, no server) — it just needs a browser and an `open`/`start` command.
 
 ### 2. Confirm the skills resolved
 
