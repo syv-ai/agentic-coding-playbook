@@ -1,8 +1,9 @@
 # Attribution
 
 The Syv.ai skills collection is assembled from two excellent open-source skill
-libraries, both MIT-licensed, plus skills written from scratch by Syv.ai. We are
-grateful to the original authors. This collection is itself MIT-licensed.
+libraries, both MIT-licensed, plus skills written from scratch by Syv.ai — some
+of those reimplementing ideas from a third MIT-licensed library. We are grateful
+to the original authors. This collection is itself MIT-licensed.
 
 Each vendored skill has been adapted for this collection: bodies are in English,
 cross-references point only to other skills in this collection, and any
@@ -15,6 +16,8 @@ every skill stands on its own.
   <https://github.com/mattpocock/skills>
 - **`obra/superpowers`** — Jesse Vincent (MIT, © 2025).
   <https://github.com/obra/superpowers>
+- **`BuilderIO/skills`** — Builder.io / Agent-Native (MIT). The `visual-plan`
+  block taxonomy was inspired by theirs. <https://github.com/BuilderIO/skills>
 
 ## Per-skill provenance
 
@@ -25,6 +28,7 @@ every skill stands on its own.
 | `to-prd` | mattpocock/skills (`to-prd`), decoupled from the setup/issue-tracker config machinery |
 | `to-issues` | mattpocock/skills (`to-issues`), decoupled from the setup/issue-tracker config machinery |
 | `writing-plans` | obra/superpowers (`writing-plans`) |
+| `visual-plan` | Syv.ai original — self-contained static-HTML review surface; block taxonomy inspired by BuilderIO/skills (`visual-plan`) |
 | `prototype` | mattpocock/skills (`prototype`) |
 | `executing-plans` | obra/superpowers (`executing-plans`) |
 | `zoom-out` | mattpocock/skills (`zoom-out`) |

@@ -35,6 +35,7 @@ Then, inside Claude Code in your project:
 - [`to-prd`](to-prd/) — turn the current conversation into a PRD.
 - [`to-issues`](to-issues/) — break a plan/PRD into independently-shippable vertical-slice issues.
 - [`writing-plans`](writing-plans/) — turn a spec into a detailed implementation plan.
+- [`visual-plan`](visual-plan/) — render a high-stakes plan as a self-contained HTML review surface (diagrams, file maps, annotated code, open questions); decisions captured in the terminal.
 - [`prototype`](prototype/) — build a throwaway prototype to settle a design decision before committing.
 
 **Execution**

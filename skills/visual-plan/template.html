@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Visual plan — {{PLAN TITLE}}</title>
+
+    <!--
+      SELF-CONTAINED VISUAL PLAN TEMPLATE
+
+      No server, no build, no npm, no account. Open this file directly in a
+      browser. The only external resources are the Tailwind and Mermaid CDNs.
+
+      This file is a THROWAWAY review surface. The markdown plan is the source
+      of truth — fold resolved decisions back into it, and do not commit this.
+
+      Selection highlighting on the open-questions block is COSMETIC ONLY. The
+      decision is captured in the terminal via the agent's AskUserQuestion tool.
+
+      Replace every {{PLACEHOLDER}} and the example block content below. Delete
+      blocks you don't need — render only what makes the plan clearer.
+    -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module">
+      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+      mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+    </script>
+
+    <style>
+      :root { color-scheme: light dark; }
+      body { font-feature-settings: "ss01"; }
+      /* margin annotation tie-line for annotated-code */
+      .anno { border-left: 2px solid #6366f1; }
+      /* cosmetic selection state for open questions */
+      .opt[data-selected="true"] { outline: 2px solid #6366f1; background: #eef2ff; }
+      @media (prefers-color-scheme: dark) {
+        .opt[data-selected="true"] { background: #1e1b4b; }
+      }
+    </style>
+  </head>
+
+  <body class="bg-stone-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased">
+    <main class="max-w-4xl mx-auto px-6 py-12 space-y-12">
+
+      <!-- ===== HEADER ===== -->
+      <header class="space-y-3 border-b border-slate-200 dark:border-slate-800 pb-6">
+        <p class="text-xs uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Implementation plan</p>
+        <h1 class="text-3xl font-serif font-semibold">{{PLAN TITLE}}</h1>
+        <p class="text-slate-600 dark:text-slate-400 max-w-2xl">{{ONE-SENTENCE OBJECTIVE — what this builds and what "done" means}}</p>
+        <dl class="flex flex-wrap gap-x-8 gap-y-1 text-sm text-slate-500 pt-2">
+          <div><dt class="inline font-medium text-slate-700 dark:text-slate-300">Scope:</dt> <dd class="inline">{{in scope}}</dd></div>
+          <div><dt class="inline font-medium text-slate-700 dark:text-slate-300">Non-goals:</dt> <dd class="inline">{{out of scope}}</dd></div>
+        </dl>
+      </header>
+
+      <!-- ===== PROSE: approach + key decisions ===== -->
+      <section class="space-y-3">
+        <h2 class="text-xl font-serif font-semibold">Approach</h2>
+        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">{{The proposed approach in plain prose. State the key decisions and the rationale behind them. Lead concrete for broad work.}}</p>
+      </section>
+
+      <!-- ===== CALLOUT: settled decision (NOT an open question) ===== -->
+      <aside class="rounded-lg border-l-4 border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 px-4 py-3">
+        <p class="text-xs uppercase tracking-wider text-emerald-700 dark:text-emerald-400 font-medium">Decision</p>
+        <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">{{A choice already made — e.g. "Use the existing job queue rather than adding a scheduler."}}</p>
+      </aside>
+      <!-- Tones: emerald=decision · indigo=note · amber=warning · rose=risk -->
+
+      <!-- ===== FILE MAP ===== -->
+      <section class="space-y-3">
+        <h2 class="text-xl font-serif font-semibold">File map</h2>
+        <ul class="font-mono text-sm space-y-1">
+          <li><span class="inline-block w-16 text-emerald-600">create</span> {{path/to/new.ts}} <span class="text-slate-500">— {{responsibility}}</span></li>
+          <li><span class="inline-block w-16 text-amber-600">modify</span> {{path/to/existing.ts:120-145}} <span class="text-slate-500">— {{what changes}}</span></li>
+          <li><span class="inline-block w-16 text-indigo-600">test</span> {{path/to/test.ts}} <span class="text-slate-500">— {{what it covers}}</span></li>
+        </ul>
+      </section>
+
+      <!-- ===== DIAGRAM (Mermaid for graph-shaped flows) ===== -->
+      <section class="space-y-3">
+        <h2 class="text-xl font-serif font-semibold">Architecture</h2>
+        <div class="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+          <pre class="mermaid">
+            flowchart LR
+              A[{{Caller}}] --> B[{{New module}}]
+              B --> C[({{Store}})]
+          </pre>
+        </div>
+        <!-- For editorial visuals Mermaid can't do well, hand-build divs + inline SVG instead. -->
+      </section>
+
+      <!-- ===== ANNOTATED CODE (the load-bearing change) ===== -->
+      <section class="space-y-3">
+        <h2 class="text-xl font-serif font-semibold">{{The key change}}</h2>
+        <div class="grid grid-cols-[1fr_18rem] gap-0 rounded-lg border border-slate-200 dark:border-slate-800 overflow-hidden">
+          <pre class="bg-slate-900 text-slate-100 text-sm p-4 overflow-x-auto m-0"><code>{{only the load-bearing lines, not the whole file}}</code></pre>
+          <div class="bg-slate-50 dark:bg-slate-900 text-sm divide-y divide-slate-200 dark:divide-slate-800">
+            <div class="anno px-3 py-2"><span class="font-mono text-xs text-indigo-600">L12</span> — {{why this line matters}}</div>
+            <div class="anno px-3 py-2"><span class="font-mono text-xs text-indigo-600">L18-20</span> — {{the decision encoded here}}</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== COLUMNS (before / after) ===== -->
+      <section class="space-y-3">
+        <h2 class="text-xl font-serif font-semibold">Before / after</h2>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="rounded-lg border border-slate-200 dark:border-slate-800 p-4">
+            <p class="text-xs uppercase tracking-wider text-slate-500 mb-2">Before</p>
+            <p class="text-sm text-slate-700 dark:text-slate-300">{{current state}}</p>
+          </div>
+          <div class="rounded-lg border border-indigo-200 dark:border-indigo-800 p-4">
+            <p class="text-xs uppercase tracking-wider text-indigo-600 mb-2">After</p>
+            <p class="text-sm text-slate-700 dark:text-slate-300">{{target state}}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CHECKLIST (verification) ===== -->
+      <section class="space-y-3">
+        <h2 class="text-xl font-serif font-semibold">Verification</h2>
+        <ul class="space-y-2 text-sm">
+          <li class="flex gap-2"><span class="text-slate-400">☐</span> {{End-to-end check that exercises a real workflow — actual command + expected result}}</li>
+          <li class="flex gap-2"><span class="text-slate-400">☐</span> {{On-disk / browser assertion that proves it works}}</li>
+        </ul>
+      </section>
+
+      <!-- ===== OPEN QUESTIONS (bottom only — resolved in the terminal) ===== -->
+      <section class="space-y-4 border-t border-slate-200 dark:border-slate-800 pt-8">
+        <div>
+          <h2 class="text-xl font-serif font-semibold">Open questions</h2>
+          <p class="text-sm text-slate-500">Answer these in the terminal — the agent will ask. Highlighting here is just a preview.</p>
+        </div>
+
+        <div class="space-y-2">
+          <p class="font-medium">{{Question that would change the plan?}}</p>
+          <div class="grid gap-2">
+            <div class="opt rounded-md border border-slate-200 dark:border-slate-800 px-4 py-2 text-sm" data-selected="true">
+              {{Option A}} <span class="text-indigo-600 text-xs font-medium">(Recommended)</span>
+              <p class="text-slate-500 text-xs mt-0.5">{{why this is the default}}</p>
+            </div>
+            <div class="opt rounded-md border border-slate-200 dark:border-slate-800 px-4 py-2 text-sm">
+              {{Option B}}
+              <p class="text-slate-500 text-xs mt-0.5">{{trade-off}}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </body>
+</html>
