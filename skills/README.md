@@ -7,6 +7,22 @@ verification. Tool-agnostic in spirit; written for Claude Code.
 
 ## Install
 
+Two ways — pick one.
+
+### A. As a Claude Code plugin (recommended)
+
+Installs through Claude Code's native plugin system, so `/plugin update` keeps
+it current:
+
+```
+/plugin marketplace add syv-ai/agentic-coding-playbook
+/plugin install syv-skills@syv-skills
+```
+
+### B. As on-disk skill files
+
+Copies the collection into your project (no plugin system involved):
+
 ```bash
 npx skills add syv-ai/agentic-coding-playbook   # puts the collection on disk
 ```
@@ -21,7 +37,7 @@ npx skills add syv-ai/agentic-coding-playbook --agent claude-code --copy
 Requires Node.js 18+. (`--agent claude-code` also ensures the skills land in
 `.claude/skills/` rather than a generic agent directory.)
 
-Then, inside Claude Code in your project:
+### Then, in your project
 
 ```
 /setup-syv-skills                                # readies this repo to use the collection

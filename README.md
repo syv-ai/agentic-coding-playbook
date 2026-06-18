@@ -108,7 +108,14 @@ Install into any project:
 npx skills add syv-ai/agentic-coding-playbook
 ```
 
-Then, inside Claude Code:
+Or, inside Claude Code, install it as a native plugin (supports `/plugin update`):
+
+```
+/plugin marketplace add syv-ai/agentic-coding-playbook
+/plugin install syv-skills@syv-skills
+```
+
+Either way, then run:
 
 ```
 /setup-syv-skills
