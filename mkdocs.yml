@@ -51,20 +51,20 @@ nav:
       - About Syv.ai: about-syv.md
   - Modules:
       - Introduction: 00-introduction.md
-      - The Agentic Loop: 01-the-agentic-loop.md
-      - Environment Setup: 02-environment-setup.md
-      - Context Engineering: 03-context-engineering.md
-      - Effective Prompting: 04-effective-prompting.md
-      - Tools and MCP: 05-tools-and-mcp.md
-      - Verification and Quality: 06-verification-and-quality.md
-      - Subagents and Parallelism: 07-subagents-and-parallelism.md
-      - Long-Running Agents: 08-long-running-agents.md
-      - Production Workflows: 09-production-workflows.md
-      - Building Your System: 10-building-your-system.md
-      - From Business Context to Agent Tasks: 11-from-business-context-to-agent-tasks.md
-      - Enterprise Adoption: 12-enterprise-adoption.md
-      - Observability and Lifecycle: 13-observability-and-lifecycle.md
-      - Software Distillation and Atomic Agents: 14-software-distillation-and-atomic-agents.md
+      - 1. The Agentic Loop: 01-the-agentic-loop.md
+      - 2. Environment Setup: 02-environment-setup.md
+      - 3. Context Engineering: 03-context-engineering.md
+      - 4. Effective Prompting: 04-effective-prompting.md
+      - 5. Tools and MCP: 05-tools-and-mcp.md
+      - 6. Verification and Quality: 06-verification-and-quality.md
+      - 7. Subagents and Parallelism: 07-subagents-and-parallelism.md
+      - 8. Long-Running Agents: 08-long-running-agents.md
+      - 9. Production Workflows: 09-production-workflows.md
+      - 10. Building Your System: 10-building-your-system.md
+      - 11. From Business Context to Agent Tasks: 11-from-business-context-to-agent-tasks.md
+      - 12. Enterprise Adoption: 12-enterprise-adoption.md
+      - 13. Observability and Lifecycle: 13-observability-and-lifecycle.md
+      - 14. Software Distillation and Atomic Agents: 14-software-distillation-and-atomic-agents.md
   - Research Summary: research-summary.md
 
 markdown_extensions:

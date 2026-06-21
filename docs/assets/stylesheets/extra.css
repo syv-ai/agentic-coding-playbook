@@ -132,6 +132,20 @@
   font-weight: 600;
 }
 
+/* ---- Sidebar nav --------------------------------------------------------- */
+/* Hide the redundant logo + site title at the top of the desktop sidebar
+   (the header already shows it). Keep it on mobile, where it's the drawer
+   header. */
+@media screen and (min-width: 76.25em) {
+  .md-nav--primary > .md-nav__title {
+    display: none;
+  }
+}
+/* More breathing room between top-level nav sections. */
+.md-nav--primary > .md-nav__list > .md-nav__item:not(:first-child) {
+  margin-top: 1.25rem;
+}
+
 /* ---- Code, admonitions, tables ------------------------------------------ */
 .md-typeset pre > code,
 .md-typeset .highlight {
