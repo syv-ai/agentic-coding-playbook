@@ -36,6 +36,7 @@ theme:
   features:
     - navigation.instant
     - navigation.tracking
+    - navigation.expand
     - navigation.top
     - navigation.footer
     - content.code.copy
@@ -45,21 +46,25 @@ theme:
     - toc.follow
 
 nav:
-  - Introduction: index.md
-  - The Agentic Loop: 01-the-agentic-loop.md
-  - Environment Setup: 02-environment-setup.md
-  - Context Engineering: 03-context-engineering.md
-  - Effective Prompting: 04-effective-prompting.md
-  - Tools and MCP: 05-tools-and-mcp.md
-  - Verification and Quality: 06-verification-and-quality.md
-  - Subagents and Parallelism: 07-subagents-and-parallelism.md
-  - Long-Running Agents: 08-long-running-agents.md
-  - Production Workflows: 09-production-workflows.md
-  - Building Your System: 10-building-your-system.md
-  - From Business Context to Agent Tasks: 11-from-business-context-to-agent-tasks.md
-  - Enterprise Adoption: 12-enterprise-adoption.md
-  - Observability and Lifecycle: 13-observability-and-lifecycle.md
-  - Software Distillation and Atomic Agents: 14-software-distillation-and-atomic-agents.md
+  - Welcome:
+      - Welcome: index.md
+      - About Syv.ai: about-syv.md
+  - Modules:
+      - Introduction: 00-introduction.md
+      - The Agentic Loop: 01-the-agentic-loop.md
+      - Environment Setup: 02-environment-setup.md
+      - Context Engineering: 03-context-engineering.md
+      - Effective Prompting: 04-effective-prompting.md
+      - Tools and MCP: 05-tools-and-mcp.md
+      - Verification and Quality: 06-verification-and-quality.md
+      - Subagents and Parallelism: 07-subagents-and-parallelism.md
+      - Long-Running Agents: 08-long-running-agents.md
+      - Production Workflows: 09-production-workflows.md
+      - Building Your System: 10-building-your-system.md
+      - From Business Context to Agent Tasks: 11-from-business-context-to-agent-tasks.md
+      - Enterprise Adoption: 12-enterprise-adoption.md
+      - Observability and Lifecycle: 13-observability-and-lifecycle.md
+      - Software Distillation and Atomic Agents: 14-software-distillation-and-atomic-agents.md
   - Research Summary: research-summary.md
 
 markdown_extensions:
