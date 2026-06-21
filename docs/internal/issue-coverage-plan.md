@@ -39,7 +39,7 @@ Exercises are **tool-agnostic** — harder to write, but matches the playbook's 
 
 **Recommendation:** Pick one toolchain and one visual language now, before more diagrams accumulate inconsistently.
 
-- **Toolchain:** All diagrams are custom **D3** (no Mermaid) — see the `/add-visual` skill (`.claude/skills/add-visual/`). Renderers and the shared theme live in `docs/javascripts/visuals/`. Inline SVG for one-offs. The Mermaid draft fragments below are historical and should be re-authored as D3 when those diagrams are built.
+- **Toolchain:** All diagrams are custom **D3** (no Mermaid) — see the `/add-visual` skill (`.claude/skills/add-visual/`). Renderers and the shared theme live in `docs/javascripts/visuals/`. Inline SVG for one-offs. The draft fragments below are in the D3 `<template>` format (canonical source). Note: most use branching / decision nodes / edge labels / feedback loops, which the current `flow-diagram.js` (linear chains only) does not yet render — promoting these to a published module needs a graph-capable renderer.
 - **Visual language:** The shared theme lives in `docs/javascripts/visuals/theme.js` (color palette, arrow gap, node shapes, fonts). Design rules are in the `/add-visual` skill.
 
 **Light theme only.** No existing brand reference to match — we define the visual language ourselves in `docs/visual-style.md`.
@@ -48,50 +48,100 @@ Exercises are **tool-agnostic** — harder to write, but matches the playbook's 
 
 **Fragment: the agentic loop**
 
-```mermaid
-flowchart LR
-    Spec[Spec / instruction] --> Plan[Agent plans]
-    Plan --> Act[Agent acts<br/>tool calls / edits]
-    Act --> Verify[Verify<br/>tests / linters / human]
-    Verify -->|pass| Done[Done]
-    Verify -->|fail| Plan
-```
+<div class="flow-diagram" data-orientation="LR">
+<template>
+{
+  "nodes": [
+    { "id": "spec", "label": "Spec / instruction" },
+    { "id": "plan", "label": "Agent plans" },
+    { "id": "act", "label": "Agent acts", "sub": "tool calls / edits" },
+    { "id": "verify", "label": "Verify", "sub": "tests / linters / human" },
+    { "id": "done", "label": "Done" }
+  ],
+  "links": [
+    { "source": "spec", "target": "plan" },
+    { "source": "plan", "target": "act" },
+    { "source": "act", "target": "verify" },
+    { "source": "verify", "target": "done", "label": "pass" },
+    { "source": "verify", "target": "plan", "label": "fail" }
+  ]
+}
+</template>
+</div>
 
 **Fragment: fan-out / fan-in (subagents, used in 07)**
 
-```mermaid
-flowchart LR
-    Orchestrator[Orchestrator agent] --> A[Subagent A]
-    Orchestrator --> B[Subagent B]
-    Orchestrator --> C[Subagent C]
-    A --> Aggregate[Aggregate results]
-    B --> Aggregate
-    C --> Aggregate
-    Aggregate --> Orchestrator
-```
+<div class="flow-diagram" data-orientation="LR">
+<template>
+{
+  "nodes": [
+    { "id": "orch", "label": "Orchestrator agent" },
+    { "id": "a", "label": "Subagent A" },
+    { "id": "b", "label": "Subagent B" },
+    { "id": "c", "label": "Subagent C" },
+    { "id": "agg", "label": "Aggregate results" }
+  ],
+  "links": [
+    { "source": "orch", "target": "a" },
+    { "source": "orch", "target": "b" },
+    { "source": "orch", "target": "c" },
+    { "source": "a", "target": "agg" },
+    { "source": "b", "target": "agg" },
+    { "source": "c", "target": "agg" },
+    { "source": "agg", "target": "orch" }
+  ]
+}
+</template>
+</div>
 
 **Fragment: three-checkpoint verification pipeline (used in 06)**
 
-```mermaid
-flowchart LR
-    Change[Code change] --> RT[Real-time<br/>linter · type checker · LSP]
-    RT --> PC[Pre-commit<br/>hooks · formatters · fast tests]
-    PC --> PR[PR review<br/>two-way critique · CI suite]
-    PR --> Merge[Merge]
-```
+<div class="flow-diagram" data-orientation="LR">
+<template>
+{
+  "nodes": [
+    { "id": "change", "label": "Code change" },
+    { "id": "rt", "label": "Real-time", "sub": "linter · type checker · LSP" },
+    { "id": "pc", "label": "Pre-commit", "sub": "hooks · formatters · fast tests" },
+    { "id": "pr", "label": "PR review", "sub": "two-way critique · CI suite" },
+    { "id": "merge", "label": "Merge" }
+  ],
+  "links": [
+    { "source": "change", "target": "rt" },
+    { "source": "rt", "target": "pc" },
+    { "source": "pc", "target": "pr" },
+    { "source": "pr", "target": "merge" }
+  ]
+}
+</template>
+</div>
 
 **Fragment: spec-as-artifact flow (used in 09 / 11)**
 
-```mermaid
-flowchart LR
-    PRD[PRD] --> Spec[Spec / design doc]
-    Spec --> Issues[Issues / task prompts]
-    Issues --> Agent[Agent session]
-    Agent --> PR[Pull request]
-    PR --> Review[Two-way review]
-    Review -->|merged| Followup[Follow-up issues]
-    Review -->|rework| Issues
-```
+<div class="flow-diagram" data-orientation="LR">
+<template>
+{
+  "nodes": [
+    { "id": "prd", "label": "PRD" },
+    { "id": "spec", "label": "Spec / design doc" },
+    { "id": "issues", "label": "Issues / task prompts" },
+    { "id": "agent", "label": "Agent session" },
+    { "id": "pr", "label": "Pull request" },
+    { "id": "review", "label": "Two-way review" },
+    { "id": "followup", "label": "Follow-up issues" }
+  ],
+  "links": [
+    { "source": "prd", "target": "spec" },
+    { "source": "spec", "target": "issues" },
+    { "source": "issues", "target": "agent" },
+    { "source": "agent", "target": "pr" },
+    { "source": "pr", "target": "review" },
+    { "source": "review", "target": "followup", "label": "merged" },
+    { "source": "review", "target": "issues", "label": "rework" }
+  ]
+}
+</template>
+</div>
 
 ---
 
@@ -157,19 +207,33 @@ This frame also reinforces #13 (operators must be familiar with coding) — a ma
 
 **TODO:** Internal team chat (incl. the algotrader) on how each of us actually mitigates review-related issues — the section's prescriptions should reflect a real discussion, not just the literature.
 
-**Visualization (deliverable):** Mermaid diagram of the two-way critique loop. Lives in the section and is reused on the matching slide. Source fragment goes in the diagram library defined under #3. Draft:
+**Visualization (deliverable):** D3 diagram of the two-way critique loop. Lives in the section and is reused on the matching slide. Source fragment goes in the diagram library defined under #3. Draft:
 
-```mermaid
-flowchart LR
-    Spec[Human writes spec] --> Premise{Agent: premise check}
-    Premise -->|weak / missing constraint| Flag[Agent flags assumption<br/>asks before writing code]
-    Flag --> Spec
-    Premise -->|sound| Impl[Agent implements +<br/>articulates reasoning]
-    Impl --> Review{Human reviews<br/>reasoning, not diff}
-    Review -->|reasoning sound| Merge[Merge]
-    Review -->|unjustified abstraction /<br/>divergence from intent| Pushback[Human pushes back<br/>names the divergence]
-    Pushback --> Impl
-```
+<div class="flow-diagram" data-orientation="LR">
+<template>
+{
+  "nodes": [
+    { "id": "spec", "label": "Human writes spec" },
+    { "id": "premise", "label": "Agent: premise check", "kind": "decision" },
+    { "id": "flag", "label": "Agent flags assumption", "sub": "asks before writing code" },
+    { "id": "impl", "label": "Agent implements", "sub": "+ articulates reasoning" },
+    { "id": "review", "label": "Human reviews", "sub": "reasoning, not diff", "kind": "decision" },
+    { "id": "merge", "label": "Merge" },
+    { "id": "pushback", "label": "Human pushes back", "sub": "names the divergence" }
+  ],
+  "links": [
+    { "source": "spec", "target": "premise" },
+    { "source": "premise", "target": "flag", "label": "weak / missing constraint" },
+    { "source": "flag", "target": "spec" },
+    { "source": "premise", "target": "impl", "label": "sound" },
+    { "source": "impl", "target": "review" },
+    { "source": "review", "target": "merge", "label": "reasoning sound" },
+    { "source": "review", "target": "pushback", "label": "divergence from intent" },
+    { "source": "pushback", "target": "impl" }
+  ]
+}
+</template>
+</div>
 
 The diagram makes both halves of the section visible in one frame: the agent half (premise-check + flag) on the left, the human half (review reasoning + push back on divergence) on the right. Same loop, two failure modes, one fix.
 
@@ -197,14 +261,27 @@ Discipline content. These are the habits that separate people who get value from
 
 **Visualization — what gets pushed where:**
 
-```mermaid
-flowchart TD
-    Need[A correctness check is needed] --> Q{Can it be<br/>made deterministic?}
-    Q -->|yes| Det[Linter · type checker<br/>generated client · CI test<br/><i>same answer every time</i>]
-    Q -->|no — requires judgment| Prob[Agent + human review<br/><i>probabilistic; reliable<br/>only when reviewed</i>]
-    Det --> Scale[Scales freely<br/>no review tax per change]
-    Prob --> Tax[Pays the review tax<br/>every change]
-```
+<div class="flow-diagram" data-orientation="TD">
+<template>
+{
+  "nodes": [
+    { "id": "need", "label": "A correctness check is needed" },
+    { "id": "q", "label": "Can it be made deterministic?", "kind": "decision" },
+    { "id": "det", "label": "Linter · type checker · generated client · CI test", "sub": "same answer every time" },
+    { "id": "prob", "label": "Agent + human review", "sub": "probabilistic; reliable only when reviewed" },
+    { "id": "scale", "label": "Scales freely", "sub": "no review tax per change" },
+    { "id": "tax", "label": "Pays the review tax", "sub": "every change" }
+  ],
+  "links": [
+    { "source": "need", "target": "q" },
+    { "source": "q", "target": "det", "label": "yes" },
+    { "source": "q", "target": "prob", "label": "no — needs judgment" },
+    { "source": "det", "target": "scale" },
+    { "source": "prob", "target": "tax" }
+  ]
+}
+</template>
+</div>
 
 The visualization makes the chapter's working question concrete: for any new correctness check the team is tempted to "just have the agent handle," ask first whether it can be turned into infrastructure. If yes, build it once. If no, accept the review tax and design the review discipline (#11/#12) to handle it.
 
