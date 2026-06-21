@@ -80,9 +80,11 @@ extra_css:
 
 extra_javascript:
   - https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js
+  - https://cdn.jsdelivr.net/npm/@dagrejs/dagre@1.1.8/dist/dagre.min.js # layout engine for graph-diagram
   - javascripts/visuals/theme.js # must load first — defines window.VIZ
   - javascripts/visuals/flow-diagram.js
   - javascripts/visuals/quality-funnel.js
+  - javascripts/visuals/graph-diagram.js
 
 plugins:
   - search

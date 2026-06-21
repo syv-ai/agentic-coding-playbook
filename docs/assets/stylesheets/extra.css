@@ -159,3 +159,23 @@
 .md-footer-meta {
   background-color: #000000;
 }
+
+/* ---- Visuals (D3 diagram containers) ------------------------------------- */
+/* Diagrams render at NATURAL pixel size (so the font is always the intended
+   size — never scaled down). If a diagram is wider than the content column it
+   scrolls horizontally here instead of shrinking; narrower diagrams center. */
+.md-typeset .flow-diagram,
+.md-typeset .graph-diagram,
+.md-typeset .funnel-diagram {
+  margin: 1.5em 0;
+  padding-block: 0.25rem;
+  overflow-x: auto;
+  text-align: center;
+}
+/* Override Material's `.md-typeset svg{max-width:100%}` so diagrams keep their
+   natural size (font never scales down); the container scrolls instead. */
+.md-typeset .flow-diagram svg,
+.md-typeset .graph-diagram svg,
+.md-typeset .funnel-diagram svg {
+  max-width: none;
+}

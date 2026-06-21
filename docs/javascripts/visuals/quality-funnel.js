@@ -73,11 +73,9 @@
       .select(container)
       .append("svg")
       .attr("viewBox", `${-M} ${-M} ${totalW + 2 * M} ${totalH + 2 * M}`)
-      .attr("width", "100%")
-      .style("max-width", totalW + 2 * M + "px")
-      .style("height", "auto")
-      .style("display", "block")
-      .style("margin", "1.5em auto");
+      .attr("width", totalW + 2 * M)
+      .attr("height", totalH + 2 * M)
+      .style("display", "inline-block"); // natural size; container centers/scrolls
 
     const ARROW = window.VIZ.arrow(svg, "funnel-arrow", COL.border);
 

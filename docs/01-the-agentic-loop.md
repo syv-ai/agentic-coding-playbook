@@ -14,6 +14,27 @@ This loop is the core mechanism. Every agentic coding tool, regardless of brand,
 
 The agentic loop has three phases that blend together in practice [^1]:
 
+<div class="graph-diagram" data-orientation="LR">
+<template>
+{
+  "nodes": [
+    { "id": "spec", "label": "Spec /\ninstruction" },
+    { "id": "plan", "label": "Agent plans" },
+    { "id": "act", "label": "Agent acts", "sub": "tool calls / edits" },
+    { "id": "verify", "label": "Verify", "sub": "tests / linters / human" },
+    { "id": "done", "label": "Done" }
+  ],
+  "links": [
+    { "source": "spec", "target": "plan" },
+    { "source": "plan", "target": "act" },
+    { "source": "act", "target": "verify" },
+    { "source": "verify", "target": "done", "label": "pass" },
+    { "source": "verify", "target": "plan", "label": "fail" }
+  ]
+}
+</template>
+</div>
+
 ### 1. Gather Context
 
 Before the agent does anything, it needs to understand the situation. This might involve reading specific files you mentioned, searching the codebase for relevant code, checking git status for recent changes, looking at test output or error logs, or fetching documentation from the web.

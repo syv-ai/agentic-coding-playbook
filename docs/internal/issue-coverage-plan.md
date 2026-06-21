@@ -39,7 +39,7 @@ Exercises are **tool-agnostic** — harder to write, but matches the playbook's 
 
 **Recommendation:** Pick one toolchain and one visual language now, before more diagrams accumulate inconsistently.
 
-- **Toolchain:** All diagrams are custom **D3** (no Mermaid) — see the `/add-visual` skill (`.claude/skills/add-visual/`). Renderers and the shared theme live in `docs/javascripts/visuals/`. Inline SVG for one-offs. The draft fragments below are in the D3 `<template>` format (canonical source). Note: most use branching / decision nodes / edge labels / feedback loops, which the current `flow-diagram.js` (linear chains only) does not yet render — promoting these to a published module needs a graph-capable renderer.
+- **Toolchain:** All diagrams are custom **D3** (no Mermaid) — see the `/add-visual` skill (`.claude/skills/add-visual/`). Renderers and the shared theme live in `docs/javascripts/visuals/`. Inline SVG for one-offs. The draft fragments below are in the D3 `<template>` format (canonical source): branching/looping ones use `graph-diagram` (dagre layout); the linear verification pipeline uses `flow-diagram`.
 - **Visual language:** The shared theme lives in `docs/javascripts/visuals/theme.js` (color palette, arrow gap, node shapes, fonts). Design rules are in the `/add-visual` skill.
 
 **Light theme only.** No existing brand reference to match — we define the visual language ourselves in `docs/visual-style.md`.
@@ -48,7 +48,7 @@ Exercises are **tool-agnostic** — harder to write, but matches the playbook's 
 
 **Fragment: the agentic loop**
 
-<div class="flow-diagram" data-orientation="LR">
+<div class="graph-diagram" data-orientation="LR">
 <template>
 {
   "nodes": [
@@ -71,7 +71,7 @@ Exercises are **tool-agnostic** — harder to write, but matches the playbook's 
 
 **Fragment: fan-out / fan-in (subagents, used in 07)**
 
-<div class="flow-diagram" data-orientation="LR">
+<div class="graph-diagram" data-orientation="LR">
 <template>
 {
   "nodes": [
@@ -118,7 +118,7 @@ Exercises are **tool-agnostic** — harder to write, but matches the playbook's 
 
 **Fragment: spec-as-artifact flow (used in 09 / 11)**
 
-<div class="flow-diagram" data-orientation="LR">
+<div class="graph-diagram" data-orientation="LR">
 <template>
 {
   "nodes": [
@@ -209,7 +209,7 @@ This frame also reinforces #13 (operators must be familiar with coding) — a ma
 
 **Visualization (deliverable):** D3 diagram of the two-way critique loop. Lives in the section and is reused on the matching slide. Source fragment goes in the diagram library defined under #3. Draft:
 
-<div class="flow-diagram" data-orientation="LR">
+<div class="graph-diagram" data-orientation="LR">
 <template>
 {
   "nodes": [
@@ -261,7 +261,7 @@ Discipline content. These are the habits that separate people who get value from
 
 **Visualization — what gets pushed where:**
 
-<div class="flow-diagram" data-orientation="TD">
+<div class="graph-diagram" data-orientation="LR">
 <template>
 {
   "nodes": [

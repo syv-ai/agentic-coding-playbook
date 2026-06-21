@@ -14,6 +14,7 @@ window.VIZ = (function () {
     // Colors — resolved fresh each call so theme/palette changes are picked up.
     colors() {
       return {
+        bg: "#0a0a0b", // page/content background (e.g. to occlude edge labels)
         fill: "#000000",
         border: "#ffffff",
         text: "#ffffff",
@@ -32,7 +33,7 @@ window.VIZ = (function () {
     // Spacing, in user units.
     space: {
       gap: 12, // gap between an arrowhead/line end and the element it points at
-      spacing: 78, // distance between consecutive nodes in a flow
+      spacing: 46, // distance between consecutive nodes (rank/arrow length) — keep tight to avoid scroll
       margin: 16, // outer SVG margin so arrowheads/strokes aren't clipped
     },
 

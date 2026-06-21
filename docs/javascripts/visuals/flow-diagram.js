@@ -40,7 +40,7 @@
     const { gap: GAP, spacing: SPACING, margin: MARGIN } = window.VIZ.space;
     const FONT = window.VIZ.fonts.label;
     const SUBFONT = window.VIZ.fonts.sub;
-    const PAD_X = 20; // horizontal text padding inside a node
+    const PAD_X = 14; // horizontal text padding inside a node
 
     // Off-DOM canvas for text measurement.
     const ctx = document.createElement("canvas").getContext("2d");
@@ -51,7 +51,7 @@
 
     const nodes = spec.nodes.map((n) => {
       const w = Math.max(
-        112,
+        96,
         Math.max(measure(n.label, FONT), n.sub ? measure(n.sub, SUBFONT) : 0) + PAD_X * 2
       );
       return { ...n, w, h: n.sub ? 62 : 44, pill: !n.sub };
@@ -81,11 +81,9 @@
       .select(container)
       .append("svg")
       .attr("viewBox", `${-MARGIN} ${-MARGIN} ${totalW + 2 * MARGIN} ${totalH + 2 * MARGIN}`)
-      .attr("width", "100%")
-      .style("max-width", totalW + 2 * MARGIN + "px")
-      .style("height", "auto")
-      .style("display", "block")
-      .style("margin", "1.5em auto");
+      .attr("width", totalW + 2 * MARGIN)
+      .attr("height", totalH + 2 * MARGIN)
+      .style("display", "inline-block"); // natural size; container centers/scrolls
 
     // Shared arrowhead marker.
     const ARROW = window.VIZ.arrow(svg, "flow-arrow", COL.line);

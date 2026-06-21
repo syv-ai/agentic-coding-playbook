@@ -10,8 +10,11 @@ description: How to add or restyle a D3 diagram in the playbook docs (MkDocs Mat
 All diagrams are custom **D3** (no Mermaid). Renderers + shared theme live in `docs/javascripts/visuals/`, registered in `mkdocs.yml` under `extra_javascript`:
 
 - `theme.js` — global `window.VIZ` (colors, spacing, fonts, arrowhead factory). **Loads first.**
-- `flow-diagram.js` — pill (single-line) / rounded (with `sub`) node flows. `data-orientation` `LR` | `TD`.
+- `flow-diagram.js` — **linear** pill/rounded node flows. `data-orientation` `LR` | `TD`.
+- `graph-diagram.js` — **branching/looping** flows with edge labels + decision nodes. Layout via **dagre** (CDN). Node `kind:"decision"` → diamond; link `label` → edge label.
 - `quality-funnel.js` — defense-in-depth funnel.
+
+Pick `flow-diagram` for a simple chain; `graph-diagram` when there are branches, loops, decisions, or edge labels.
 
 One-offs → inline SVG in the `.md`. App-like interactives → a built `<iframe>` component.
 
@@ -53,3 +56,11 @@ Verify: `mkdocs build --strict` is clean and the `<template>` JSON is present in
 - No dark-grey on black.
 - Visible gap between arrowheads and their targets (`VIZ.space.gap`).
 - `defect` (error accent) is tunable, not canonical — readable, not neon.
+
+## Layout — the sizing system
+
+- **Render at natural pixel size; never scale to fit.** SVGs are sized in real px (not `width:100%`), so the font is always the intended size. This is the rule that prevents the "stretched diagram → shrunk font" problem. Don't reintroduce `width:100%` / `max-width` scaling on the SVG.
+- A diagram wider than the content column **scrolls horizontally** (container `overflow-x:auto` in `extra.css`); a narrower one centers.
+- Therefore: **design each diagram to fit the content column at natural size** where you can — keep node count and label lengths reasonable. Very wide flows will scroll, which is acceptable but a signal to simplify or split.
+- To narrow a wide node, put a `\n` in its `label` to wrap it onto multiple lines (supported by `graph-diagram`).
+- Default orientation `LR`; use `TD` only when genuinely top-down.
