@@ -24,10 +24,10 @@
   --md-primary-bg-color:           #f5f5f7;
   --md-primary-bg-color--light:    rgba(245, 245, 247, 0.70);
 
-  /* Violet accent */
-  --md-accent-fg-color:            #cdbcff;
-  --md-accent-fg-color--transparent: rgba(167, 139, 250, 0.12);
-  --md-typeset-a-color:            #b8a4ff;
+  /* Purple accent (hover / active). Base link color is set in the
+     [scheme][primary] block below, which Material overrides at higher specificity. */
+  --md-accent-fg-color:            #c084fc;
+  --md-accent-fg-color--transparent: rgba(192, 132, 252, 0.15);
 
   /* Code */
   --md-code-bg-color:              #141417;
@@ -36,6 +36,23 @@
   /* Footer */
   --md-footer-bg-color:            #000000;
   --md-footer-bg-color--dark:      #000000;
+}
+
+/* Purple accent (hover / active) in light mode too. */
+[data-md-color-scheme="default"] {
+  --md-accent-fg-color:            #7c3aed;
+  --md-accent-fg-color--transparent: rgba(124, 58, 237, 0.12);
+}
+
+/* Base link + active-page color. Set on the [scheme][primary] selector to match
+   the specificity at which Material sets --md-typeset-a-color (otherwise links
+   and the current page fall back to Material's blue). Lighter than the hover
+   accent so hover reads as the emphasised state. */
+[data-md-color-scheme="slate"][data-md-color-primary="black"] {
+  --md-typeset-a-color: #d8b4fe;
+}
+[data-md-color-scheme="default"][data-md-color-primary="black"] {
+  --md-typeset-a-color: #7e22ce;
 }
 
 /* ---- Header & tabs ------------------------------------------------------- */
@@ -114,7 +131,7 @@
   padding-bottom: 0.3rem;
 }
 .md-typeset a {
-  text-decoration-color: rgba(184, 164, 255, 0.35);
+  text-decoration-color: rgba(216, 180, 254, 0.4);
   text-underline-offset: 0.15em;
   transition: color 0.15s;
 }
@@ -130,6 +147,15 @@
 }
 .md-nav__item .md-nav__link--active {
   font-weight: 600;
+}
+
+/* ---- Content spacing ----------------------------------------------------- */
+/* More breathing room between the main content and the left/right sidebars
+   (desktop only — there are no side columns on mobile). */
+@media screen and (min-width: 76.25em) {
+  .md-content__inner {
+    margin-inline: 2.4rem;
+  }
 }
 
 /* ---- Sidebar nav --------------------------------------------------------- */
@@ -166,7 +192,7 @@
 
 /* ---- Selection ----------------------------------------------------------- */
 [data-md-color-scheme="slate"] ::selection {
-  background: rgba(167, 139, 250, 0.30);
+  background: rgba(192, 132, 252, 0.30);
 }
 
 /* ---- Footer -------------------------------------------------------------- */
@@ -192,4 +218,14 @@
 .md-typeset .graph-diagram svg,
 .md-typeset .funnel-diagram svg {
   max-width: none;
+}
+
+/* ---- Motion: subtle, calm; disabled for reduced-motion users ------------- */
+/* Glide to anchors / TOC targets instead of jumping. The content fade-in on
+   each navigation is driven by page-motion.js (Web Animations API), which also
+   respects prefers-reduced-motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }

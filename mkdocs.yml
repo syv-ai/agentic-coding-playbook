@@ -35,6 +35,8 @@ theme:
         name: Switch to dark mode
   features:
     - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
     - navigation.tracking
     - navigation.expand
     - navigation.top
@@ -75,6 +77,7 @@ markdown_extensions:
   - tables
   - toc:
       permalink: true
+      title: On this page
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
@@ -84,6 +87,7 @@ extra_css:
   - assets/stylesheets/extra.css
 
 extra_javascript:
+  - javascripts/page-motion.js
   - https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js
   - https://cdn.jsdelivr.net/npm/@dagrejs/dagre@1.1.8/dist/dagre.min.js # layout engine for graph-diagram
   - javascripts/visuals/theme.js # must load first — defines window.VIZ
