@@ -12,19 +12,27 @@ This module covers the pipeline that turns business context into work an agent c
 
 ## The Full Pipeline
 
-```
-Business need / opportunity
-        |
-    Product vision
-        |
-    PRD (Product Requirements Document)
-        |
-    Technical specification
-        |
-    Task breakdown (issues)
-        |
-    Agent-ready task prompt
-```
+<div class="flow-diagram" data-orientation="TD">
+<template>
+{
+  "nodes": [
+    { "id": "need", "label": "Business need / opportunity" },
+    { "id": "vision", "label": "Product vision" },
+    { "id": "prd", "label": "PRD (Product Requirements Document)" },
+    { "id": "spec", "label": "Technical specification" },
+    { "id": "tasks", "label": "Task breakdown (issues)" },
+    { "id": "prompt", "label": "Agent-ready task prompt" }
+  ],
+  "links": [
+    { "source": "need", "target": "vision" },
+    { "source": "vision", "target": "prd" },
+    { "source": "prd", "target": "spec" },
+    { "source": "spec", "target": "tasks" },
+    { "source": "tasks", "target": "prompt" }
+  ]
+}
+</template>
+</div>
 
 You don't need all of these steps for every piece of work. A bug fix skips straight from "the thing is broken" to an agent-ready task. But for feature work, especially in enterprise settings, the upstream quality directly determines what the agent produces.
 

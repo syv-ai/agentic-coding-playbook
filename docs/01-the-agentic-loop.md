@@ -55,7 +55,7 @@ Each tool use returns information that informs the next step. That's the loop in
 
 ## The Harness
 
-The "harness" is the software that wraps around the language model and gives it tools, context management, and an execution environment [^1]. Claude Code is a harness. Cursor is a harness. Codex is a harness. The model does the reasoning; the harness provides everything else.
+The "harness" is the software that wraps around the language model and gives it tools, context management, and an execution environment [^1][^2]. Claude Code is a harness. Cursor is a harness. Codex is a harness. The model does the reasoning; the harness provides everything else.
 
 Different harnesses make different trade-offs:
 

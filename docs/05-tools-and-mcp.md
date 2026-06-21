@@ -28,11 +28,23 @@ MCP is a standard protocol for connecting AI agents to external services [^2]. T
 
 The architecture is straightforward:
 
-```
-Your Agent  <-->  MCP Client  <-->  MCP Server  <-->  External Service
-                  (built into        (you install      (Slack, DB, 
-                   your tool)         or run)           Jira, etc.)
-```
+<div class="flow-diagram" data-orientation="LR">
+<template>
+{
+  "nodes": [
+    { "id": "agent", "label": "Your Agent" },
+    { "id": "client", "label": "MCP Client", "sub": "built into your tool" },
+    { "id": "server", "label": "MCP Server", "sub": "you install or run" },
+    { "id": "ext", "label": "External Service", "sub": "Slack, DB, Jira…" }
+  ],
+  "links": [
+    { "source": "agent", "target": "client", "dir": "both" },
+    { "source": "client", "target": "server", "dir": "both" },
+    { "source": "server", "target": "ext", "dir": "both" }
+  ]
+}
+</template>
+</div>
 
 An MCP server exposes capabilities (called "tools") that the agent can discover and use. For example, a Slack MCP server might expose tools like `send_message`, `search_messages`, and `list_channels`. A database MCP server might expose `query` and `list_tables`.
 

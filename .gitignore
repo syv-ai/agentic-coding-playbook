@@ -1,2 +1,8 @@
 ncnielsen/images/
 ncnielsen/plan/
+
+# MkDocs build output
+site/
+
+# Dash tooling
+.dash/

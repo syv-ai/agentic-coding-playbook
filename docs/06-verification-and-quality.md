@@ -135,27 +135,23 @@ The reframe for delegation: a good bug report to an agent looks like a good bug 
 
 Here's a practical quality pipeline for agentic coding:
 
-```
-Agent writes code
-    |
-    v
-Hook: formatter/linter runs automatically
-    |
-    v
-Agent runs tests (part of its workflow)
-    |
-    v
-Agent commits (pre-commit hooks run: type check, lint staged)
-    |
-    v
-You review the diff
-    |
-    v
-PR created (CI runs: full test suite, static analysis, coverage check)
-    |
-    v
-Merge
-```
+<div class="funnel-diagram">
+<template>
+{
+  "entry": {
+    "label": "Agent writes code",
+    "defects": ["style", "logic", "design", "integration", "coverage"]
+  },
+  "layers": [
+    { "label": "Formatter / linter hook", "catches": "style" },
+    { "label": "Agent runs tests", "catches": "logic errors" },
+    { "label": "You review the diff", "catches": "design & consistency" },
+    { "label": "CI on the PR", "catches": "integration, coverage" }
+  ],
+  "exit": { "label": "Merged with confidence" }
+}
+</template>
+</div>
 
 Each layer catches different problems. The formatter catches style issues. The agent's test run catches logic errors. Your review catches design and consistency issues. CI catches integration problems and coverage regression.
 

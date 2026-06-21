@@ -1,0 +1,93 @@
+site_name: Agentic Coding Playbook
+site_description: A workshop playbook on agentic coding — developer and leadership tracks.
+site_url: https://syv-ai.github.io/agentic-coding-playbook/
+repo_url: https://github.com/syv-ai/agentic-coding-playbook
+repo_name: syv-ai/agentic-coding-playbook
+edit_uri: edit/main/docs/
+
+docs_dir: docs
+
+# Keep contributor working notes out of the published site.
+exclude_docs: |
+  internal/
+  javascripts/visuals/README.md
+
+theme:
+  name: material
+  logo: assets/logo.svg
+  favicon: assets/favicon.svg
+  font:
+    text: IBM Plex Sans
+    code: IBM Plex Mono
+  # Always start in dark mode; toggle to light is still available.
+  palette:
+    - scheme: slate
+      primary: black
+      accent: deep purple
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+    - scheme: default
+      primary: black
+      accent: deep purple
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+    - content.action.edit
+    - search.suggest
+    - search.highlight
+    - toc.follow
+
+nav:
+  - Introduction: index.md
+  - The Agentic Loop: 01-the-agentic-loop.md
+  - Environment Setup: 02-environment-setup.md
+  - Context Engineering: 03-context-engineering.md
+  - Effective Prompting: 04-effective-prompting.md
+  - Tools and MCP: 05-tools-and-mcp.md
+  - Verification and Quality: 06-verification-and-quality.md
+  - Subagents and Parallelism: 07-subagents-and-parallelism.md
+  - Long-Running Agents: 08-long-running-agents.md
+  - Production Workflows: 09-production-workflows.md
+  - Building Your System: 10-building-your-system.md
+  - From Business Context to Agent Tasks: 11-from-business-context-to-agent-tasks.md
+  - Enterprise Adoption: 12-enterprise-adoption.md
+  - Observability and Lifecycle: 13-observability-and-lifecycle.md
+  - Software Distillation and Atomic Agents: 14-software-distillation-and-atomic-agents.md
+  - Research Summary: research-summary.md
+
+markdown_extensions:
+  - footnotes
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+
+extra_css:
+  - assets/stylesheets/extra.css
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js
+  - javascripts/visuals/theme.js # must load first — defines window.VIZ
+  - javascripts/visuals/flow-diagram.js
+  - javascripts/visuals/quality-funnel.js
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/syv-ai/agentic-coding-playbook

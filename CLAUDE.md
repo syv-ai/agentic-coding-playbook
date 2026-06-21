@@ -25,5 +25,5 @@ The pipeline is `further-reading.md` → `sources.md` → `docs/research-summary
 
 - **Tool-agnostic stance.** The playbook covers Claude Code, Cursor, Codex, and others. When citing tool-specific material, separate the principle (transferable) from the implementation (tool-specific) — see the shanraisshan entry in `further-reading.md` for the convention.
 - **Voice and section headers.** Punchy, claim-style headers ("The slop problem is real, but it's not new") are preferred over neutral descriptive ones in posture/argument sections.
-- **Visual language.** Mermaid for flow/architecture diagrams; hand-built SVG when Mermaid can't do it. Reusable fragments live in `docs/visual-style.md` (planned) and the issue coverage plan has draft fragments.
+- **Visual language.** All diagrams are custom **D3** (no Mermaid). Renderers + shared theme live in `docs/javascripts/visuals/`; see the `/add-visual` skill.
 - **Internal vs published.** Anything a workshop participant should read goes in `docs/`. Working notes, plans, and editorial decisions go in `docs/internal/`.

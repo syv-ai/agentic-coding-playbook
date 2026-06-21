@@ -39,9 +39,8 @@ Exercises are **tool-agnostic** — harder to write, but matches the playbook's 
 
 **Recommendation:** Pick one toolchain and one visual language now, before more diagrams accumulate inconsistently.
 
-- **Toolchain:** Mermaid for flow/architecture diagrams (renders natively on GitHub and in the Next.js slides). For anything Mermaid can't do, hand-built SVG checked in as source.
-- **Visual language:** A short `docs/visual-style.md` that fixes color palette, arrow conventions (control flow vs. data flow), node shapes (agent / tool / human / artifact), and font.
-- The slide deck and docs reuse the same Mermaid blocks so updates flow to both.
+- **Toolchain:** All diagrams are custom **D3** (no Mermaid) — see the `/add-visual` skill (`.claude/skills/add-visual/`). Renderers and the shared theme live in `docs/javascripts/visuals/`. Inline SVG for one-offs. The Mermaid draft fragments below are historical and should be re-authored as D3 when those diagrams are built.
+- **Visual language:** The shared theme lives in `docs/javascripts/visuals/theme.js` (color palette, arrow gap, node shapes, fonts). Design rules are in the `/add-visual` skill.
 
 **Light theme only.** No existing brand reference to match — we define the visual language ourselves in `docs/visual-style.md`.
 
@@ -276,7 +275,7 @@ We don't have first-hand case studies to draw on, so this is synthesized from th
 | --- | --- | --- | --- |
 | 1 | Exercises | `exercises/NN-*.md` per module | new asset |
 | 2 | Split into tracks | README + track map | structural |
-| 3 | Visualizations | `docs/visual-style.md` + Mermaid library | new asset |
+| 3 | Visualizations | D3 renderers + theme in `docs/javascripts/visuals/` (`/add-visual` skill) | new asset |
 | 4 | Culture material | New chapter, leadership track | new chapter |
 | 5 | Full-lifecycle examples | `docs/examples/` appendix | new asset |
 | 6 | Situate as distributions | 00 Introduction, new section | integrated |

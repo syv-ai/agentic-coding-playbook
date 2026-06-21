@@ -6,7 +6,7 @@ When a human developer writes code, the process is largely invisible but the out
 
 For a solo developer running a single agent interactively, this is manageable. You're there, you see the work happening, you review the result. But when agents run in CI, on schedules, in parallel, or across a team, you need structured visibility into what they're doing, how much they cost, and whether they're producing good results.
 
-This module covers the observability and lifecycle management practices that make agentic coding sustainable at scale.
+This module covers the observability and lifecycle management practices that make agentic coding sustainable at scale [^3].
 
 ## The Three Pillars of Agent Observability
 
@@ -94,12 +94,27 @@ An agent interaction doesn't start when you type a prompt and end when the agent
 
 ### The Task Lifecycle
 
-```
-Specification  ->  Planning  ->  Execution  ->  Review  ->  Merge  ->  Monitor
-     |                |              |             |           |           |
-  PRD/Issue      Plan mode      Agent work    Human review   Ship    Watch for
-  creation       analysis       + self-test   + CI gates            regressions
-```
+<div class="flow-diagram" data-orientation="TD">
+<template>
+{
+  "nodes": [
+    { "id": "spec", "label": "Specification", "sub": "PRD / issue creation" },
+    { "id": "plan", "label": "Planning", "sub": "plan mode analysis" },
+    { "id": "exec", "label": "Execution", "sub": "agent work + self-test" },
+    { "id": "review", "label": "Review", "sub": "human review + CI gates" },
+    { "id": "merge", "label": "Merge", "sub": "ship" },
+    { "id": "monitor", "label": "Monitor", "sub": "watch for regressions" }
+  ],
+  "links": [
+    { "source": "spec", "target": "plan" },
+    { "source": "plan", "target": "exec" },
+    { "source": "exec", "target": "review" },
+    { "source": "review", "target": "merge" },
+    { "source": "merge", "target": "monitor" }
+  ]
+}
+</template>
+</div>
 
 Each stage has different observability needs:
 
