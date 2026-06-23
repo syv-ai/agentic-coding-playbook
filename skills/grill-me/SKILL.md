@@ -7,6 +7,8 @@ Interview me relentlessly about every aspect of this plan until we reach a share
 
 Ask the questions one at a time, waiting for feedback on each before continuing.
 
+**Always ask through the `AskUserQuestion` tool** — never pose the question as plain prose in the chat. Put the question and your recommended answer (plus the other plausible answers) as options in the tool, so I can pick fast and the decision is captured cleanly. The recommended option goes first, labelled as recommended.
+
 If a question can be answered by exploring the codebase, explore the codebase instead.
 
 ## Sharpen the language as you go
