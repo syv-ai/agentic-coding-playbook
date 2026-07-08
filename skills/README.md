@@ -71,6 +71,10 @@ Requires Node.js 18+. (`--agent claude-code` also ensures the skills land in
 - [`handoff`](handoff/) — compact the conversation into a handoff doc for a fresh session.
 - [`write-a-skill`](write-a-skill/) — author new skills for this collection, with progressive disclosure.
 
+**Company brain (syv-internal)**
+- [`hjernen`](hjernen/) — query or contribute to syv.ai's shared brain (the private `1brain` repo) from any session; bootstraps a local clone and defers to the repo's own schema.
+- [`tilbud`](tilbud/) — write a client proposal in the company's fixed format and render the branded PDF; builds on `hjernen`. *(Both require GitHub access to the private `syv-ai/1brain` repo.)*
+
 **Setup**
 - [`setup`](setup/) — set up a project's stack and dev-env feedback loops (new or existing repo).
 - [`setup-syv-skills`](setup-syv-skills/) — one-command onboarding for this collection.
