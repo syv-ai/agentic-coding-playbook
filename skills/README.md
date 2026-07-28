@@ -68,12 +68,15 @@ Requires Node.js 18+. (`--agent claude-code` also ensures the skills land in
 
 **Architecture, lifecycle & meta**
 - [`improve-codebase-architecture`](improve-codebase-architecture/) — find shallow modules, propose deeper ones.
+- [`improve-code-design`](improve-code-design/) — name the anti-pattern a piece of code is an instance of, the principle it violates, and the pattern that fixes it. Its sibling above asks "is this module deep?"; this one asks "does this violate a named principle, and is there a named remedy?"
 - [`handoff`](handoff/) — compact the conversation into a handoff doc for a fresh session.
 - [`write-a-skill`](write-a-skill/) — author new skills for this collection, with progressive disclosure.
 
-**Company brain (syv-internal)**
+**Company brain (syv-internal)** — deliberately *not* registered in the plugin, so they are
+not installed by method A. Use method B, or copy the directory. Both require GitHub access to
+the private `syv-ai/1brain` repo.
 - [`hjernen`](hjernen/) — query or contribute to syv.ai's shared brain (the private `1brain` repo) from any session; bootstraps a local clone and defers to the repo's own schema.
-- [`tilbud`](tilbud/) — write a client proposal in the company's fixed format and render the branded PDF; builds on `hjernen`. *(Both require GitHub access to the private `syv-ai/1brain` repo.)*
+- [`tilbud`](tilbud/) — write a client proposal in the company's fixed format and render the branded PDF; builds on `hjernen`.
 
 **Setup**
 - [`setup`](setup/) — set up a project's stack and dev-env feedback loops (new or existing repo).
