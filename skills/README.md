@@ -68,7 +68,7 @@ Requires Node.js 18+. (`--agent claude-code` also ensures the skills land in
 
 **Architecture, lifecycle & meta**
 - [`improve-codebase-architecture`](improve-codebase-architecture/) — find shallow modules, propose deeper ones.
-- [`improve-code-design`](improve-code-design/) — name the anti-pattern a piece of code is an instance of, the principle it violates, and the pattern that fixes it. Its sibling above asks "is this module deep?"; this one asks "does this violate a named principle, and is there a named remedy?"
+- [`improve-code-design`](improve-code-design/) — name the anti-pattern a piece of code is an instance of, the principle it violates, and the pattern that fixes it. Its sibling above asks "is this module deep?"; this one asks "does this violate a named principle, and is there a named remedy?" Enumeration is delegated to the `design-inventory` agent and the suppression gate to `design-auditor`, both in [`agents/`](../agents/); findings land as a published Claude artifact.
 - [`handoff`](handoff/) — compact the conversation into a handoff doc for a fresh session.
 - [`write-a-skill`](write-a-skill/) — author new skills for this collection, with progressive disclosure.
 
