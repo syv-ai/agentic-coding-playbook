@@ -1,4 +1,6 @@
-# Research Summary and Sources
+---
+title: Sources
+---
 
 This document summarizes the research that informed the workshop content, organized by theme. It serves as a reference for workshop facilitators and attendees who want to go deeper.
 

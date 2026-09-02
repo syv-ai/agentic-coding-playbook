@@ -1,0 +1,8 @@
+title: Working well with agents
+audience: Developers who already use agents. Where the playbook says what only Syv can say.
+order: 2
+parts:
+  - key: A
+    title: Verification makes speed safe
+  - key: B
+    title: Craft raises the ceiling
