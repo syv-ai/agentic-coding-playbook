@@ -1,0 +1,16 @@
+---
+import { render } from "astro:content";
+import Deck from "../../../layouts/Deck.astro";
+import { getBook, getPublishedChapters } from "../../../lib/site";
+
+export async function getStaticPaths() {
+  const chapters = await getPublishedChapters();
+  return chapters.map((chapter) => ({ params: { book: chapter.book, chapter: chapter.slug }, props: { chapter } }));
+}
+const { chapter } = Astro.props;
+const book = (await getBook(chapter.book))!;
+const { Content } = await render(chapter.entry);
+---
+<Deck book={book} chapter={chapter}>
+  <Content />
+</Deck>

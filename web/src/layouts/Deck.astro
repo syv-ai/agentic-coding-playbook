@@ -1,0 +1,57 @@
+---
+import Base from "./Base.astro";
+import { BASE, chapterPath } from "../lib/paths";
+import type { Book, Chapter } from "../lib/site";
+
+interface Props { book: Book; chapter: Chapter }
+const { book, chapter } = Astro.props;
+const bookUrl = chapterPath(BASE, book.slug, chapter.slug);
+---
+<Base title={`${chapter.data.title} (deck)`} render="deck">
+  <div class="deck" data-book-url={bookUrl}>
+    <div class="stage">
+      <section class="slide" data-slide="title">
+        <p class="kicker">Book {book.data.order} · {book.data.title}</p>
+        <h1>{chapter.data.title}</h1>
+        <p class="summary">{chapter.data.summary}</p>
+      </section>
+      <slot />
+    </div>
+    <div class="hud">
+      <span class="meta">Book {book.data.order} · {chapter.data.title}</span>
+      <span class="controls">
+        <button type="button" data-deck-prev aria-label="Previous slide">←</button>
+        <span class="counter"></span>
+        <button type="button" data-deck-next aria-label="Next slide">→</button>
+        <button type="button" data-deck-notes aria-label="Toggle notes">N</button>
+        <a href={bookUrl} aria-label="Back to book">Esc</a>
+      </span>
+    </div>
+  </div>
+</Base>
+
+<style is:global>
+  html[data-render="deck"] { background: #101014; color: #e8e8ec; }
+  html[data-render="deck"] body { min-height: 100vh; }
+  .deck { display: flex; flex-direction: column; min-height: 100vh; }
+  .stage { flex: 1; display: grid; place-items: center; padding: 2rem; }
+  .stage section.slide { display: none; width: min(100%, 64rem); aspect-ratio: 16 / 9; padding: 2.5rem 3rem; font-size: 1.25rem; overflow: auto; }
+  .stage section.slide[data-active] { display: block; }
+  .stage h1 { font-size: 2.6rem; }
+  .stage h2 { font-size: 2rem; margin-top: 0; }
+  .kicker { color: #9a9aa6; font-size: 0.9rem; }
+  .summary { color: #b8b8c2; }
+  .stage [data-notes] { display: none; margin-top: 1.5rem; padding: 1rem; border-top: 1px solid #2a2a33; font-size: 0.95rem; color: #b8b8c2; }
+  .deck.notes-open .stage [data-active] [data-notes] { display: block; }
+  .hud { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 1.25rem; font-size: 0.8rem; color: #7a7a86; border-top: 1px solid #2a2a33; }
+  .controls { display: flex; gap: 0.5rem; align-items: center; }
+  .controls button, .controls a { background: none; border: 1px solid #2a2a33; color: #b8b8c2; border-radius: 6px; padding: 0.2rem 0.5rem; font: inherit; cursor: pointer; text-decoration: none; }
+  /* Visual tokens in the deck are always dark, whatever the reader's theme. */
+  html[data-render="deck"] { --viz-bg: #101014; --viz-fill: #1c1c24; --viz-border: #ffffff; --viz-text: #ffffff; --viz-sub: #a1a1aa; --viz-line: #ffffff; --viz-connector: #8b8b93; --viz-good: #7ee787; --viz-defect: #e0857c; --viz-defect-text: #0a0a0b; --viz-accent: #c084fc; --bg: #101014; --bg-raised: #1c1c24; --text: #e8e8ec; --text-muted: #b8b8c2; --border: #2a2a33; --accent: #c084fc; --good: #7ee787; --bad: #f87171; --link: #d8b4fe; }
+</style>
+
+<script>
+  import { mountDeck } from "../scripts/deck";
+  const root = document.querySelector<HTMLElement>(".deck");
+  if (root) mountDeck(root);
+</script>
