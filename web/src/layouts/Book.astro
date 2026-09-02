@@ -84,3 +84,18 @@ const h2s = headings.filter((h) => h.depth === 2);
   .chapter-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); }
   @media (max-width: 1000px) { .shell { grid-template-columns: 1fr; } .sidebar, .toc { position: static; max-height: none; } }
 </style>
+
+<link rel="stylesheet" href={`${BASE}pagefind/pagefind-ui.css`} />
+<script is:inline define:vars={{ base: BASE }}>
+  // The bundle exists only after `npm run build`; in `astro dev` the script 404s and the box stays empty.
+  var s = document.createElement("script");
+  s.src = base + "pagefind/pagefind-ui.js";
+  s.onload = function () {
+    new PagefindUI({ element: "#search", bundlePath: base + "pagefind/", showSubResults: true, showImages: false });
+  };
+  document.head.appendChild(s);
+</script>
+
+<style is:global>
+  .search { --pagefind-ui-scale: 0.8; --pagefind-ui-primary: var(--accent); --pagefind-ui-text: var(--text); --pagefind-ui-background: var(--bg); --pagefind-ui-border: var(--border); --pagefind-ui-font: var(--font-sans); }
+</style>

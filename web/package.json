@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
     "test": "vitest run",
@@ -32,6 +32,7 @@
     "hast-util-to-html": "9.0.5",
     "hastscript": "9.0.1",
     "jsdom": "30.0.1",
+    "pagefind": "1.5.2",
     "typescript": "6.0.3",
     "vitest": "4.1.11"
   },
