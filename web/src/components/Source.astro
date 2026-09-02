@@ -1,0 +1,36 @@
+---
+interface Props {
+  who: string;
+  work: string;
+  year?: number | string;
+  href?: string;
+  provenance: "read" | "stated";
+}
+const { who, work, year, href, provenance } = Astro.props;
+const chip = provenance === "read" ? "Read in full" : "Stated, not quoted";
+---
+<figure class="source" data-provenance={provenance}>
+  <div class="source-year">{year}<small>{chip}</small></div>
+  <div class="source-body">
+    <slot />
+    <p class="source-attr"><b>{who}</b>, <cite>{work}</cite>.</p>
+    <p class="source-ref">
+      <span class="chip">{chip}</span>
+      {href && <a href={href} rel="noopener">{href.replace(/^https?:\/\//, "")}</a>}
+    </p>
+  </div>
+</figure>
+
+<style>
+  .source { display: grid; grid-template-columns: 5.5rem 1fr; gap: 1rem; margin: 1.5rem 0; padding: 1rem 1.1rem; background: var(--bg-raised); border-radius: 10px; }
+  .source-year { font-weight: 600; color: var(--text-muted); }
+  .source-year small { display: block; font-weight: 400; font-size: 0.7rem; color: var(--text-faint); }
+  .source-body :global(q) { display: block; font-style: italic; margin: 0 0 0.6rem; }
+  .source-body :global(q)::before, .source-body :global(q)::after { content: none; }
+  .source-attr { margin: 0.4rem 0 0.2rem; }
+  .source-ref { margin: 0; font-size: 0.85rem; }
+  .chip { display: inline-block; font-size: 0.72rem; padding: 0.05rem 0.5rem; border-radius: 999px; margin-right: 0.5rem; background: var(--bg-sunken); color: var(--text-muted); }
+  .source[data-provenance="read"] .chip { color: var(--good); }
+  .source[data-provenance="stated"] .chip { color: var(--warn); }
+  @media (max-width: 600px) { .source { grid-template-columns: 1fr; } }
+</style>
