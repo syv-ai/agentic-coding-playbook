@@ -22,6 +22,12 @@ export function rehypeSlides() {
     const isBlank = (n: RootContent) => n.type === "text" && n.value.trim() === "";
 
     for (const node of tree.children) {
+      // MDX `import`/`export` statements must stay at the root: Astro's metadata pass reads them there
+      // to match client:* directives to their imports.
+      if ((node as { type: string }).type === "mdxjsEsm") {
+        out.push(node);
+        continue;
+      }
       if (node.type === "element" && node.tagName === "h2") {
         title = toString(node);
         anchor = String(node.properties?.id ?? "");

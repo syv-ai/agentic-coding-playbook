@@ -50,4 +50,13 @@ describe("rehypeSlides", () => {
     expect(section.tagName).toBe("section");
     expect(section.children.map((c: any) => c.type ?? c.tagName)).toEqual(["element", "mdxJsxFlowElement"]);
   });
+
+  it("leaves MDX import/export nodes at the root so Astro can still find component imports", () => {
+    const esm = { type: "mdxjsEsm", value: 'import Quiz from "../Quiz";' };
+    const tree = { type: "root", children: [esm, h("p", "lead"), h("h2", { id: "a" }, "A")] } as unknown as Root;
+    rehypeSlides()(tree);
+    expect((tree.children[0] as any).type).toBe("mdxjsEsm");
+    expect((tree.children[1] as any).properties.dataSlide).toBe("intro");
+    expect((tree.children[2] as any).properties.dataSlide).toBe("a");
+  });
 });

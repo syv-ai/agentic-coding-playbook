@@ -1,0 +1,129 @@
+---
+title: Decide how you'll measure success before you build
+order: 1
+part: A
+summary: A loop without a checkable target is an automated way to make errors you find too late.
+status: published
+sources: []
+---
+import Quiz from "../../../components/Quiz";
+import Visual from "../../../components/Visual.astro";
+import Callout from "../../../components/Callout.astro";
+import Source from "../../../components/Source.astro";
+import Notes from "../../../components/Notes.astro";
+import BookOnly from "../../../components/BookOnly.astro";
+import VerifiableLoopDemo from "./_components/VerifiableLoopDemo";
+
+An agent working on a task is a loop: look at the state, act, look again. The loop runs until something says stop. If the only thing that says stop is the agent's own judgment that it is done, the loop optimises for *looking* done. If a check says stop, the loop optimises for *being* done. Nothing else about the agent has to change for that difference to show up in every line it writes.
+
+So the first decision on any task is not what to build. It is what will count as built.
+
+<Notes>
+Open with the loop drawing, not the claim. Ask the room what stops the loop in their setup today. Most answers are "I read the diff" — which is a check, but a late and expensive one.
+</Notes>
+
+## The loop only optimises for what can stop it
+
+<Visual
+  kind="graph"
+  orientation="LR"
+  caption="The loop with a check in it. Remove the check and the only exit is the agent deciding it is finished."
+  spec={{
+    nodes: [
+      { id: "check", label: "Write the check" },
+      { id: "act", label: "Agent acts" },
+      { id: "run", label: "Run the check" },
+      { id: "pass", label: "Passes?", kind: "decision" },
+      { id: "done", label: "Done" },
+    ],
+    links: [
+      { source: "check", target: "act" },
+      { source: "act", target: "run" },
+      { source: "run", target: "pass" },
+      { source: "pass", target: "done", label: "yes" },
+      { source: "pass", target: "act", label: "no" },
+    ],
+  }}
+/>
+
+A check is anything that can fail on its own, without a person reading: a test, a type error, a lint rule, a script that hits the endpoint and compares the body, a build. What it is not is a description of what good looks like. Descriptions steer the agent's first attempt. Checks steer every attempt after that.
+
+## Why it holds
+
+We train models and we build harnesses for them. From that side of the table the point is not subtle: a model gets better at whatever the loss function measures, and at nothing else. An agent loop is the same shape at a slower speed. Whatever can stop the loop is its loss function. If that is "the agent reports success", the agent gets very good at reporting success.
+
+The June review of our own practice put it this way: write the check before the loop. A loop without a checkable target is just an automated way to make errors you find too late. Late here means at review, or in production, where the cost of a defect is highest and the context that produced it is gone.
+
+Test-driven development said the same thing about people twenty-five years ago, and it was a hard sell then for a reason that no longer applies: writing the check first cost a person real time. With an agent doing the work, the check is the cheapest part of the task and the only part that has to be right.
+
+<Source who="Anthropic" work="Effective harnesses for long-running agents" year={2025} href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents" provenance="stated">
+<q>The post's argument, paraphrased: long-running agents drift unless the harness gives them an external signal of progress, and the most reliable signal is a test the agent can run itself.</q>
+</Source>
+
+<Notes>
+The loss-function analogy is the one model-builder point in this chapter. Use it once, do not lean on it. If someone asks for the experiment behind "trained together", that is chapter 8.
+</Notes>
+
+## Try it
+
+<VerifiableLoopDemo client:visible />
+
+Both columns do the same five rounds of work. The left column has no check, so every round ends with the agent's claim. The right column has a check written before round one, so every round ends with a fact. The defects on the left were always there. The only thing the check changed is when they became visible.
+
+## What it changes
+
+Before you let the agent loose:
+
+- **Write the failing check first.** A test, a script, a type. If you cannot write one, you do not yet know what done means, and neither will the agent.
+- **Make the check runnable by the agent.** A check only a human can run is a review, not a check. Put it in a command the agent can call.
+- **Let the check be the stop condition.** Tell the agent to iterate until it passes, and not to report done before it does.
+- **Keep the check outside the agent's reach.** If the agent can edit the test, the loop can optimise the test instead of the code. Protect it, or review changes to it before anything else.
+
+What to stop doing:
+
+- Accepting "done" as an outcome. It is a claim.
+- Writing the check after the code. It then confirms what you already believe.
+- Substituting a description of quality for a check of it. Descriptions help the first attempt; only checks help the tenth.
+
+<Callout kind="tension">
+Thinking before you code and checking before you build are the same discipline seen from two sides. The next chapter covers the thinking side: closing the gap between what you meant and what the agent understood, before any code exists.
+</Callout>
+
+## Check yourself
+
+<Quiz
+  client:visible
+  id="working-well-01"
+  questions={[
+    {
+      prompt: "What does an agent loop optimise for?",
+      choices: [
+        { text: "The task as described in the prompt", explain: "The description steers the first attempt. After that, the loop optimises for whatever can stop it." },
+        { text: "Whatever condition stops the loop", correct: true, explain: "If the stop condition is a check, the loop optimises for passing it. If it is the agent's own judgment, the loop optimises for looking done." },
+        { text: "The shortest path to a diff", explain: "Agents are not lazy in that sense. They stop when something tells them they are done." },
+      ],
+    },
+    {
+      prompt: "Which of these is a check, in the sense used here?",
+      choices: [
+        { text: "A paragraph in the task brief describing the expected behaviour", explain: "That is a description. It cannot fail on its own." },
+        { text: "A script the agent can run that calls the endpoint and compares the response", correct: true, explain: "It fails without a person reading, and the agent can run it every round." },
+        { text: "Your own read of the final diff", explain: "That is a review. It matters, but it is late and it does not run inside the loop." },
+      ],
+    },
+    {
+      prompt: "The agent can edit the test file. What is the risk?",
+      choices: [
+        { text: "None; the agent needs to keep tests up to date", explain: "It sometimes does. But if the test is the stop condition, changing it changes the target, and the loop will take the easier target." },
+        { text: "The loop can pass by changing the check instead of the code", correct: true, explain: "Protect the check, or review changes to it before anything else." },
+        { text: "The test will become slower", explain: "Speed is not the issue. The target is." },
+      ],
+    },
+  ]}
+/>
+
+## For the basics
+
+<BookOnly>
+If the three layers of verification (the agent's own check, automated gates, human review) are new to you, Book 1 chapter 5 covers them. This chapter assumes them and argues about where the first layer goes: before the work, not after.
+</BookOnly>
