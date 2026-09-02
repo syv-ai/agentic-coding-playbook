@@ -1,3 +1,10 @@
 ---
+import Base from "../layouts/Base.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
 ---
-<html lang="en"><body><h1>Agentic Coding Playbook</h1></body></html>
+<Base title="Series" render="book">
+  <main class="prose" style="padding:2rem">
+    <ThemeToggle />
+    <h1>Agentic Coding Playbook</h1>
+  </main>
+</Base>

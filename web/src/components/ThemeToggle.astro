@@ -1,0 +1,31 @@
+---
+---
+<button class="theme-toggle" type="button" aria-label="Toggle colour theme" title="Toggle colour theme">
+  <span data-when="light" aria-hidden="true">☾</span>
+  <span data-when="dark" aria-hidden="true">☀</span>
+</button>
+
+<style>
+  .theme-toggle { background: none; border: 1px solid var(--border); color: var(--text); border-radius: 999px; width: 2rem; height: 2rem; cursor: pointer; font-size: 1rem; line-height: 1; }
+  .theme-toggle:hover { border-color: var(--accent); }
+  :global(html[data-theme="dark"]) [data-when="light"] { display: none; }
+  :global(html:not([data-theme="dark"])) [data-when="dark"] { display: none; }
+  @media (prefers-color-scheme: dark) {
+    :global(html:not([data-theme="light"])) [data-when="light"] { display: none; }
+    :global(html:not([data-theme="light"])) [data-when="dark"] { display: inline; }
+  }
+</style>
+
+<script>
+  import { writeJSON } from "../lib/storage";
+  // Base.astro applies the stored choice before first paint; this only handles the click.
+  const root = document.documentElement;
+  const button = document.querySelector<HTMLButtonElement>(".theme-toggle");
+  const systemDark = () => window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const current = () => root.dataset.theme ?? (systemDark() ? "dark" : "light");
+  button?.addEventListener("click", () => {
+    const next = current() === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    writeJSON("theme", next);
+  });
+</script>

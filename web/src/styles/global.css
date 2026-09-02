@@ -1,0 +1,116 @@
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --bg-raised: #f5f5f7;
+  --bg-sunken: #ebebef;
+  --text: #1a1a1e;
+  --text-muted: #5c5c66;
+  --text-faint: #8e8e98;
+  --border: #d9d9df;
+  --accent: #7c3aed;
+  --accent-text: #ffffff;
+  --link: #7e22ce;
+  --good: #15803d;
+  --warn: #b45309;
+  --bad: #b91c1c;
+  --code-bg: #f1f1f4;
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+  --measure: 70ch;
+
+  /* Visual (D3) tokens: read by src/lib/viz/theme.ts */
+  --viz-bg: var(--bg);
+  --viz-fill: #ffffff;
+  --viz-border: #1a1a1e;
+  --viz-text: #1a1a1e;
+  --viz-sub: #5c5c66;
+  --viz-line: #1a1a1e;
+  --viz-connector: #8e8e98;
+  --viz-good: #15803d;
+  --viz-defect: #e0857c;
+  --viz-defect-text: #1a1a1e;
+  --viz-accent: var(--accent);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0a0a0b;
+    --bg-raised: #141417;
+    --bg-sunken: #000000;
+    --text: #e8e8ec;
+    --text-muted: #b6b6bd;
+    --text-faint: #7d7d86;
+    --border: #2a2a30;
+    --accent: #c084fc;
+    --accent-text: #0a0a0b;
+    --link: #d8b4fe;
+    --good: #7ee787;
+    --warn: #fbbf24;
+    --bad: #f87171;
+    --code-bg: #141417;
+    --viz-fill: #000000;
+    --viz-border: #ffffff;
+    --viz-text: #ffffff;
+    --viz-sub: #a1a1aa;
+    --viz-line: #ffffff;
+    --viz-connector: #8b8b93;
+    --viz-good: #7ee787;
+    --viz-defect: #e0857c;
+    --viz-defect-text: #0a0a0b;
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0a0a0b;
+  --bg-raised: #141417;
+  --bg-sunken: #000000;
+  --text: #e8e8ec;
+  --text-muted: #b6b6bd;
+  --text-faint: #7d7d86;
+  --border: #2a2a30;
+  --accent: #c084fc;
+  --accent-text: #0a0a0b;
+  --link: #d8b4fe;
+  --good: #7ee787;
+  --warn: #fbbf24;
+  --bad: #f87171;
+  --code-bg: #141417;
+  --viz-fill: #000000;
+  --viz-border: #ffffff;
+  --viz-text: #ffffff;
+  --viz-sub: #a1a1aa;
+  --viz-line: #ffffff;
+  --viz-connector: #8b8b93;
+  --viz-good: #7ee787;
+  --viz-defect: #e0857c;
+  --viz-defect-text: #0a0a0b;
+}
+
+* { box-sizing: border-box; }
+html { font-family: var(--font-sans); background: var(--bg); color: var(--text); line-height: 1.6; }
+body { margin: 0; }
+a { color: var(--link); }
+a:hover { color: var(--accent); }
+code, pre, kbd { font-family: var(--font-mono); font-size: 0.92em; }
+pre { background: var(--code-bg); padding: 1rem; border-radius: 8px; overflow-x: auto; }
+:not(pre) > code { background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 4px; }
+h1, h2, h3 { line-height: 1.2; letter-spacing: -0.01em; }
+h1 { font-size: 2.2rem; margin: 0 0 0.5rem; }
+h2 { font-size: 1.5rem; margin: 2.5rem 0 0.75rem; }
+h3 { font-size: 1.15rem; margin: 1.75rem 0 0.5rem; }
+hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
+table { border-collapse: collapse; width: 100%; }
+th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+img, svg { max-width: 100%; }
+.prose { max-width: var(--measure); }
+.prose p, .prose ul, .prose ol { margin: 0 0 1rem; }
+.muted { color: var(--text-muted); }
+.faint { color: var(--text-faint); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* Rendering-specific visibility. Layouts set data-render on <html>. */
+html[data-render="book"] [data-deck-only] { display: none; }
+html[data-render="deck"] [data-book-only] { display: none; }
+html[data-render="book"] [data-notes] { display: none; }
