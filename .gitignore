@@ -1,8 +1,13 @@
 # macOS
 .DS_Store
 
-# MkDocs build output
+# MkDocs build output (removed in Task 15)
 site/
+
+# Astro
+web/node_modules/
+web/dist/
+web/.astro/
 
 # Dash tooling
 .dash/
