@@ -2,7 +2,7 @@
 
 Working notes, planning documents, and editorial decisions for the playbook. Not part of the published workshop material.
 
-The published modules live one level up in `docs/` (00–14). Anything in this folder is for contributors deciding *what* to write, not learners reading *what was written*.
+The published content lives in `web/src/content/`. The retired 14 modules are in `docs/legacy/`. Design specs are in `docs/specs/` and implementation plans in `docs/plans/`. Anything in this folder is for contributors deciding *what* to write, not readers.
 
 ## What belongs here
 
@@ -14,12 +14,12 @@ The published modules live one level up in `docs/` (00–14). Anything in this f
 
 ## What does not belong here
 
-- Anything a workshop participant should read — that goes in `docs/`
-- Curated research already attached to landed module content — that goes in `docs/research-summary.md`
+- Anything a reader should see — that goes in `web/src/content/`
+- Curated research already attached to landed chapter content — that goes in the Sources page (`web/src/content/pages/sources.md`)
 
 ## Current contents
 
-- [issue-coverage-plan.md](issue-coverage-plan.md) — proposal for how the 13 open GitHub issues map onto the existing 14-module spine.
-- [slides-migration-plan.md](slides-migration-plan.md) — plan for migrating `slides/` to Slidev and building agent tooling that generates audience-targeted decks.
-- [sources.md](sources.md) — working knowledge base of articles and studies gathered during issue research, with summaries and notes on where each source pulls weight. Promote entries to `docs/research-summary.md` once they back content in a landed module.
-- [further-reading.md](further-reading.md) — backlog of resources we've flagged but haven't fully processed yet. Promote entries to `sources.md` once we've drawn from them.
+- [2026-06-21-perspectives-section-design.md](2026-06-21-perspectives-section-design.md) — superseded by the book-series spec; kept for the reasoning.
+- [issue-coverage-plan.md](issue-coverage-plan.md) — how the open GitHub issues mapped onto the old 14-module spine. Re-map against the four books when picking issues up.
+- [sources.md](sources.md) — working knowledge base. Promote entries to the Sources page (`web/src/content/pages/sources.md`) once they back a landed chapter.
+- [further-reading.md](further-reading.md) — backlog of resources flagged but not processed. Promote to `sources.md` once drawn from.

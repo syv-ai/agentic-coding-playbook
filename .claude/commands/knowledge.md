@@ -9,7 +9,7 @@ You are managing the knowledge base for the agentic coding playbook. The user ha
 
 - **`docs/internal/sources.md`** — material we've cited, with settled framing and caveats
 - **`docs/internal/further-reading.md`** — flagged but unprocessed; the default destination for new material
-- **`docs/research-summary.md`** — published, curated. NEVER write to this directly; promotion is a manual editorial step
+- **`web/src/content/pages/sources.md`** — published, curated. NEVER write to this directly; promotion is a manual editorial step
 - Affected playbook modules in `docs/` (00–14) and `docs/internal/issue-coverage-plan.md` — only edited to add contradiction-flag alert blocks
 
 Read the entry templates and the existing entries in `sources.md` and `further-reading.md` before drafting anything new — match the tone and structure already established.
@@ -105,7 +105,7 @@ Triggered by `/knowledge update <slug>` or by duplicate detection in stage 1.
 
 ## What you do NOT do
 
-- Do not write to `docs/research-summary.md`. Promotion to that file is a manual editorial decision.
+- Do not write to `web/src/content/pages/sources.md`. Promotion to that file is a manual editorial decision.
 - Do not invent caveats. If the source genuinely has none worth flagging, that itself is the caveat ("none identified — re-evaluate if claims fail to replicate").
 - Do not flag every overlap as a contradiction. Restraint here is what keeps the command usable.
 - Do not commit without explicit user approval. Show the diff, wait, then commit.

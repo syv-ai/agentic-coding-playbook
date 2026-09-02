@@ -1,6 +1,6 @@
 # Design — "Perspectives" section (the differentiated layer)
 
-**Date:** 2026-06-21 · **Status:** approved in brainstorm, pending spec review · **Owner:** nicolai@syv.ai
+**Date:** 2026-06-21 · **Status:** superseded on 2026-09-02 by `docs/specs/2026-09-02-book-series-design.md` (posture, authority framing and the ten perspectives carry over as Book 2) · **Owner:** nicolai@syv.ai
 
 Internal working note. Excluded from the built site (`docs/internal/`).
 

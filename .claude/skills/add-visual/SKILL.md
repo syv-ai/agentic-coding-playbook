@@ -1,66 +1,44 @@
 ---
 name: add-visual
-description: How to add or restyle a D3 diagram in the playbook docs (MkDocs Material). Use for any flowchart, diagram, chart, or graphic in docs/.
+description: How to add or restyle a D3 diagram in a playbook chapter (Astro, web/). Use for any flowchart, diagram, chart, or graphic in a chapter.
 ---
 
 # add-visual
 
 ## What
 
-All diagrams are custom **D3** (no Mermaid). Renderers + shared theme live in `docs/javascripts/visuals/`, registered in `mkdocs.yml` under `extra_javascript`:
+All diagrams are custom **D3** (no Mermaid), rendered client-side by `web/src/lib/viz/` and placed with the `<Visual>` component:
 
-- `theme.js` — global `window.VIZ` (colors, spacing, fonts, arrowhead factory). **Loads first.**
-- `flow-diagram.js` — **linear** pill/rounded node flows. `data-orientation` `LR` | `TD`.
-- `graph-diagram.js` — **branching/looping** flows with edge labels + decision nodes. Layout via **dagre** (CDN). Node `kind:"decision"` → diamond; link `label` → edge label.
-- `quality-funnel.js` — defense-in-depth funnel.
+- `flow` — linear chain of pill/rounded nodes. `orientation` `LR` | `TD`.
+- `graph` — branching/looping flows with edge labels and decision diamonds; layout via dagre. Node `kind: "decision"` → diamond; link `label` → edge label; `dir: "both"` → arrowheads at both ends.
+- `funnel` — defence-in-depth funnel: entry, layers that each shed a defect class, exit.
 
-Pick `flow-diagram` for a simple chain; `graph-diagram` when there are branches, loops, decisions, or edge labels.
-
-One-offs → inline SVG in the `.md`. App-like interactives → a built `<iframe>` component.
-
-## Why
-
-- Site is static (GitHub Pages); D3 runs client-side.
-- D3 gives control + interactivity Mermaid can't (e.g. arrow gaps, hover).
-- Config lives in a `<template>`, **not** `<script>` — Material's instant navigation rewrites `<script>` tags and breaks the diagram on the second visit.
-- External CSS can't reliably style SVG internals — theme through `window.VIZ` in JS instead.
+Pick `flow` for a chain, `graph` when there are branches, loops, decisions or edge labels. One-offs → inline SVG in the MDX. App-like interactives → a React island in the chapter's `_components/` folder.
 
 ## How
 
-Author in a page:
+In a chapter `.mdx`:
 
-```html
-<div class="flow-diagram" data-orientation="TD">
-<template>
-{ "nodes": [ { "id": "a", "label": "Title", "sub": "optional subtitle" } ],
-  "links": [ { "source": "a", "target": "b", "dir": "both" } ] }
-</template>
-</div>
+```mdx
+import Visual from "../../../components/Visual.astro";
+
+<Visual kind="graph" orientation="LR" caption="One line under the figure."
+  spec={{ nodes: [{ id: "a", label: "Title", sub: "optional" }], links: [{ source: "a", target: "b", label: "yes" }] }} />
 ```
 
-New renderer — copy an existing one; it must:
+The spec is serialised into `data-spec`; `mountVisuals()` renders every figure on load, redraws when the theme changes, and reveals on scroll.
 
-1. `window.document$.subscribe(renderAll)` — runs on load + every instant nav.
-2. Be idempotent — clear prior `svg` first.
-3. Read all style from `window.VIZ` (never hardcode).
-4. Read config from `container.querySelector("template").content.textContent`.
-5. Be registered in `mkdocs.yml` after `visuals/theme.js`.
+New renderer: add `web/src/lib/viz/<kind>.ts` exporting `render<Kind>(container, spec, { theme, ... })`, register it in `index.ts`, add the kind to `Visual.astro`'s prop type, and write a jsdom test like `flow.test.ts`. It must:
 
-Verify: `mkdocs build --strict` is clean and the `<template>` JSON is present in `site/<page>/index.html`. Don't headless-screenshot — ask the user to check, including navigate-away-and-back.
+1. Clear any previous `svg` in the container first (idempotent).
+2. Read every colour, font and spacing value from the `VizTheme` passed in (never hardcode).
+3. Measure text with `theme.measure`, not a canvas of its own.
+4. Render at natural pixel size; the container scrolls horizontally if the diagram is wider than the column.
 
-## Theme (`visuals/theme.js`)
+## Theme
 
-- Dark-first: black fill `#000`, white borders/labels/lines, muted text `#a1a1aa`, violet accent, green `good`.
-- No same-hue text on its own fill.
-- Boundary = color delta (solid fill, no border) when fill ≠ page bg; thin white border only for black nodes (fill = page bg).
-- No dark-grey on black.
-- Visible gap between arrowheads and their targets (`VIZ.space.gap`).
-- `defect` (error accent) is tunable, not canonical — readable, not neon.
+Colours come from CSS custom properties (`--viz-*` in `web/src/styles/global.css`), one set for light and one for dark. The deck forces the dark set. Rules: no same-hue text on its own fill; boundary by colour delta when fill ≠ background, a thin border only when fill = background; no dark grey on black; a visible gap between arrowheads and targets (`theme.space.gap`).
 
-## Layout — the sizing system
+## Verify
 
-- **Render at natural pixel size; never scale to fit.** SVGs are sized in real px (not `width:100%`), so the font is always the intended size. This is the rule that prevents the "stretched diagram → shrunk font" problem. Don't reintroduce `width:100%` / `max-width` scaling on the SVG.
-- A diagram wider than the content column **scrolls horizontally** (container `overflow-x:auto` in `extra.css`); a narrower one centers.
-- Therefore: **design each diagram to fit the content column at natural size** where you can — keep node count and label lengths reasonable. Very wide flows will scroll, which is acceptable but a signal to simplify or split.
-- To narrow a wide node, put a `\n` in its `label` to wrap it onto multiple lines (supported by `graph-diagram`).
-- Default orientation `LR`; use `TD` only when genuinely top-down.
+`npm test` and `npm run build` in `web/` are clean. Then ask the user to look at the chapter in both the book and deck views and in both themes. Do not headless-screenshot.
