@@ -1,0 +1,26 @@
+---
+interface Props {
+  kind: "flow" | "funnel" | "graph";
+  spec: unknown;
+  orientation?: "LR" | "TD";
+  caption?: string;
+}
+const { kind, spec, orientation = "LR", caption } = Astro.props;
+---
+<figure class="visual" data-visual={kind} data-orientation={orientation} data-spec={JSON.stringify(spec)}>
+  <div class="visual-canvas"></div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .visual { margin: 1.5rem 0; text-align: center; opacity: 0; transform: translateY(8px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .visual.is-visible { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .visual { opacity: 1; transform: none; transition: none; } }
+  .visual-canvas { overflow-x: auto; }
+  figcaption { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; }
+</style>
+
+<script>
+  import { mountVisuals } from "../lib/viz";
+  mountVisuals();
+</script>

@@ -1,4 +1,4 @@
-import type { Element, Root, RootContent } from "hast";
+import type { Element, ElementContent, Root, RootContent } from "hast";
 import { toString } from "hast-util-to-string";
 
 /**
@@ -27,7 +27,7 @@ export function rehypeSlides() {
         anchor = String(node.properties?.id ?? "");
         splitCount = 0;
         current = open({ dataSlide: anchor || title, dataTitle: title, dataAnchor: anchor });
-        current.children.push(node);
+        current.children.push(node as ElementContent);
         continue;
       }
       if (node.type === "element" && node.tagName === "hr" && current) {
@@ -39,7 +39,8 @@ export function rehypeSlides() {
         if (isBlank(node)) continue;
         current = open({ dataSlide: "intro" });
       }
-      current.children.push(node);
+      // A markdown/MDX body never contains a doctype, so every remaining node is valid element content.
+      current.children.push(node as ElementContent);
     }
     tree.children = out;
   };
