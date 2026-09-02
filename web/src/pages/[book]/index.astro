@@ -1,0 +1,29 @@
+---
+import Book from "../../layouts/Book.astro";
+import { BASE, chapterPath } from "../../lib/paths";
+import { getBooks, getPublishedChapters } from "../../lib/site";
+
+export async function getStaticPaths() {
+  const books = await getBooks();
+  return books.map((book) => ({ params: { book: book.slug }, props: { book } }));
+}
+const { book } = Astro.props;
+const chapters = await getPublishedChapters(book.slug);
+---
+<Book book={book} chapters={chapters}>
+  <p class="faint">Book {book.data.order}</p>
+  <h1>{book.data.title}</h1>
+  <p class="muted">{book.data.audience}</p>
+  {chapters.length === 0 ? (
+    <p>This book is in preparation.</p>
+  ) : (
+    <ol class="chapters">
+      {chapters.map((c) => (
+        <li>
+          <a href={chapterPath(BASE, book.slug, c.slug)}>{c.data.title}</a>
+          <span class="muted"> — {c.data.summary}</span>
+        </li>
+      ))}
+    </ol>
+  )}
+</Book>

@@ -1,0 +1,86 @@
+---
+import Base from "./Base.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import { BASE, bookPath, chapterPath, deckPath } from "../lib/paths";
+import { getBooks, type Book, type Chapter } from "../lib/site";
+import { neighbours } from "../lib/chapters";
+
+interface Props {
+  book: Book;
+  chapters: Chapter[];          // published chapters of this book, sorted
+  current?: Chapter;            // undefined on the book TOC page
+  headings?: { depth: number; slug: string; text: string }[];
+}
+const { book, chapters, current, headings = [] } = Astro.props;
+const books = await getBooks();
+const nav = current ? neighbours(chapters, current.id) : { prev: undefined, next: undefined };
+const parts = book.data.parts.length ? book.data.parts : [{ key: "", title: "" }];
+const chaptersIn = (key: string) => chapters.filter((c) => (c.data.part ?? "") === key);
+const h2s = headings.filter((h) => h.depth === 2);
+---
+<Base title={current ? current.data.title : book.data.title} description={current?.data.summary} render="book">
+  <header class="bar">
+    <a class="brand" href={BASE}>Agentic Coding Playbook</a>
+    <nav class="switch" aria-label="Books">
+      {books.map((b) => (
+        <a href={bookPath(BASE, b.slug)} aria-current={b.slug === book.slug ? "true" : undefined} title={b.data.title}>{b.data.order}</a>
+      ))}
+      <span class="switch-title">{book.data.title}</span>
+    </nav>
+    <div id="search" class="search"></div>
+    <ThemeToggle />
+  </header>
+  <div class="shell">
+    <nav class="sidebar" aria-label="Book contents">
+      {parts.map((p) => (
+        <div class="part">
+          {p.title && <div class="part-title">{p.key} · {p.title}</div>}
+          <ol>
+            {chaptersIn(p.key).map((c) => (
+              <li aria-current={current?.id === c.id ? "page" : undefined}>
+                <a href={chapterPath(BASE, book.slug, c.slug)}>{c.data.order}. {c.data.title}</a>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))}
+    </nav>
+    <main class="main prose" data-pagefind-body={current ? "" : undefined}>
+      <slot />
+      {current && (
+        <footer class="chapter-nav">
+          <span>{nav.prev ? <a href={chapterPath(BASE, book.slug, nav.prev.slug)}>← {nav.prev.data.title}</a> : <a href={bookPath(BASE, book.slug)}>← Book contents</a>}</span>
+          <span>{nav.next && <a href={chapterPath(BASE, book.slug, nav.next.slug)}>{nav.next.data.title} →</a>}</span>
+        </footer>
+      )}
+    </main>
+    {current && (
+      <aside class="toc" aria-label="On this page">
+        <div class="toc-title">On this page</div>
+        <ul>{h2s.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ul>
+        <a class="deck-link" href={deckPath(BASE, book.slug, current.slug)}>Open as deck →</a>
+      </aside>
+    )}
+  </div>
+</Base>
+
+<style>
+  .bar { display: flex; align-items: center; gap: 1rem; padding: 0.6rem 1.25rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 2; }
+  .brand { font-weight: 600; color: var(--text); text-decoration: none; }
+  .switch { flex: 1; display: flex; align-items: center; gap: 0.3rem; font-size: 0.9rem; color: var(--text-muted); }
+  .switch a { display: inline-flex; width: 1.6rem; height: 1.6rem; align-items: center; justify-content: center; border-radius: 6px; border: 1px solid var(--border); color: var(--text-muted); text-decoration: none; font-size: 0.8rem; }
+  .switch a[aria-current] { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+  .switch-title { margin-left: 0.5rem; }
+  .search { min-width: 14rem; }
+  .shell { display: grid; grid-template-columns: 16rem minmax(0, 1fr) 14rem; gap: 2.5rem; padding: 1.5rem 1.25rem; max-width: 80rem; margin: 0 auto; }
+  .sidebar, .toc { font-size: 0.88rem; position: sticky; top: 4rem; align-self: start; max-height: calc(100vh - 5rem); overflow-y: auto; }
+  .part-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); margin: 1rem 0 0.3rem; }
+  .sidebar ol, .toc ul { list-style: none; margin: 0; padding: 0; }
+  .sidebar li a, .toc li a { display: block; padding: 0.25rem 0; color: var(--text-muted); text-decoration: none; }
+  .sidebar li[aria-current] a { color: var(--accent); font-weight: 600; }
+  .sidebar li a:hover, .toc li a:hover { color: var(--text); }
+  .toc-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); margin-bottom: 0.3rem; }
+  .deck-link { display: inline-block; margin-top: 1rem; }
+  .chapter-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  @media (max-width: 1000px) { .shell { grid-template-columns: 1fr; } .sidebar, .toc { position: static; max-height: none; } }
+</style>

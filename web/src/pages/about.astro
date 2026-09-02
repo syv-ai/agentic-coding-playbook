@@ -1,0 +1,17 @@
+---
+import { getEntry, render } from "astro:content";
+import Base from "../layouts/Base.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import { BASE } from "../lib/paths";
+const entry = (await getEntry("pages", "about"))!;
+const { Content } = await render(entry);
+---
+<Base title={entry.data.title} render="book">
+  <header class="bar"><a href={BASE}>Agentic Coding Playbook</a><ThemeToggle /></header>
+  <main class="wrap prose"><h1>{entry.data.title}</h1><Content /></main>
+</Base>
+<style>
+  .bar { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 1.25rem; border-bottom: 1px solid var(--border); }
+  .bar a { color: var(--text); text-decoration: none; font-weight: 600; }
+  .wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem; }
+</style>
