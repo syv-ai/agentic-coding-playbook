@@ -12,6 +12,11 @@ const questions = [
   },
 ];
 
+const two = [
+  ...questions,
+  { prompt: "Second prompt", choices: [{ text: "Only choice", correct: true, explain: "Yes." }] },
+];
+
 afterEach(() => {
   cleanup();
   localStorage.clear();
@@ -32,10 +37,22 @@ describe("Quiz", () => {
     expect(screen.getByText("After the agent says it is done").closest("button")?.disabled).toBe(true);
   });
 
-  it("restores answers from storage and resets", () => {
+  it("shows one question at a time and advances with Next", () => {
+    render(<Quiz id="t" questions={two} />);
+    expect(screen.queryByText("Second prompt")).toBeNull();
+    fireEvent.click(screen.getByText("Before the agent starts"));
+    fireEvent.click(screen.getByText("Next question"));
+    expect(screen.queryByText("When do you write the check?")).toBeNull();
+    expect(screen.getByText("Second prompt")).toBeTruthy();
+    fireEvent.click(screen.getByText("Only choice"));
+    fireEvent.click(screen.getByText("See result"));
+    expect(screen.getByText("2 / 2")).toBeTruthy();
+  });
+
+  it("restores answers from storage, shows the summary, and resets", () => {
     localStorage.setItem("quiz:t", JSON.stringify({ 0: 1 }));
     render(<Quiz id="t" questions={questions} />);
-    expect(screen.getByText("Before the agent starts").closest("button")?.dataset.state).toBe("correct");
+    expect(screen.getByText("1 / 1")).toBeTruthy();
     fireEvent.click(screen.getByText("Reset"));
     expect(screen.getByText("Before the agent starts").closest("button")?.dataset.state).toBe("idle");
   });

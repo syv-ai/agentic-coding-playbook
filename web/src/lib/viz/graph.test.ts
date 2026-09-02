@@ -29,5 +29,6 @@ describe("renderGraph", () => {
     expect(el.querySelectorAll(".node").length).toBe(5);
     expect(el.querySelectorAll(".edge").length).toBe(5);
     expect(Array.from(el.querySelectorAll("text")).some((t) => t.textContent === "no")).toBe(true);
+    expect(el.querySelectorAll("circle.traveller").length).toBe(5);
   });
 });

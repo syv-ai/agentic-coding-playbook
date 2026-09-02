@@ -104,6 +104,17 @@ hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
 table { border-collapse: collapse; width: 100%; }
 th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
 img, svg { max-width: 100%; }
+button { border-radius: 999px; }
+li::marker { color: var(--accent); }
+.prose ul, .prose ol { padding-left: 1.4rem; }
+
+/* Heading deep links: an empty anchor appended by rehypeHeadingAnchors, shown on hover or focus. */
+h2, h3 { position: relative; }
+.anchor { margin-left: 0.4em; color: var(--text-faint); text-decoration: none; opacity: 0; transition: opacity 0.15s; }
+.anchor::before { content: "#"; }
+h2:hover .anchor, h3:hover .anchor, .anchor:focus-visible { opacity: 1; }
+.anchor:hover { color: var(--accent); }
+html[data-render="deck"] .anchor { display: none; }
 .prose { max-width: var(--measure); }
 .prose p, .prose ul, .prose ol { margin: 0 0 1rem; }
 .muted { color: var(--text-muted); }

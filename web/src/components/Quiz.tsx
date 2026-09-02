@@ -17,63 +17,101 @@ interface Props {
 
 type Answers = Record<number, number>;
 
+/** One question at a time. Answers persist in the browser; the summary shows once every question is answered. */
 export default function Quiz({ id, questions }: Props) {
   const key = `quiz:${id}`;
   const [answers, setAnswers] = useState<Answers>(() => readJSON<Answers>(key, {}));
+  const [step, setStep] = useState(() => {
+    const first = questions.findIndex((_, i) => answers[i] === undefined);
+    return first === -1 ? questions.length : first;
+  });
 
   useEffect(() => {
     writeJSON(key, answers);
   }, [key, answers]);
 
-  const choose = (q: number, c: number) => {
-    if (answers[q] !== undefined) return;
-    setAnswers({ ...answers, [q]: c });
-  };
-  const reset = () => setAnswers({});
+  const total = questions.length;
   const score = questions.filter((q, i) => q.choices[answers[i]]?.correct).length;
-  const done = Object.keys(answers).length === questions.length;
+  const done = step >= total;
+
+  const choose = (c: number) => {
+    if (answers[step] !== undefined) return;
+    setAnswers({ ...answers, [step]: c });
+  };
+  const reset = () => {
+    setAnswers({});
+    setStep(0);
+  };
 
   return (
     <div className="quiz">
       <div className="quiz-head">
-        <span className="quiz-label">Check yourself</span>
-        {done && <span className="quiz-score">{score} / {questions.length}</span>}
+        <span>Check yourself</span>
+        <span className="quiz-progress" aria-label={`Question ${Math.min(step + 1, total)} of ${total}`}>
+          {questions.map((_, i) => (
+            <i key={i} data-state={answers[i] === undefined ? "todo" : questions[i].choices[answers[i]]?.correct ? "correct" : "wrong"} />
+          ))}
+        </span>
       </div>
-      {questions.map((q, qi) => {
-        const picked = answers[qi];
-        return (
-          <fieldset key={qi} className="quiz-q">
-            <legend>{q.prompt}</legend>
-            {q.choices.map((c, ci) => {
-              const state = picked === undefined ? "idle" : ci === picked ? (c.correct ? "correct" : "wrong") : c.correct && picked !== undefined ? "reveal" : "idle";
-              return (
-                <button key={ci} type="button" data-state={state} disabled={picked !== undefined} onClick={() => choose(qi, ci)}>
-                  {c.text}
-                </button>
-              );
-            })}
-            {picked !== undefined && <p className="quiz-explain">{q.choices[picked].explain}</p>}
-          </fieldset>
-        );
-      })}
-      {Object.keys(answers).length > 0 && (
-        <button type="button" className="quiz-reset" onClick={reset}>
-          Reset
-        </button>
+
+      {done ? (
+        <div className="quiz-summary">
+          <p className="quiz-score">{score} / {total}</p>
+          <p className="quiz-explain">{score === total ? "All of them. On to the next chapter." : "Reset to try the ones you missed again."}</p>
+          <button type="button" className="quiz-btn" onClick={reset}>Reset</button>
+        </div>
+      ) : (
+        (() => {
+          const q = questions[step];
+          const picked = answers[step];
+          return (
+            <fieldset className="quiz-q">
+              <legend>
+                <span className="quiz-num">Question {step + 1} of {total}</span>
+                {q.prompt}
+              </legend>
+              {q.choices.map((c, ci) => {
+                const state = picked === undefined ? "idle" : ci === picked ? (c.correct ? "correct" : "wrong") : c.correct ? "reveal" : "idle";
+                return (
+                  <button key={ci} type="button" className="quiz-choice" data-state={state} disabled={picked !== undefined} onClick={() => choose(ci)}>
+                    {c.text}
+                  </button>
+                );
+              })}
+              {picked !== undefined && (
+                <div className="quiz-after">
+                  <p className="quiz-explain">{q.choices[picked].explain}</p>
+                  <button type="button" className="quiz-btn" onClick={() => setStep(step + 1)}>
+                    {step + 1 === total ? "See result" : "Next question"}
+                  </button>
+                </div>
+              )}
+            </fieldset>
+          );
+        })()
       )}
+
       <style>{`
-        .quiz { border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; margin: 1.5rem 0; background: var(--bg-raised); }
-        .quiz-head { display: flex; justify-content: space-between; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 0.5rem; }
-        .quiz-q { border: 0; padding: 0; margin: 0 0 1rem; }
-        .quiz-q legend { font-weight: 600; margin-bottom: 0.5rem; padding: 0; }
-        .quiz-q button { display: block; width: 100%; text-align: left; margin: 0.3rem 0; padding: 0.5rem 0.75rem; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; cursor: pointer; }
-        .quiz-q button:hover:not(:disabled) { border-color: var(--accent); }
-        .quiz-q button:disabled { cursor: default; }
-        .quiz-q button[data-state="correct"] { background: var(--good); color: var(--bg); border-color: var(--good); }
-        .quiz-q button[data-state="wrong"] { background: var(--bad); color: var(--bg); border-color: var(--bad); }
-        .quiz-q button[data-state="reveal"] { border-color: var(--good); }
-        .quiz-explain { margin: 0.5rem 0 0; color: var(--text-muted); }
-        .quiz-reset { font: inherit; font-size: 0.85rem; background: none; border: 0; color: var(--link); cursor: pointer; padding: 0; }
+        .quiz { margin: 1.5rem 0; }
+        .quiz-head { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 0.75rem; }
+        .quiz-progress { display: inline-flex; gap: 0.35rem; }
+        .quiz-progress i { width: 0.5rem; height: 0.5rem; border-radius: 999px; background: var(--border); }
+        .quiz-progress i[data-state="correct"] { background: var(--good); }
+        .quiz-progress i[data-state="wrong"] { background: var(--bad); }
+        .quiz-q { border: 0; padding: 0; margin: 0; }
+        .quiz-q legend { font-weight: 600; margin-bottom: 0.6rem; padding: 0; }
+        .quiz-num { display: block; font-weight: 400; font-size: 0.8rem; color: var(--text-faint); margin-bottom: 0.2rem; }
+        .quiz-choice { display: block; width: 100%; text-align: left; margin: 0.35rem 0; padding: 0.55rem 1rem; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; cursor: pointer; }
+        .quiz-choice:hover:not(:disabled) { border-color: var(--accent); }
+        .quiz-choice:disabled { cursor: default; }
+        .quiz-choice[data-state="correct"] { background: var(--good); color: var(--bg); border-color: var(--good); }
+        .quiz-choice[data-state="wrong"] { background: var(--bad); color: var(--bg); border-color: var(--bad); }
+        .quiz-choice[data-state="reveal"] { border-color: var(--good); color: var(--good); }
+        .quiz-after { margin-top: 0.75rem; }
+        .quiz-explain { margin: 0 0 0.75rem; color: var(--text-muted); }
+        .quiz-btn { font: inherit; padding: 0.45rem 1rem; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-text); cursor: pointer; }
+        .quiz-btn:hover { filter: brightness(1.08); }
+        .quiz-score { font-size: 1.6rem; font-weight: 600; margin: 0 0 0.25rem; }
       `}</style>
     </div>
   );

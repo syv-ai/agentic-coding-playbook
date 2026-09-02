@@ -13,6 +13,10 @@ export interface VizTheme {
   arrow(svg: Selection<SVGSVGElement, unknown, null, undefined>, id: string, color: string): string;
   /** Text width in px for the given CSS font. */
   measure(text: string, font: string): number;
+  /** False when the reader prefers reduced motion; renderers then draw static figures. */
+  animate: boolean;
+  /** A small dot that travels along `path` forever. The slow, looping motion replaces hover effects. */
+  travel(svg: Selection<SVGSVGElement, unknown, null, undefined>, path: string, color: string, seconds: number, delay?: number): void;
 }
 
 const FONTS = {
@@ -26,7 +30,9 @@ export function readTheme(root: HTMLElement = document.documentElement): VizThem
   const css = getComputedStyle(root);
   const v = (name: string, fallback: string) => css.getPropertyValue(name).trim() || fallback;
   const ctx = typeof document !== "undefined" ? document.createElement("canvas").getContext("2d") : null;
+  const animate = typeof window === "undefined" || typeof window.matchMedia !== "function" ? true : !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   return {
+    animate,
     colors: {
       bg: v("--viz-bg", "#ffffff"),
       fill: v("--viz-fill", "#ffffff"),
@@ -54,6 +60,11 @@ export function readTheme(root: HTMLElement = document.documentElement): VizThem
       if (!ctx) return text.length * 8; // jsdom has no canvas; a rough width keeps layout deterministic in tests
       ctx.font = font;
       return ctx.measureText(text).width;
+    },
+    travel(svg, path, color, seconds, delay = 0) {
+      if (!animate) return;
+      svg.append("circle").attr("class", "traveller").attr("r", 3.5).attr("fill", color)
+        .append("animateMotion").attr("dur", `${seconds}s`).attr("begin", `${delay}s`).attr("repeatCount", "indefinite").attr("path", path);
     },
   };
 }

@@ -96,7 +96,7 @@ export function renderFunnel(container: HTMLElement, spec: FunnelSpec, { theme }
   };
 
   // Connectors from each band to its shed-defect chip.
-  const connectors = svg
+  svg
     .append("g")
     .selectAll("line")
     .data(bandData)
@@ -200,22 +200,9 @@ export function renderFunnel(container: HTMLElement, spec: FunnelSpec, { theme }
     .style("font", "700 16px sans-serif")
     .text("✓");
 
-  // --- Interactivity -------------------------------------------------------
-  function focus(i: number) {
-    bands.style("opacity", (d) => (d.i === i ? 1 : 0.35));
-    bands.select("path").attr("stroke", (d) => (d.i === i ? COL.accent : COL.border)).attr("stroke-width", (d) => (d.i === i ? 2 : 1));
-    chips.style("opacity", (d) => (d.i === i ? 1 : 0.3));
-    chips.select("rect").attr("fill", (d) => (d.i === i ? COL.accent : COL.defect));
-    connectors.attr("stroke", (d) => (d.i === i ? COL.accent : COL.chipBorder)).attr("opacity", (d) => (d.i === i ? 1 : 0.4));
-  }
-  function reset() {
-    bands.style("opacity", 1);
-    bands.select("path").attr("stroke", COL.border).attr("stroke-width", 1);
-    chips.style("opacity", 1);
-    chips.select("rect").attr("fill", COL.defect);
-    connectors.attr("stroke", COL.chipBorder).attr("opacity", 1);
-  }
-
-  bands.style("cursor", "pointer").on("pointerenter", (_e, d) => focus(d.i)).on("pointerleave", reset);
-  chips.style("cursor", "pointer").on("pointerenter", (_e, d) => focus(d.i)).on("pointerleave", reset);
+  // Slow, looping motion: code travels down the funnel to the exit; each band sheds its defect class sideways.
+  theme.travel(svg, `M${cx},${ENTRY_H - 6} L${cx},${exitY - GAP}`, COL.good, 6);
+  bandData.forEach((d, i) => {
+    theme.travel(svg, `M${d.rightMid + GAP},${d.yMid} L${chipX - GAP},${d.yMid}`, COL.defect, 3, i * 0.9);
+  });
 }

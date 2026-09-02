@@ -86,12 +86,10 @@ export function renderGraph(container: HTMLElement, spec: GraphSpec, { orientati
     .attr("height", H)
     .style("display", "inline-block"); // natural size; container centers/scrolls
 
-  const uid = Math.random().toString(36).slice(2, 8);
-  const ARROW = theme.arrow(svg, `graph-arrow-${uid}`, COL.line);
-  const ARROW_HI = theme.arrow(svg, `graph-arrow-hi-${uid}`, COL.accent);
+  const ARROW = theme.arrow(svg, `graph-arrow-${Math.random().toString(36).slice(2, 8)}`, COL.line);
   const lineGen = d3.line<Point>().x((p) => p.x).y((p) => p.y).curve(d3.curveCatmullRom.alpha(0.5));
 
-  const edgePaths = svg
+  svg
     .append("g")
     .selectAll("path")
     .data(edges)
@@ -172,28 +170,9 @@ export function renderGraph(container: HTMLElement, spec: GraphSpec, { orientati
     }
   });
 
-  // ---- Hover: highlight a node + its incident edges ----------------------
-  const shapeOf = (sel: d3.Selection<any, any, any, any>) => sel.select("rect,polygon");
-  node
-    .style("cursor", "pointer")
-    .on("pointerenter", function (_ev, d) {
-      const inc = (ed: Edge) => ed.v === d.id || ed.w === d.id;
-      node.style("opacity", (nn) => (nn.id === d.id ? 1 : 0.32));
-      shapeOf(d3.select(this)).attr("stroke", COL.accent).attr("stroke-width", 2);
-      edgePaths
-        .attr("stroke", (ed) => (inc(ed) ? COL.accent : COL.line))
-        .attr("opacity", (ed) => (inc(ed) ? 1 : 0.22))
-        .attr("marker-end", (ed) => (inc(ed) ? ARROW_HI : ARROW))
-        .attr("marker-start", (ed) => (ed.both ? (inc(ed) ? ARROW_HI : ARROW) : null));
-      edgeLabels.style("opacity", (ed) => (inc(ed) ? 1 : 0.22));
-    })
-    .on("pointerleave", function () {
-      node.style("opacity", 1);
-      shapeOf(node).attr("stroke", COL.border).attr("stroke-width", 1);
-      edgePaths
-        .attr("stroke", COL.line).attr("opacity", 1)
-        .attr("marker-end", ARROW)
-        .attr("marker-start", (ed) => (ed.both ? ARROW : null));
-      edgeLabels.style("opacity", 1);
-    });
+  // Slow, looping motion along every edge; the loop's cycle reads as a cycle without any pointer.
+  edges.forEach((e, i) => {
+    const d = lineGen(e.points);
+    if (d) theme.travel(svg, d, COL.accent, 3.5, i * 0.7);
+  });
 }

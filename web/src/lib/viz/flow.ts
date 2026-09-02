@@ -40,7 +40,7 @@ export function renderFlow(container: HTMLElement, spec: FlowSpec, { orientation
     .style("display", "inline-block");
   const ARROW = theme.arrow(svg, `flow-arrow-${Math.random().toString(36).slice(2, 8)}`, COL.line);
 
-  const links = svg.append("g").selectAll("line").data(spec.links).join("line")
+  svg.append("g").selectAll("line").data(spec.links).join("line")
     .each(function (l) {
       const s = byId[l.source], t = byId[l.target];
       const [x1, y1, x2, y2] = horizontal
@@ -60,22 +60,12 @@ export function renderFlow(container: HTMLElement, spec: FlowSpec, { orientation
   g.filter((d) => Boolean(d.sub)).append("text").attr("x", (d) => d.w / 2).attr("y", (d) => d.h / 2 + 12)
     .attr("text-anchor", "middle").attr("dominant-baseline", "central").attr("fill", COL.sub).style("font", SUBFONT).text((d) => d.sub ?? "");
 
-  const adj: Record<string, Set<string>> = {};
-  spec.links.forEach((l) => {
-    (adj[l.source] ??= new Set()).add(l.target);
-    (adj[l.target] ??= new Set()).add(l.source);
+  // Slow, looping motion along each link, staggered so the eye reads the chain left to right.
+  spec.links.forEach((l, i) => {
+    const s = byId[l.source], t = byId[l.target];
+    const [x1, y1, x2, y2] = horizontal
+      ? [s.x + s.w + GAP, s.y + s.h / 2, t.x - GAP, t.y + t.h / 2]
+      : [s.x + s.w / 2, s.y + s.h + GAP, t.x + t.w / 2, t.y - GAP];
+    theme.travel(svg, `M${x1},${y1} L${x2},${y2}`, COL.accent, 3, i * 0.8);
   });
-  g.style("cursor", "pointer")
-    .on("pointerenter", function (_ev, d) {
-      const near = (id: string) => id === d.id || adj[d.id]?.has(id);
-      g.style("opacity", (n) => (near(n.id) ? 1 : 0.3));
-      d3.select(this).select("rect").attr("stroke", COL.accent).attr("stroke-width", 2);
-      links.attr("stroke", (l) => (l.source === d.id || l.target === d.id ? COL.accent : COL.line))
-        .attr("opacity", (l) => (l.source === d.id || l.target === d.id ? 1 : 0.25));
-    })
-    .on("pointerleave", function () {
-      g.style("opacity", 1);
-      g.select("rect").attr("stroke", COL.border).attr("stroke-width", 1);
-      links.attr("stroke", COL.line).attr("opacity", 1);
-    });
 }

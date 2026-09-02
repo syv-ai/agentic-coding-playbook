@@ -17,6 +17,14 @@ describe("renderFlow", () => {
     expect(el.querySelector("line[marker-start]")).toBeTruthy();
   });
 
+  it("adds a looping traveller per link instead of hover handlers", () => {
+    const el = document.createElement("div");
+    renderFlow(el, spec, { orientation: "LR", theme: readTheme() });
+    expect(el.querySelectorAll("circle.traveller animateMotion").length).toBe(2);
+    expect(el.querySelector("animateMotion")?.getAttribute("repeatCount")).toBe("indefinite");
+    expect(el.querySelector("g[style*='cursor']")).toBeNull();
+  });
+
   it("is idempotent: re-rendering replaces the svg", () => {
     const el = document.createElement("div");
     renderFlow(el, spec, { orientation: "TD", theme: readTheme() });

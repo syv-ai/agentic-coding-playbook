@@ -34,6 +34,7 @@ New renderer: add `web/src/lib/viz/<kind>.ts` exporting `render<Kind>(container,
 2. Read every colour, font and spacing value from the `VizTheme` passed in (never hardcode).
 3. Measure text with `theme.measure`, not a canvas of its own.
 4. Render at natural pixel size; the container scrolls horizontally if the diagram is wider than the column.
+5. Use slow, looping motion (`theme.travel` sends a dot along a path forever) rather than hover effects. Skip motion when `theme.animate` is false.
 
 ## Theme
 

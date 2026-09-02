@@ -14,15 +14,21 @@ describe("static components", () => {
     expect(html).toContain("Both hold.");
   });
 
-  it("Source renders the provenance chip", async () => {
+  it("Source links the work title and marks paraphrases", async () => {
     const c = await AstroContainer.create();
     const html = await c.renderToString(Source, {
       props: { who: "Fred Brooks", work: "No Silver Bullet", year: 1986, href: "https://example.org", provenance: "read" },
       slots: { default: "<q>quoted</q>" },
     });
-    expect(html).toContain("Read in full");
     expect(html).toContain("Fred Brooks");
     expect(html).toContain('href="https://example.org"');
+    expect(html).not.toContain("example.org</a>"); // the work title is the link, not the bare URL
+    expect(html).not.toContain("Paraphrased");
+    const stated = await c.renderToString(Source, {
+      props: { who: "A", work: "B", provenance: "stated" },
+      slots: { default: "<q>x</q>" },
+    });
+    expect(stated).toContain("Paraphrased");
   });
 
   it("Notes, BookOnly and DeckOnly carry their data attributes", async () => {

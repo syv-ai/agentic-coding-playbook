@@ -20,30 +20,42 @@ const h2s = headings.filter((h) => h.depth === 2);
 ---
 <Base title={current ? current.data.title : book.data.title} description={current?.data.summary} render="book">
   <header class="bar">
-    <a class="brand" href={BASE}>Agentic Coding Playbook</a>
-    <nav class="switch" aria-label="Books">
-      {books.map((b) => (
-        <a href={bookPath(BASE, b.slug)} aria-current={b.slug === book.slug ? "true" : undefined} title={b.data.title}>{b.data.order}</a>
-      ))}
-      <span class="switch-title">{book.data.title}</span>
-    </nav>
-    <div id="search" class="search"></div>
-    <ThemeToggle />
+    <div class="bar-inner">
+      <a class="brand" href={BASE}>Agentic Coding Playbook</a>
+      <details class="book-menu">
+        <summary aria-label="Switch book">Book {book.data.order} · {book.data.title}</summary>
+        <ul>
+          {books.map((b) => (
+            <li>
+              <a href={bookPath(BASE, b.slug)} aria-current={b.slug === book.slug ? "true" : undefined}>
+                <span class="menu-num">Book {b.data.order}</span>
+                <span>{b.data.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+      <div id="search" class="search"></div>
+      <ThemeToggle />
+    </div>
   </header>
-  <div class="shell">
-    <nav class="sidebar" aria-label="Book contents">
-      {parts.map((p) => (
-        <div class="part">
-          {p.title && <div class="part-title">{p.key} · {p.title}</div>}
-          <ol>
-            {chaptersIn(p.key).map((c) => (
-              <li aria-current={current?.id === c.id ? "page" : undefined}>
-                <a href={chapterPath(BASE, book.slug, c.slug)}>{c.data.order}. {c.data.title}</a>
-              </li>
-            ))}
-          </ol>
-        </div>
-      ))}
+  <div class="shell" class:list={{ "no-toc": !current }} data-shell>
+    <nav class="panel sidebar" aria-label="Book contents">
+      <button class="panel-toggle" type="button" data-toggle="left" aria-expanded="true" aria-label="Toggle book contents"><span aria-hidden="true">‹</span></button>
+      <div class="panel-body">
+        {parts.map((p) => (
+          <div class="part">
+            {p.title && <div class="part-title">{p.key} · {p.title}</div>}
+            <ol>
+              {chaptersIn(p.key).map((c) => (
+                <li aria-current={current?.id === c.id ? "page" : undefined}>
+                  <a href={chapterPath(BASE, book.slug, c.slug)}>{c.data.order}. {c.data.title}</a>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))}
+      </div>
     </nav>
     <main class="main prose" data-pagefind-body={current ? "" : undefined}>
       <slot />
@@ -55,25 +67,46 @@ const h2s = headings.filter((h) => h.depth === 2);
       )}
     </main>
     {current && (
-      <aside class="toc" aria-label="On this page">
-        <div class="toc-title">On this page</div>
-        <ul>{h2s.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ul>
-        <a class="deck-link" href={deckPath(BASE, book.slug, current.slug)}>Open as deck →</a>
+      <aside class="panel toc" aria-label="On this page">
+        <button class="panel-toggle" type="button" data-toggle="right" aria-expanded="true" aria-label="Toggle on-page contents"><span aria-hidden="true">›</span></button>
+        <div class="panel-body">
+          <div class="toc-title">On this page</div>
+          <ul>{h2s.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ul>
+          <a class="deck-link" href={deckPath(BASE, book.slug, current.slug)}>Open as deck →</a>
+        </div>
       </aside>
     )}
   </div>
 </Base>
 
 <style>
-  .bar { display: flex; align-items: center; gap: 1rem; padding: 0.6rem 1.25rem; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 2; }
+  /* Header and content share one container width, so their edges line up. */
+  .bar { border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 3; }
+  .bar-inner { display: flex; align-items: center; gap: 1rem; padding: 0.6rem 1.25rem; max-width: 80rem; margin: 0 auto; }
   .brand { font-weight: 600; color: var(--text); text-decoration: none; }
-  .switch { flex: 1; display: flex; align-items: center; gap: 0.3rem; font-size: 0.9rem; color: var(--text-muted); }
-  .switch a { display: inline-flex; width: 1.6rem; height: 1.6rem; align-items: center; justify-content: center; border-radius: 6px; border: 1px solid var(--border); color: var(--text-muted); text-decoration: none; font-size: 0.8rem; }
-  .switch a[aria-current] { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
-  .switch-title { margin-left: 0.5rem; }
-  .search { min-width: 14rem; }
-  .shell { display: grid; grid-template-columns: 16rem minmax(0, 1fr) 14rem; gap: 2.5rem; padding: 1.5rem 1.25rem; max-width: 80rem; margin: 0 auto; }
-  .sidebar, .toc { font-size: 0.88rem; position: sticky; top: 4rem; align-self: start; max-height: calc(100vh - 5rem); overflow-y: auto; }
+  .search { flex: 1; min-width: 12rem; display: flex; justify-content: flex-end; }
+
+  .book-menu { position: relative; font-size: 0.9rem; }
+  .book-menu summary { list-style: none; cursor: pointer; padding: 0.3rem 0.9rem; border: 1px solid var(--border); border-radius: 999px; color: var(--text); white-space: nowrap; }
+  .book-menu summary::-webkit-details-marker { display: none; }
+  .book-menu summary::after { content: "▾"; margin-left: 0.5rem; color: var(--text-faint); }
+  .book-menu summary:hover, .book-menu[open] summary { border-color: var(--accent); }
+  .book-menu ul { position: absolute; left: 0; top: calc(100% + 0.4rem); min-width: 18rem; list-style: none; margin: 0; padding: 0.4rem; background: var(--bg); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); z-index: 4; }
+  .book-menu li a { display: grid; grid-template-columns: 4rem 1fr; gap: 0.6rem; padding: 0.5rem 0.7rem; border-radius: 10px; color: var(--text); text-decoration: none; }
+  .book-menu li a:hover { background: var(--bg-raised); }
+  .book-menu li a[aria-current] { color: var(--accent); font-weight: 600; }
+  .menu-num { color: var(--text-faint); font-size: 0.8rem; }
+
+  .shell { --left: 16rem; --right: 14rem; display: grid; grid-template-columns: var(--left) minmax(0, 1fr) var(--right); gap: 2.5rem; padding: 1.5rem 1.25rem; max-width: 80rem; margin: 0 auto; }
+  .shell.no-toc { --right: 0px; }
+  .shell[data-left="closed"] { --left: 1.6rem; }
+  .shell[data-right="closed"] { --right: 1.6rem; }
+  .panel { font-size: 0.88rem; position: sticky; top: 4rem; align-self: start; max-height: calc(100vh - 5rem); overflow-y: auto; }
+  .panel-toggle { background: none; border: 1px solid var(--border); color: var(--text-faint); width: 1.6rem; height: 1.6rem; cursor: pointer; font-size: 1rem; line-height: 1; padding: 0; margin-bottom: 0.6rem; }
+  .panel-toggle:hover { border-color: var(--accent); color: var(--text); }
+  .sidebar .panel-toggle { margin-left: auto; display: block; }
+  .shell[data-left="closed"] .sidebar .panel-body, .shell[data-right="closed"] .toc .panel-body { display: none; }
+  .shell[data-left="closed"] .sidebar .panel-toggle span, .shell[data-right="closed"] .toc .panel-toggle span { display: inline-block; transform: rotate(180deg); }
   .part-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); margin: 1rem 0 0.3rem; }
   .sidebar ol, .toc ul { list-style: none; margin: 0; padding: 0; }
   .sidebar li a, .toc li a { display: block; padding: 0.25rem 0; color: var(--text-muted); text-decoration: none; }
@@ -82,8 +115,40 @@ const h2s = headings.filter((h) => h.depth === 2);
   .toc-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); margin-bottom: 0.3rem; }
   .deck-link { display: inline-block; margin-top: 1rem; }
   .chapter-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); }
-  @media (max-width: 1000px) { .shell { grid-template-columns: 1fr; } .sidebar, .toc { position: static; max-height: none; } }
+  @media (max-width: 1000px) {
+    .shell, .shell[data-left="closed"], .shell[data-right="closed"] { grid-template-columns: 1fr; }
+    .panel { position: static; max-height: none; }
+    .panel-toggle { display: none; }
+    .shell[data-left="closed"] .sidebar .panel-body, .shell[data-right="closed"] .toc .panel-body { display: block; }
+    .search { display: none; }
+  }
 </style>
+
+<script>
+  import { readJSON, writeJSON } from "../lib/storage";
+  const shell = document.querySelector<HTMLElement>("[data-shell]");
+  if (shell) {
+    for (const side of ["left", "right"] as const) {
+      const key = `panel:${side}`;
+      const button = shell.querySelector<HTMLButtonElement>(`[data-toggle="${side}"]`);
+      const apply = (open: boolean) => {
+        shell.dataset[side] = open ? "open" : "closed";
+        button?.setAttribute("aria-expanded", String(open));
+      };
+      apply(readJSON<boolean>(key, true));
+      button?.addEventListener("click", () => {
+        const open = shell.dataset[side] !== "open";
+        apply(open);
+        writeJSON(key, open);
+      });
+    }
+  }
+  // Close the book menu when clicking elsewhere.
+  const menu = document.querySelector<HTMLDetailsElement>(".book-menu");
+  document.addEventListener("click", (e) => {
+    if (menu?.open && e.target instanceof Node && !menu.contains(e.target)) menu.open = false;
+  });
+</script>
 
 <link rel="stylesheet" href={`${BASE}pagefind/pagefind-ui.css`} />
 <script is:inline define:vars={{ base: BASE }}>
@@ -97,5 +162,5 @@ const h2s = headings.filter((h) => h.depth === 2);
 </script>
 
 <style is:global>
-  .search { --pagefind-ui-scale: 0.8; --pagefind-ui-primary: var(--accent); --pagefind-ui-text: var(--text); --pagefind-ui-background: var(--bg); --pagefind-ui-border: var(--border); --pagefind-ui-font: var(--font-sans); }
+  .search { --pagefind-ui-scale: 0.8; --pagefind-ui-primary: var(--accent); --pagefind-ui-text: var(--text); --pagefind-ui-background: var(--bg); --pagefind-ui-border: var(--border); --pagefind-ui-font: var(--font-sans); --pagefind-ui-border-radius: 999px; }
 </style>

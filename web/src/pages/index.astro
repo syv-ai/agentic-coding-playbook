@@ -9,7 +9,7 @@ const chapters = await getPublishedChapters();
 const count = (slug: string) => chapters.filter((c) => c.book === slug).length;
 ---
 <Base title="Series" render="book">
-  <header class="bar"><span class="brand">Agentic Coding Playbook</span><ThemeToggle /></header>
+  <header class="bar"><div class="bar-inner"><span class="brand">Agentic Coding Playbook</span><ThemeToggle /></div></header>
   <main class="wrap prose">
     <h1>Agentic coding, in four short books</h1>
     <p class="muted">Each book answers one question. Read them in order or start where your question is.</p>
@@ -30,7 +30,8 @@ const count = (slug: string) => chapters.filter((c) => c.book === slug).length;
 </Base>
 
 <style>
-  .bar { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 1.25rem; border-bottom: 1px solid var(--border); }
+  .bar { border-bottom: 1px solid var(--border); }
+  .bar-inner { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 1.25rem; max-width: 44rem; margin: 0 auto; }
   .brand { font-weight: 600; }
   .wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem; }
   .books { list-style: none; padding: 0; margin: 2rem 0; display: grid; gap: 0.75rem; }
