@@ -35,13 +35,15 @@ const h2s = headings.filter((h) => h.depth === 2);
           ))}
         </ul>
       </details>
-      <div id="search" class="search"></div>
-      <ThemeToggle />
+      <div class="bar-right">
+        <div id="search" class="search"></div>
+        <ThemeToggle />
+      </div>
     </div>
   </header>
   <div class="shell" class:list={{ "no-toc": !current }} data-shell>
     <nav class="panel sidebar" aria-label="Book contents">
-      <button class="panel-toggle" type="button" data-toggle="left" aria-expanded="true" aria-label="Toggle book contents"><span aria-hidden="true">‹</span></button>
+      <button class="panel-toggle" type="button" data-toggle="left" aria-expanded="true" aria-label="Toggle book contents"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="2"/><path d="M6 2.5v11"/></svg></button>
       <div class="panel-body">
         {parts.map((p) => (
           <div class="part">
@@ -68,7 +70,7 @@ const h2s = headings.filter((h) => h.depth === 2);
     </main>
     {current && (
       <aside class="panel toc" aria-label="On this page">
-        <button class="panel-toggle" type="button" data-toggle="right" aria-expanded="true" aria-label="Toggle on-page contents"><span aria-hidden="true">›</span></button>
+        <button class="panel-toggle" type="button" data-toggle="right" aria-expanded="true" aria-label="Toggle on-page contents"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="2.5" width="13" height="11" rx="2"/><path d="M6 2.5v11"/></svg></button>
         <div class="panel-body">
           <div class="toc-title">On this page</div>
           <ul>{h2s.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ul>
@@ -82,16 +84,18 @@ const h2s = headings.filter((h) => h.depth === 2);
 <style>
   /* Header and content share one container width, so their edges line up. */
   .bar { border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 3; }
-  .bar-inner { display: flex; align-items: center; gap: 1rem; padding: 0.6rem 1.25rem; max-width: 80rem; margin: 0 auto; }
+  /* Fixed height so the sticky panels below can use a constant offset. */
+  .bar-inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem; height: var(--bar-h); padding: 0 1.25rem; max-width: 80rem; margin: 0 auto; }
   .brand { font-weight: 600; color: var(--text); text-decoration: none; }
-  .search { flex: 1; min-width: 12rem; display: flex; justify-content: flex-end; }
+  .bar-right { display: flex; align-items: center; justify-content: flex-end; gap: 0.75rem; }
+  .search { min-width: 12rem; }
 
   .book-menu { position: relative; font-size: 0.9rem; }
-  .book-menu summary { list-style: none; cursor: pointer; padding: 0.3rem 0.9rem; border: 1px solid var(--border); border-radius: 999px; color: var(--text); white-space: nowrap; }
+  .book-menu summary { list-style: none; cursor: pointer; padding: 0.3rem 0.9rem; border-radius: 999px; color: var(--text); white-space: nowrap; }
   .book-menu summary::-webkit-details-marker { display: none; }
   .book-menu summary::after { content: "▾"; margin-left: 0.5rem; color: var(--text-faint); }
-  .book-menu summary:hover, .book-menu[open] summary { border-color: var(--accent); }
-  .book-menu ul { position: absolute; left: 0; top: calc(100% + 0.4rem); min-width: 18rem; list-style: none; margin: 0; padding: 0.4rem; background: var(--bg); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); z-index: 4; }
+  .book-menu summary:hover, .book-menu[open] summary { background: var(--bg-raised); }
+  .book-menu ul { position: absolute; left: 50%; transform: translateX(-50%); top: calc(100% + 0.4rem); min-width: 18rem; list-style: none; margin: 0; padding: 0.4rem; background: var(--bg); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); z-index: 4; }
   .book-menu li a { display: grid; grid-template-columns: 4rem 1fr; gap: 0.6rem; padding: 0.5rem 0.7rem; border-radius: 10px; color: var(--text); text-decoration: none; }
   .book-menu li a:hover { background: var(--bg-raised); }
   .book-menu li a[aria-current] { color: var(--accent); font-weight: 600; }
@@ -101,12 +105,15 @@ const h2s = headings.filter((h) => h.depth === 2);
   .shell.no-toc { --right: 0px; }
   .shell[data-left="closed"] { --left: 1.6rem; }
   .shell[data-right="closed"] { --right: 1.6rem; }
-  .panel { font-size: 0.88rem; position: sticky; top: 4rem; align-self: start; max-height: calc(100vh - 5rem); overflow-y: auto; }
-  .panel-toggle { background: none; border: 1px solid var(--border); color: var(--text-faint); width: 1.6rem; height: 1.6rem; cursor: pointer; font-size: 1rem; line-height: 1; padding: 0; margin-bottom: 0.6rem; }
-  .panel-toggle:hover { border-color: var(--accent); color: var(--text); }
-  .sidebar .panel-toggle { margin-left: auto; display: block; }
+  /* top = header height + the shell's top padding, so a panel never shifts relative to the viewport. */
+  .panel { font-size: 0.88rem; position: sticky; top: calc(var(--bar-h) + 1.5rem); align-self: start; max-height: calc(100vh - var(--bar-h) - 3rem); overflow-y: auto; min-height: 2rem; }
+  .panel-toggle { background: none; border: 0; color: var(--text-faint); width: 1.6rem; height: 1.6rem; cursor: pointer; padding: 0; margin-bottom: 0.4rem; display: grid; place-items: center; opacity: 0; transition: opacity 0.15s; }
+  .panel:hover .panel-toggle, .panel-toggle:focus-visible, .shell[data-left="closed"] .sidebar .panel-toggle, .shell[data-right="closed"] .toc .panel-toggle { opacity: 1; }
+  .panel-toggle:hover { color: var(--text); background: var(--bg-raised); }
+  .panel-toggle svg { width: 1rem; height: 1rem; }
+  .sidebar .panel-toggle { margin-left: auto; }
+  .toc .panel-toggle svg { transform: scaleX(-1); }
   .shell[data-left="closed"] .sidebar .panel-body, .shell[data-right="closed"] .toc .panel-body { display: none; }
-  .shell[data-left="closed"] .sidebar .panel-toggle span, .shell[data-right="closed"] .toc .panel-toggle span { display: inline-block; transform: rotate(180deg); }
   .part-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); margin: 1rem 0 0.3rem; }
   .sidebar ol, .toc ul { list-style: none; margin: 0; padding: 0; }
   .sidebar li a, .toc li a { display: block; padding: 0.25rem 0; color: var(--text-muted); text-decoration: none; }
@@ -119,6 +126,8 @@ const h2s = headings.filter((h) => h.depth === 2);
     .shell, .shell[data-left="closed"], .shell[data-right="closed"] { grid-template-columns: 1fr; }
     .panel { position: static; max-height: none; }
     .panel-toggle { display: none; }
+    .bar-inner { grid-template-columns: 1fr auto; }
+    .bar-inner .book-menu { justify-self: end; }
     .shell[data-left="closed"] .sidebar .panel-body, .shell[data-right="closed"] .toc .panel-body { display: block; }
     .search { display: none; }
   }

@@ -89,7 +89,7 @@ export function renderGraph(container: HTMLElement, spec: GraphSpec, { orientati
   const ARROW = theme.arrow(svg, `graph-arrow-${Math.random().toString(36).slice(2, 8)}`, COL.line);
   const lineGen = d3.line<Point>().x((p) => p.x).y((p) => p.y).curve(d3.curveCatmullRom.alpha(0.5));
 
-  svg
+  const edgePaths = svg
     .append("g")
     .selectAll("path")
     .data(edges)
@@ -170,9 +170,25 @@ export function renderGraph(container: HTMLElement, spec: GraphSpec, { orientati
     }
   });
 
-  // Slow, looping motion along every edge; the loop's cycle reads as a cycle without any pointer.
-  edges.forEach((e, i) => {
-    const d = lineGen(e.points);
-    if (d) theme.travel(svg, d, COL.accent, 3.5, i * 0.7);
+  // Sequence in spec order: each node, then the edges leaving it; a pause; restart.
+  const order: string[] = [];
+  spec.nodes.forEach((nd) => {
+    order.push(`n:${nd.id}`);
+    edges.forEach((e, ei) => { if (e.v === nd.id) order.push(`e:${ei}`); });
+  });
+  const slots = order.length;
+  node.each(function (d) {
+    const slot = order.indexOf(`n:${d.id}`);
+    const sel = d3.select(this);
+    const shape = sel.select("rect,polygon");
+    theme.pulse(shape, "fill", COL.fill, COL.accent, slot, slots);
+    theme.pulse(shape, "stroke", COL.border, COL.accent, slot, slots);
+    sel.selectAll("text").each(function () {
+      const t = d3.select(this);
+      theme.pulse(t, "fill", t.attr("fill"), COL.accentText, slot, slots);
+    });
+  });
+  edgePaths.each(function (_e, ei) {
+    theme.pulse(d3.select(this), "stroke", COL.line, COL.accent, order.indexOf(`e:${ei}`), slots);
   });
 }

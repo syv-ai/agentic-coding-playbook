@@ -2,7 +2,7 @@ import type { Selection } from "d3";
 
 export interface VizColors {
   bg: string; fill: string; border: string; text: string; sub: string; line: string;
-  chipBorder: string; good: string; defect: string; defectText: string; accent: string;
+  chipBorder: string; good: string; defect: string; defectText: string; accent: string; accentText: string;
 }
 
 export interface VizTheme {
@@ -15,8 +15,12 @@ export interface VizTheme {
   measure(text: string, font: string): number;
   /** False when the reader prefers reduced motion; renderers then draw static figures. */
   animate: boolean;
-  /** A small dot that travels along `path` forever. The slow, looping motion replaces hover effects. */
-  travel(svg: Selection<SVGSVGElement, unknown, null, undefined>, path: string, color: string, seconds: number, delay?: number): void;
+  /**
+   * The one motion rule for visuals: elements light up one after another, then the cycle restarts.
+   * Adds a looping <animate> on `attr` that holds `rest`, switches to `active` during this element's
+   * slot (`slot` of `slots`), and returns. Every element of one figure must share `slots` and `step`.
+   */
+  pulse(el: Selection<any, any, any, any>, attr: string, rest: string, active: string, slot: number, slots: number, step?: number): void;
 }
 
 const FONTS = {
@@ -45,6 +49,7 @@ export function readTheme(root: HTMLElement = document.documentElement): VizThem
       defect: v("--viz-defect", "#e0857c"),
       defectText: v("--viz-defect-text", "#1a1a1e"),
       accent: v("--viz-accent", "#7c3aed"),
+      accentText: v("--viz-accent-text", "#ffffff"),
     },
     space: { gap: 12, spacing: 46, margin: 16 },
     fonts: FONTS,
@@ -61,10 +66,23 @@ export function readTheme(root: HTMLElement = document.documentElement): VizThem
       ctx.font = font;
       return ctx.measureText(text).width;
     },
-    travel(svg, path, color, seconds, delay = 0) {
+    pulse(el, attr, rest, active, slot, slots, step = 0.7) {
       if (!animate) return;
-      svg.append("circle").attr("class", "traveller").attr("r", 3.5).attr("fill", color)
-        .append("animateMotion").attr("dur", `${seconds}s`).attr("begin", `${delay}s`).attr("repeatCount", "indefinite").attr("path", path);
+      const pause = 1.2; // seconds of rest at the end of every cycle
+      const total = slots * step + pause;
+      const ramp = Math.min(0.15, step * 0.2) / total; // short fade in and out
+      const t0 = (slot * step) / total;
+      const t1 = ((slot + 1) * step) / total;
+      const times = [0, t0, t0 + ramp, t1 - ramp, t1, 1];
+      const values = [rest, rest, active, active, rest, rest];
+      // keyTimes must be non-decreasing; drop the duplicate leading point for the first slot.
+      if (t0 === 0) { times.shift(); values.shift(); }
+      el.append("animate")
+        .attr("attributeName", attr)
+        .attr("values", values.join(";"))
+        .attr("keyTimes", times.map((t) => t.toFixed(4)).join(";"))
+        .attr("dur", `${total}s`)
+        .attr("repeatCount", "indefinite");
     },
   };
 }

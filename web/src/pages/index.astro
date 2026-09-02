@@ -31,7 +31,7 @@ const count = (slug: string) => chapters.filter((c) => c.book === slug).length;
 
 <style>
   .bar { border-bottom: 1px solid var(--border); }
-  .bar-inner { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 1.25rem; max-width: 44rem; margin: 0 auto; }
+  .bar-inner { display: flex; justify-content: space-between; align-items: center; height: var(--bar-h); padding: 0 1.25rem; max-width: 44rem; margin: 0 auto; }
   .brand { font-weight: 600; }
   .wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem; }
   .books { list-style: none; padding: 0; margin: 2rem 0; display: grid; gap: 0.75rem; }

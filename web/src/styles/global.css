@@ -17,6 +17,7 @@
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
   --measure: 70ch;
+  --bar-h: 3.5rem;
 
   /* Visual (D3) tokens: read by src/lib/viz/theme.ts */
   --viz-bg: var(--bg);
@@ -30,6 +31,7 @@
   --viz-defect: #e0857c;
   --viz-defect-text: #1a1a1e;
   --viz-accent: var(--accent);
+  --viz-accent-text: var(--accent-text);
 }
 
 @media (prefers-color-scheme: dark) {

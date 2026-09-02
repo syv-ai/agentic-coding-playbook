@@ -17,11 +17,14 @@ describe("renderFlow", () => {
     expect(el.querySelector("line[marker-start]")).toBeTruthy();
   });
 
-  it("adds a looping traveller per link instead of hover handlers", () => {
+  it("pulses every node and link in sequence on one shared looping cycle, with no hover handlers", () => {
     const el = document.createElement("div");
     renderFlow(el, spec, { orientation: "LR", theme: readTheme() });
-    expect(el.querySelectorAll("circle.traveller animateMotion").length).toBe(2);
-    expect(el.querySelector("animateMotion")?.getAttribute("repeatCount")).toBe("indefinite");
+    const anims = Array.from(el.querySelectorAll("animate"));
+    expect(el.querySelectorAll("rect > animate").length).toBe(6); // fill + stroke per node
+    expect(el.querySelectorAll("line > animate").length).toBe(2);
+    expect(new Set(anims.map((a) => a.getAttribute("dur"))).size).toBe(1);
+    expect(anims.every((a) => a.getAttribute("repeatCount") === "indefinite")).toBe(true);
     expect(el.querySelector("g[style*='cursor']")).toBeNull();
   });
 

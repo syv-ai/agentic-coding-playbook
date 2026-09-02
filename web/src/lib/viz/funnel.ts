@@ -200,9 +200,23 @@ export function renderFunnel(container: HTMLElement, spec: FunnelSpec, { theme }
     .style("font", "700 16px sans-serif")
     .text("✓");
 
-  // Slow, looping motion: code travels down the funnel to the exit; each band sheds its defect class sideways.
-  theme.travel(svg, `M${cx},${ENTRY_H - 6} L${cx},${exitY - GAP}`, COL.good, 6);
-  bandData.forEach((d, i) => {
-    theme.travel(svg, `M${d.rightMid + GAP},${d.yMid} L${chipX - GAP},${d.yMid}`, COL.defect, 3, i * 0.9);
+  // Sequence: entry, then band and its chip in turn, then the exit; a pause; restart.
+  const slots = 2 + n;
+  entry.selectAll("text").each(function (_d, i) {
+    theme.pulse(d3.select(this), "fill", i === 0 ? COL.text : COL.sub, COL.accent, 0, slots);
+  });
+  bands.each(function (d) {
+    const sel = d3.select(this);
+    theme.pulse(sel.select("path"), "fill", COL.fill, COL.accent, 1 + d.i, slots);
+    theme.pulse(sel.select("path"), "stroke", COL.border, COL.accent, 1 + d.i, slots);
+    theme.pulse(sel.select("text"), "fill", COL.text, COL.accentText, 1 + d.i, slots);
+  });
+  chips.each(function (d) {
+    theme.pulse(d3.select(this).select("rect"), "fill", COL.defect, COL.accent, 1 + d.i, slots);
+  });
+  theme.pulse(exit.select("rect"), "fill", COL.fill, COL.accent, slots - 1, slots);
+  theme.pulse(exit.select("rect"), "stroke", COL.good, COL.accent, slots - 1, slots);
+  exit.selectAll("text").each(function () {
+    theme.pulse(d3.select(this), "fill", d3.select(this).attr("fill"), COL.accentText, slots - 1, slots);
   });
 }

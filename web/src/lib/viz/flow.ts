@@ -40,7 +40,7 @@ export function renderFlow(container: HTMLElement, spec: FlowSpec, { orientation
     .style("display", "inline-block");
   const ARROW = theme.arrow(svg, `flow-arrow-${Math.random().toString(36).slice(2, 8)}`, COL.line);
 
-  svg.append("g").selectAll("line").data(spec.links).join("line")
+  const links = svg.append("g").selectAll("line").data(spec.links).join("line")
     .each(function (l) {
       const s = byId[l.source], t = byId[l.target];
       const [x1, y1, x2, y2] = horizontal
@@ -60,12 +60,23 @@ export function renderFlow(container: HTMLElement, spec: FlowSpec, { orientation
   g.filter((d) => Boolean(d.sub)).append("text").attr("x", (d) => d.w / 2).attr("y", (d) => d.h / 2 + 12)
     .attr("text-anchor", "middle").attr("dominant-baseline", "central").attr("fill", COL.sub).style("font", SUBFONT).text((d) => d.sub ?? "");
 
-  // Slow, looping motion along each link, staggered so the eye reads the chain left to right.
-  spec.links.forEach((l, i) => {
-    const s = byId[l.source], t = byId[l.target];
-    const [x1, y1, x2, y2] = horizontal
-      ? [s.x + s.w + GAP, s.y + s.h / 2, t.x - GAP, t.y + t.h / 2]
-      : [s.x + s.w / 2, s.y + s.h + GAP, t.x + t.w / 2, t.y - GAP];
-    theme.travel(svg, `M${x1},${y1} L${x2},${y2}`, COL.accent, 3, i * 0.8);
+  // Sequence: node, its outgoing link, next node, ... then a pause and restart.
+  const order: string[] = [];
+  nodes.forEach((n) => {
+    order.push(`n:${n.id}`);
+    spec.links.forEach((l, li) => { if (l.source === n.id) order.push(`l:${li}`); });
+  });
+  const slots = order.length;
+  g.each(function (d) {
+    const slot = order.indexOf(`n:${d.id}`);
+    const sel = d3.select(this);
+    theme.pulse(sel.select("rect"), "fill", COL.fill, COL.accent, slot, slots);
+    theme.pulse(sel.select("rect"), "stroke", COL.border, COL.accent, slot, slots);
+    sel.selectAll("text").each(function (_t, ti) {
+      theme.pulse(d3.select(this), "fill", ti === 0 ? COL.text : COL.sub, COL.accentText, slot, slots);
+    });
+  });
+  links.each(function (_l, li) {
+    theme.pulse(d3.select(this), "stroke", COL.line, COL.accent, order.indexOf(`l:${li}`), slots);
   });
 }
