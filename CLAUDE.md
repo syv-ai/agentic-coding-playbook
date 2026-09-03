@@ -29,7 +29,8 @@ Chrome
 
 Interactives
 - Every quiz and demo wraps in `Interactive` (`src/components/Interactive.tsx`): title (· meta) and description on the left, the primary action on the right, body below. Nothing shows before the reader starts except that header.
-- Quizzes open on a landing view, then one question at a time, then the result.
+- Quizzes open on a landing view, then one question at a time, then the result. While a block is active its title gives way to a small muted counter ("Question 2 of 3", "Round 2 of 5").
+- Anything that moves other content slides. The Interactive body animates its height, so reveals and swaps never make the page jump.
 
 Figures
 - Only `<Visual kind=...>`: `flow`, `flowchart`, `loop`, `funnel`. Shape carries type. At most two focal nodes, one accent link, nine nodes.

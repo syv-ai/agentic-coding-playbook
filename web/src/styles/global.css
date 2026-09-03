@@ -143,9 +143,12 @@ li::marker { color: var(--accent); }
 .ix-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2rem; margin-bottom: 1.75rem; }
 .ix-lead { padding-right: 2rem; }
 .ix-title { font-size: 1.05rem; font-weight: 600; margin: 0; line-height: 1.3; }
+.ix-title--counter { font-size: 0.85rem; font-weight: 400; color: var(--text-muted); letter-spacing: 0.01em; }
 .ix-meta { color: var(--text-faint); font-weight: 400; }
 .ix-action { display: flex; align-items: center; align-self: center; gap: 0.5rem; }
-.ix-body:empty { display: none; }
+/* Anything that moves other content slides. */
+.autoheight { overflow: hidden; transition: height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@media (prefers-reduced-motion: reduce) { .autoheight { transition: none; } }
 /* Interactive blocks own their typography; the prose rhythm stops at their edge.
    Two classes deep so these outrank the .prose rules whatever their order in the file. */
 .prose .ix :where(p, ul, ol), .ix :where(p, ul, ol) { margin: 0; }

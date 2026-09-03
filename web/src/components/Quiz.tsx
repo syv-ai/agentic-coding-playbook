@@ -75,7 +75,7 @@ export default function Quiz({ id, questions, title = "Test your understanding",
     );
 
   return (
-    <Interactive className="quiz" title={headTitle} meta={meta} description={view === "landing" ? description : undefined} action={action}>
+    <Interactive className="quiz" title={headTitle} titleStyle={view === "questions" ? "counter" : "title"} meta={meta} description={view === "landing" ? description : undefined} action={action}>
       {view === "landing" && complete && <p className="quiz-explain">Last result: {score} / {total}.</p>}
 
       {view === "result" && (
@@ -114,28 +114,28 @@ export default function Quiz({ id, questions, title = "Test your understanding",
       })()}
 
       <style>{`
-        .quiz-progress { display: inline-flex; gap: 0.4rem; }
-        .quiz-progress i { width: 0.55rem; height: 0.55rem; border-radius: 999px; background: var(--border); }
-        .quiz-progress i[data-state="correct"] { background: var(--good); }
-        .quiz-progress i[data-state="wrong"] { background: var(--bad); }
-        .quiz-q { border: 0; padding: 0; margin: 0; }
-        .quiz-q legend { font-weight: 600; font-size: 1.05rem; margin-bottom: 1.1rem; padding: 0; }
+        .quiz .quiz-progress { display: inline-flex; gap: 0.4rem; }
+        .quiz .quiz-progress i { width: 0.55rem; height: 0.55rem; border-radius: 999px; background: var(--border); }
+        .quiz .quiz-progress i[data-state="correct"] { background: var(--good); }
+        .quiz .quiz-progress i[data-state="wrong"] { background: var(--bad); }
+        .quiz .quiz-q { border: 0; padding: 0; margin: 0; }
+        .quiz .quiz-q legend { font-weight: 600; font-size: 1.05rem; margin-bottom: 1.1rem; padding: 0; }
         /* Options are a numbered list, not buttons in boxes: the number carries the state. */
-        .quiz-choice { display: grid; grid-template-columns: 1.75rem 1fr; align-items: baseline; gap: 0.9rem; width: 100%; text-align: left; margin: 0; padding: 0.65rem 0; border: 0; border-radius: 0; background: none; color: var(--text); font: inherit; cursor: pointer; }
-        .quiz-choice + .quiz-choice { margin-top: 0.35rem; }
-        .quiz-n { display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 999px; border: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted); transition: background 0.2s, border-color 0.2s, color 0.2s; }
-        .quiz-choice:hover:not(:disabled) .quiz-n { border-color: var(--accent); color: var(--accent); }
-        .quiz-choice:hover:not(:disabled) .quiz-text { color: var(--accent); }
-        .quiz-choice:disabled { cursor: default; }
-        .quiz-choice[data-state="correct"] .quiz-n { background: var(--good); border-color: var(--good); color: var(--bg); }
-        .quiz-choice[data-state="wrong"] .quiz-n { background: var(--bad); border-color: var(--bad); color: var(--bg); }
-        .quiz-choice[data-state="reveal"] .quiz-n { border-color: var(--good); color: var(--good); }
-        .quiz-choice[data-state="wrong"] .quiz-text { color: var(--text-muted); text-decoration: line-through; text-decoration-color: var(--bad); }
-        .quiz-choice[data-state="correct"] .quiz-text, .quiz-choice[data-state="reveal"] .quiz-text { color: var(--good); }
-        .quiz-choice:disabled[data-state="idle"] .quiz-text { color: var(--text-muted); }
-        .quiz-after { margin-top: 1.25rem; }
-        .quiz-explain { margin: 0 0 0.9rem; color: var(--text-muted); }
-        .quiz-score { font-size: 1.6rem; font-weight: 600; margin: 0 0 0.25rem; }
+        .quiz .quiz-choice { display: grid; grid-template-columns: 1.75rem 1fr; align-items: baseline; gap: 0.9rem; width: 100%; text-align: left; margin: 0; padding: 0.65rem 0; border: 0; border-radius: 0; background: none; color: var(--text); font: inherit; cursor: pointer; }
+        .quiz .quiz-choice + .quiz-choice { margin-top: 0.35rem; }
+        .quiz .quiz-n { display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 999px; border: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted); transition: background 0.2s, border-color 0.2s, color 0.2s; }
+        .quiz .quiz-choice:hover:not(:disabled) .quiz-n { border-color: var(--accent); color: var(--accent); }
+        .quiz .quiz-choice:hover:not(:disabled) .quiz-text { color: var(--accent); }
+        .quiz .quiz-choice:disabled { cursor: default; }
+        .quiz .quiz-choice[data-state="correct"] .quiz-n { background: var(--good); border-color: var(--good); color: var(--bg); }
+        .quiz .quiz-choice[data-state="wrong"] .quiz-n { background: var(--bad); border-color: var(--bad); color: var(--bg); }
+        .quiz .quiz-choice[data-state="reveal"] .quiz-n { border-color: var(--good); color: var(--good); }
+        .quiz .quiz-choice[data-state="wrong"] .quiz-text { color: var(--text-muted); text-decoration: line-through; text-decoration-color: var(--bad); }
+        .quiz .quiz-choice[data-state="correct"] .quiz-text, .quiz .quiz-choice[data-state="reveal"] .quiz-text { color: var(--good); }
+        .quiz .quiz-choice:disabled[data-state="idle"] .quiz-text { color: var(--text-muted); }
+        .quiz .quiz-after { margin-top: 1.5rem; }
+        .quiz .quiz-explain { margin: 0 0 1.25rem; color: var(--text-muted); }
+        .quiz .quiz-score { font-size: 1.6rem; font-weight: 600; margin: 0 0 0.35rem; }
       `}</style>
     </Interactive>
   );

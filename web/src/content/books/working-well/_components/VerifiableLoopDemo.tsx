@@ -33,9 +33,9 @@ export default function VerifiableLoopDemo() {
   return (
     <Interactive
       className="vl"
-      title="Five rounds, two stop conditions"
-      meta={n > 0 ? `round ${n} of ${ROUNDS.length}` : undefined}
-      description="The agent does the same work in both columns. Only what stops the loop differs."
+      title={n > 0 ? `Round ${n} of ${ROUNDS.length}` : "Five rounds, two stop conditions"}
+      titleStyle={n > 0 ? "counter" : "title"}
+      description={n > 0 ? undefined : "The agent does the same work in both columns. Only what stops the loop differs."}
       action={action}
     >
       {round && (
