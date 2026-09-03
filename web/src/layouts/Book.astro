@@ -101,7 +101,7 @@ const h2s = headings.filter((h) => h.depth === 2);
   .book-menu li a[aria-current] { color: var(--accent); font-weight: 600; }
   .menu-num { color: var(--text-faint); font-size: 0.8rem; }
 
-  .shell { --left: 16rem; --right: 14rem; display: grid; grid-template-columns: var(--left) minmax(0, 1fr) var(--right); gap: 2.5rem; padding: 1.5rem 1.25rem; max-width: 80rem; margin: 0 auto; }
+  .shell { --left: 16rem; --right: 14rem; display: grid; grid-template-columns: var(--left) minmax(0, 1fr) var(--right); gap: 2.5rem; padding: 2.25rem 1.25rem 3rem; max-width: 80rem; margin: 0 auto; }
   .shell.no-toc { --right: 0px; }
   .shell[data-left="closed"] { --left: 1.6rem; }
   .shell[data-right="closed"] { --right: 1.6rem; }
@@ -121,7 +121,7 @@ const h2s = headings.filter((h) => h.depth === 2);
   .sidebar li a:hover, .toc li a:hover { color: var(--text); }
   .toc-title { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); margin-bottom: 0.3rem; }
   .deck-link { display: inline-block; margin-top: 1rem; }
-  .chapter-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .chapter-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 4.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
   @media (max-width: 1000px) {
     .shell, .shell[data-left="closed"], .shell[data-right="closed"] { grid-template-columns: 1fr; }
     .panel { position: static; max-height: none; }
