@@ -61,10 +61,15 @@ describe("Quiz", () => {
     expect(screen.getByText("2 / 2")).toBeTruthy();
   });
 
+  it("shows the question count next to the title", () => {
+    render(<Quiz id="t" questions={two} title="Quick check" />);
+    expect(screen.getByText("Quick check").textContent).toBe("Quick check · 2 questions");
+  });
+
   it("shows the last result on the landing view and starts over from stored answers", () => {
     localStorage.setItem("quiz:t", JSON.stringify({ 0: 1 }));
     render(<Quiz id="t" questions={questions} />);
-    expect(screen.getByText(/last result 1 \/ 1/)).toBeTruthy();
+    expect(screen.getByText(/Last result: 1 \/ 1/)).toBeTruthy();
     fireEvent.click(screen.getByText("Try again"));
     expect(screen.getByText("Before the agent starts").closest("button")?.dataset.state).toBe("idle");
   });

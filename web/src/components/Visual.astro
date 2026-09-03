@@ -1,6 +1,7 @@
 ---
 interface Props {
-  kind: "flow" | "funnel" | "graph";
+  /** flow: linear chain. flowchart: branches and loops. loop: ring with a hub. funnel: defence in depth. */
+  kind: "flow" | "flowchart" | "loop" | "funnel";
   spec: unknown;
   orientation?: "LR" | "TD";
   caption?: string;

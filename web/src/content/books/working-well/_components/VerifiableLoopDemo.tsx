@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Interactive from "../../../../components/Interactive";
 
 /**
  * The same five rounds of agent work, run twice: once with nothing but the agent's own
@@ -7,11 +8,11 @@ import { useState } from "react";
  * only when they become visible differs.
  */
 const ROUNDS = [
-  { work: "Adds the endpoint", defect: "returns 200 on invalid input", check: "Rejects invalid input" },
-  { work: "Adds input validation", defect: "error body is not JSON", check: "Error body is JSON" },
-  { work: "Fixes the error body", defect: "last page is off by one", check: "Last page has the right count" },
-  { work: "Fixes pagination", defect: "", check: "All checks pass" },
-  { work: "Renames for clarity", defect: "", check: "All checks pass" },
+  { work: "adds the endpoint", defect: "returns 200 on invalid input", check: "rejects invalid input" },
+  { work: "adds input validation", defect: "error body is not JSON", check: "error body is JSON" },
+  { work: "fixes the error body", defect: "last page is off by one", check: "last page has the right count" },
+  { work: "fixes pagination", defect: "", check: "all checks pass" },
+  { work: "renames for clarity", defect: "", check: "all checks pass" },
 ];
 const HIDDEN = ROUNDS.filter((r) => r.defect).length;
 
@@ -19,54 +20,52 @@ export default function VerifiableLoopDemo() {
   const [n, setN] = useState(0);
   const round = ROUNDS[n - 1];
   const finished = n >= ROUNDS.length;
-  const caught = ROUNDS.slice(0, n).filter((r) => r.defect).length;
+
+  const action = (
+    <>
+      {n > 0 && <button type="button" className="btn" onClick={() => setN(0)}>Reset</button>}
+      <button type="button" className="btn btn-primary" onClick={() => setN(n + 1)} disabled={finished}>
+        {n === 0 ? "Run round 1" : finished ? "Finished" : `Run round ${n + 1}`}
+      </button>
+    </>
+  );
 
   return (
-    <div className="vl">
-      <div className="vl-head">
-        <span>{n === 0 ? "Same agent, same task, two ways of deciding when it is done." : `Round ${n} of ${ROUNDS.length}`}</span>
-        <span className="vl-controls">
-          <button type="button" onClick={() => setN(n + 1)} disabled={finished}>
-            {n === 0 ? "Run round 1" : finished ? "Finished" : `Run round ${n + 1}`}
-          </button>
-          {n > 0 && <button type="button" className="vl-ghost" onClick={() => setN(0)}>Reset</button>}
-        </span>
-      </div>
-
-      {round && <p className="vl-work">The agent <b>{round.work.toLowerCase()}</b>.</p>}
-
-      <div className="vl-cols">
-        <div className="vl-col">
-          <div className="vl-label">Loop stops when the agent says so</div>
-          <ol className="vl-dots" aria-hidden="true">
-            {ROUNDS.map((_, i) => <li key={i} data-state={i < n ? "claim" : "todo"} />)}
-          </ol>
-          <p className="vl-report">
-            {round ? <><span className="vl-claim">“Done.”</span> Nothing else to go on.</> : <span className="vl-faint">Waiting.</span>}
-          </p>
-          {finished && <p className="vl-verdict vl-bad">At review: {HIDDEN} defects. All three were there since rounds 1 to 3.</p>}
-        </div>
-        <div className="vl-col">
-          <div className="vl-label">Loop stops when the check passes</div>
-          <ol className="vl-dots" aria-hidden="true">
-            {ROUNDS.map((r, i) => <li key={i} data-state={i < n ? (r.defect ? "fail" : "pass") : "todo"} />)}
-          </ol>
-          <p className="vl-report">
-            {round ? (
-              round.defect ? <><span className="vl-warn">Check fails:</span> {round.check.toLowerCase()}. Back to work.</> : <><span className="vl-good">Check passes.</span> {n < ROUNDS.length ? "Free to refine." : "Done means done."}</>
-            ) : <span className="vl-faint">Check written. Waiting.</span>}
-          </p>
-          {finished && <p className="vl-verdict vl-good">At review: nothing the check had not already caught. {caught} defects fixed in the round after they appeared.</p>}
-        </div>
-      </div>
-
+    <Interactive
+      className="vl"
+      title="Five rounds, two stop conditions"
+      meta={n > 0 ? `round ${n} of ${ROUNDS.length}` : undefined}
+      description="The agent does the same work in both columns. Only what stops the loop differs."
+      action={action}
+    >
+      {round && (
+        <>
+          <p className="vl-work">The agent <b>{round.work}</b>.</p>
+          <div className="vl-cols">
+            <div className="vl-col">
+              <div className="vl-label">Loop stops when the agent says so</div>
+              <ol className="vl-dots" aria-hidden="true">
+                {ROUNDS.map((_, i) => <li key={i} data-state={i < n ? "claim" : "todo"} />)}
+              </ol>
+              <p className="vl-report"><span className="vl-claim">“Done.”</span> Nothing else to go on.</p>
+              {finished && <p className="vl-verdict vl-bad">At review: {HIDDEN} defects, all present since rounds 1 to 3.</p>}
+            </div>
+            <div className="vl-col">
+              <div className="vl-label">Loop stops when the check passes</div>
+              <ol className="vl-dots" aria-hidden="true">
+                {ROUNDS.map((r, i) => <li key={i} data-state={i < n ? (r.defect ? "fail" : "pass") : "todo"} />)}
+              </ol>
+              <p className="vl-report">
+                {round.defect
+                  ? <><span className="vl-warn">Check fails:</span> {round.check}. Back to work.</>
+                  : <><span className="vl-good">Check passes.</span> {finished ? "Done means done." : "Free to refine."}</>}
+              </p>
+              {finished && <p className="vl-verdict vl-good">At review: nothing the check had not already caught.</p>}
+            </div>
+          </div>
+        </>
+      )}
       <style>{`
-        .vl { margin: 2rem 0; }
-        .vl-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem; }
-        .vl-controls { display: inline-flex; gap: 0.5rem; }
-        .vl-controls button { font: inherit; font-size: 0.85rem; text-transform: none; letter-spacing: 0; padding: 0.4rem 0.95rem; border: 1px solid var(--accent); background: var(--accent); color: var(--accent-text); cursor: pointer; }
-        .vl-controls .vl-ghost { background: none; color: var(--text); border-color: var(--border); }
-        .vl-controls button:disabled { opacity: 0.45; cursor: default; }
         .vl-work { margin: 0 0 1.25rem; }
         .vl-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
         .vl-label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.6rem; }
@@ -77,13 +76,12 @@ export default function VerifiableLoopDemo() {
         .vl-dots li[data-state="pass"] { background: var(--good); }
         .vl-report { margin: 0; min-height: 3.2em; }
         .vl-claim { color: var(--text-faint); font-style: italic; }
-        .vl-faint { color: var(--text-faint); }
         .vl-good { color: var(--good); font-weight: 600; }
         .vl-warn { color: var(--warn); font-weight: 600; }
         .vl-bad { color: var(--bad); }
         .vl-verdict { font-weight: 600; margin: 0.9rem 0 0; }
         @media (max-width: 600px) { .vl-cols { grid-template-columns: 1fr; } }
       `}</style>
-    </div>
+    </Interactive>
   );
 }

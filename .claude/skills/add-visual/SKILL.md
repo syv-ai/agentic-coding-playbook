@@ -1,44 +1,62 @@
 ---
 name: add-visual
-description: How to add or restyle a D3 diagram in a playbook chapter (Astro, web/). Use for any flowchart, diagram, chart, or graphic in a chapter.
+description: How to add or restyle a diagram in a playbook chapter (Astro, web/). Use for any flowchart, loop, chain, funnel, or other figure in a chapter.
 ---
 
 # add-visual
 
-## What
+## The forms
 
-All diagrams are custom **D3** (no Mermaid), rendered client-side by `web/src/lib/viz/` and placed with the `<Visual>` component:
+Every figure is custom D3 (no Mermaid), rendered client-side by `web/src/lib/viz/` and placed with `<Visual>`. Pick the form by the shape of the idea, not the data:
 
-- `flow` — linear chain of pill/rounded nodes. `orientation` `LR` | `TD`.
-- `graph` — branching/looping flows with edge labels and decision diamonds; layout via dagre. Node `kind: "decision"` → diamond; link `label` → edge label; `dir: "both"` → arrowheads at both ends.
-- `funnel` — defence-in-depth funnel: entry, layers that each shed a defect class, exit.
+| Showing | `kind` | Spec |
+|---|---|---|
+| A chain: this, then this, then this | `flow` | `nodes`, `links`; `orientation` `LR` or `TD` |
+| Decision logic, branches, a loop that exits | `flowchart` | `nodes`, `links`; `orientation` |
+| A reinforcing cycle where the last step feeds the first, optionally writing to a shared centre | `loop` | `stations` (3 to 8, clockwise from the top), optional `hub`, `spokes` `in`/`out`/`none` |
+| Defence in depth: layers that each shed a defect class | `funnel` | `entry`, `layers`, `exit` |
 
-Pick `flow` for a chain, `graph` when there are branches, loops, decisions or edge labels. One-offs → inline SVG in the MDX. App-like interactives → a React island in the chapter's `_components/` folder.
+One-offs get inline SVG in the MDX. App-like interactives are React islands in the chapter's `_components/` folder, wrapped in `Interactive`.
+
+Before drawing, ask whether a sentence or a table would do the job. Above nine nodes it is two figures.
+
+## Grammar (shared by every form, in `primitives.ts`)
+
+- **Shape carries type, not colour.** `kind`: `start`/`end` are ovals in the soft fill, `step` is a white rectangle with the ink stroke, `decision` is a diamond, `store` is a soft-filled rectangle with the muted stroke. The loop hub is the one inverted box.
+- **Colour is editorial.** At most one or two nodes per figure set `focal: true` and take the accent tint and stroke. At most one link sets `accent: true` (the happy path). If you want to accent four things you have not decided what the figure is about.
+- **Labels.** Node names in sans; `sub` (ports, states, qualifiers) in mono. Link `label` is short, drawn uppercase mono on an opaque mask with a 6px gap off the stroke, never on it.
+- **Connectors.** Orthogonal with rounded elbows (r = 8), drawn before nodes, a 12px gap before every arrowhead, one attach point per connector when several share a box edge, back-edges in a lane outside the nodes. The ring arcs and hub spokes of `loop` are the sanctioned exceptions. `dashed: true` for optional or return relationships.
+- **Grid.** Node dimensions are multiples of 8, positions of 4, gaps 24 to 64.
 
 ## How
-
-In a chapter `.mdx`:
 
 ```mdx
 import Visual from "../../../components/Visual.astro";
 
-<Visual kind="graph" orientation="LR" caption="One line under the figure."
-  spec={{ nodes: [{ id: "a", label: "Title", sub: "optional" }], links: [{ source: "a", target: "b", label: "yes" }] }} />
+<Visual kind="flowchart" orientation="LR" caption="One line under the figure; it also becomes the accessible name."
+  spec={{
+    nodes: [
+      { id: "check", label: "Write the check", sub: "before any code", focal: true },
+      { id: "pass", label: "Passes?", kind: "decision" },
+      { id: "done", label: "Done", kind: "end" },
+    ],
+    links: [{ source: "check", target: "pass" }, { source: "pass", target: "done", label: "yes" }],
+  }} />
 ```
 
 The spec is serialised into `data-spec`; `mountVisuals()` renders every figure on load, redraws when the theme changes, and reveals on scroll.
 
-New renderer: add `web/src/lib/viz/<kind>.ts` exporting `render<Kind>(container, spec, { theme, ... })`, register it in `index.ts`, add the kind to `Visual.astro`'s prop type, and write a jsdom test like `flow.test.ts`. It must:
+## Motion
 
-1. Clear any previous `svg` in the container first (idempotent).
-2. Read every colour, font and spacing value from the `VizTheme` passed in (never hardcode).
-3. Measure text with `theme.measure`, not a canvas of its own.
-4. Render at natural pixel size; the container scrolls horizontally if the diagram is wider than the column.
-5. Motion, never hover: elements light up one after another in reading order, pause, and restart. Use `theme.pulse(el, attr, rest, active, slot, slots)` for every element of the figure with one shared `slots` count. It is a no-op when `theme.animate` is false.
+One rule: **elements light up one after another in reading order, pause, and restart. Connectors never move.** Use `pulseNode(g, node, theme, slot, slots)` for every node of the figure with one shared `slots` count. It is a no-op when `theme.animate` is false (reduced motion). No hover effects, no travelling dots, no blinking.
+
+## Adding a form
+
+Add `web/src/lib/viz/<kind>.ts` exporting `render<Kind>(container, spec, { theme, title, ... })`, built from `primitives.ts` (`sizeNode`, `drawNode`, `elbowPath`, `drawEdgeLabel`, `markers`, `newSvg`, `pulseNode`). Register it in `index.ts`, add the kind to `Visual.astro`, and write a jsdom test like `flowchart.test.ts` that checks the grammar (orthogonal paths, masked labels, grid, pulses on nodes only). Read every colour, font and spacing value from the `VizTheme`; measure text with `theme.measure`; clear any previous `svg` first.
 
 ## Theme
 
-Colours come from CSS custom properties (`--viz-*` in `web/src/styles/global.css`), one set for light and one for dark. The deck forces the dark set. Rules: no same-hue text on its own fill; boundary by colour delta when fill ≠ background, a thin border only when fill = background; no dark grey on black; a visible gap between arrowheads and targets (`theme.space.gap`).
+Colours are CSS custom properties (`--viz-*` in `web/src/styles/global.css`), one set for light and one for dark; the deck forces the dark set. No same-hue text on its own fill; boundary by colour delta when fill differs from the background, a thin border only when it does not; no dark grey on black.
 
 ## Verify
 

@@ -32,6 +32,9 @@
   --viz-defect-text: #1a1a1e;
   --viz-accent: var(--accent);
   --viz-accent-text: var(--accent-text);
+  --viz-fill-soft: #eeeef2;
+  --viz-border-soft: #9a9aa4;
+  --viz-accent-tint: #f1e8fd;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -60,6 +63,9 @@
     --viz-good: #7ee787;
     --viz-defect: #e0857c;
     --viz-defect-text: #0a0a0b;
+    --viz-fill-soft: #17171c;
+    --viz-border-soft: #5c5c66;
+    --viz-accent-tint: #261a38;
   }
 }
 
@@ -88,6 +94,9 @@
   --viz-good: #7ee787;
   --viz-defect: #e0857c;
   --viz-defect-text: #0a0a0b;
+  --viz-fill-soft: #17171c;
+  --viz-border-soft: #5c5c66;
+  --viz-accent-tint: #261a38;
 }
 
 * { box-sizing: border-box; }
@@ -109,6 +118,29 @@ img, svg { max-width: 100%; }
 button { border-radius: 999px; }
 li::marker { color: var(--accent); }
 .prose ul, .prose ol { padding-left: 1.4rem; }
+.prose li + li { margin-top: 0.45rem; }
+.prose li > ul, .prose li > ol { margin-top: 0.45rem; }
+
+/* Pill buttons shared by every interactive block. */
+.btn { font: inherit; font-size: 0.9rem; padding: 0.45rem 1.1rem; border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; white-space: nowrap; }
+.btn:hover:not(:disabled) { border-color: var(--accent); }
+.btn:disabled { opacity: 0.45; cursor: default; }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+.btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
+
+/*
+ * Interactive block: the one layout every quiz and demo uses.
+ *   header  = title (· meta) + description on the left, the primary action on the right, middle-aligned
+ *   body    = whatever the block does
+ */
+.ix { margin: 2.5rem 0; }
+.ix-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1.5rem; margin-bottom: 1.25rem; }
+.ix-title { font-size: 1.05rem; font-weight: 600; margin: 0; line-height: 1.3; }
+.ix-meta { color: var(--text-faint); font-weight: 400; }
+.ix-desc { margin: 0.3rem 0 0; color: var(--text-muted); }
+.ix-action { display: flex; align-items: center; gap: 0.5rem; }
+.ix-body:empty { display: none; }
+@media (max-width: 600px) { .ix-head { grid-template-columns: 1fr; } }
 
 /* Heading deep links: an empty anchor appended by rehypeHeadingAnchors, shown on hover or focus. */
 h2, h3 { position: relative; }

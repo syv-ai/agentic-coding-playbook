@@ -1,9 +1,10 @@
 import { readTheme } from "./theme";
 import { renderFlow, type FlowSpec } from "./flow";
+import { renderFlowchart, type FlowchartSpec } from "./flowchart";
+import { renderLoop, type LoopSpec } from "./loop";
 import { renderFunnel, type FunnelSpec } from "./funnel";
-import { renderGraph, type GraphSpec } from "./graph";
 
-type Kind = "flow" | "funnel" | "graph";
+export type Kind = "flow" | "flowchart" | "loop" | "funnel" | "graph";
 
 function draw(fig: HTMLElement): void {
   const canvas = fig.querySelector<HTMLElement>(".visual-canvas");
@@ -13,10 +14,12 @@ function draw(fig: HTMLElement): void {
   try { spec = JSON.parse(raw); } catch { return; }
   const kind = fig.dataset.visual as Kind;
   const orientation = (fig.dataset.orientation as "LR" | "TD") ?? "LR";
+  const title = fig.querySelector("figcaption")?.textContent?.trim() || undefined;
   const theme = readTheme();
-  if (kind === "flow") renderFlow(canvas, spec as FlowSpec, { orientation, theme });
+  if (kind === "flow") renderFlow(canvas, spec as FlowSpec, { orientation, theme, title });
+  else if (kind === "flowchart" || kind === "graph") renderFlowchart(canvas, spec as FlowchartSpec, { orientation, theme, title });
+  else if (kind === "loop") renderLoop(canvas, spec as LoopSpec, { theme, title });
   else if (kind === "funnel") renderFunnel(canvas, spec as FunnelSpec, { theme });
-  else if (kind === "graph") renderGraph(canvas, spec as GraphSpec, { orientation, theme });
 }
 
 let mounted = false;

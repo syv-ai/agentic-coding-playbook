@@ -1,14 +1,18 @@
 import type { Selection } from "d3";
 
 export interface VizColors {
-  bg: string; fill: string; border: string; text: string; sub: string; line: string;
-  chipBorder: string; good: string; defect: string; defectText: string; accent: string; accentText: string;
+  bg: string; fill: string; fillSoft: string; border: string; borderSoft: string;
+  text: string; sub: string; line: string; chipBorder: string;
+  good: string; defect: string; defectText: string;
+  accent: string; accentText: string; accentTint: string;
 }
 
 export interface VizTheme {
   colors: VizColors;
+  /** gap: arrowhead to target (always visible). spacing: rank gap. margin: canvas padding. All on the 4px grid. */
   space: { gap: number; spacing: number; margin: number };
-  fonts: { label: string; sub: string; chip: string };
+  /** label: node names (sans). sub: technical sublabels (mono). edge: connector labels (mono, tracked, uppercase). */
+  fonts: { label: string; sub: string; edge: string; chip: string };
   /** Append a shared arrowhead marker and return its url(#id). */
   arrow(svg: Selection<SVGSVGElement, unknown, null, undefined>, id: string, color: string): string;
   /** Text width in px for the given CSS font. */
@@ -24,8 +28,9 @@ export interface VizTheme {
 }
 
 const FONTS = {
-  label: '600 14px "IBM Plex Sans", sans-serif',
-  sub: '11.5px "IBM Plex Sans", sans-serif',
+  label: '600 12px "IBM Plex Sans", sans-serif',
+  sub: '9px "IBM Plex Mono", monospace',
+  edge: '500 8px "IBM Plex Mono", monospace',
   chip: '12px "IBM Plex Sans", sans-serif',
 };
 
@@ -40,7 +45,9 @@ export function readTheme(root: HTMLElement = document.documentElement): VizThem
     colors: {
       bg: v("--viz-bg", "#ffffff"),
       fill: v("--viz-fill", "#ffffff"),
+      fillSoft: v("--viz-fill-soft", "#eeeef2"),
       border: v("--viz-border", "#1a1a1e"),
+      borderSoft: v("--viz-border-soft", "#9a9aa4"),
       text: v("--viz-text", "#1a1a1e"),
       sub: v("--viz-sub", "#5c5c66"),
       line: v("--viz-line", "#1a1a1e"),
@@ -50,8 +57,9 @@ export function readTheme(root: HTMLElement = document.documentElement): VizThem
       defectText: v("--viz-defect-text", "#1a1a1e"),
       accent: v("--viz-accent", "#7c3aed"),
       accentText: v("--viz-accent-text", "#ffffff"),
+      accentTint: v("--viz-accent-tint", "#f1e8fd"),
     },
-    space: { gap: 12, spacing: 46, margin: 16 },
+    space: { gap: 12, spacing: 64, margin: 16 },
     fonts: FONTS,
     arrow(svg, id, color) {
       let defs = svg.select<SVGDefsElement>("defs");
@@ -62,7 +70,7 @@ export function readTheme(root: HTMLElement = document.documentElement): VizThem
       return `url(#${id})`;
     },
     measure(text, font) {
-      if (!ctx) return text.length * 8; // jsdom has no canvas; a rough width keeps layout deterministic in tests
+      if (!ctx) return text.length * 7; // jsdom has no canvas; a rough width keeps layout deterministic in tests
       ctx.font = font;
       return ctx.measureText(text).width;
     },

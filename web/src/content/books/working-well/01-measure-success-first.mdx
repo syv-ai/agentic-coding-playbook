@@ -25,16 +25,16 @@ Open with the loop drawing, not the claim. Ask the room what stops the loop in t
 ## The loop only optimises for what can stop it
 
 <Visual
-  kind="graph"
+  kind="flowchart"
   orientation="LR"
   caption="The loop with a check in it. Remove the check and the only exit is the agent deciding it is finished."
   spec={{
     nodes: [
-      { id: "check", label: "Write the check" },
+      { id: "check", label: "Write the check", sub: "before any code", focal: true },
       { id: "act", label: "Agent acts" },
       { id: "run", label: "Run the check" },
       { id: "pass", label: "Passes?", kind: "decision" },
-      { id: "done", label: "Done" },
+      { id: "done", label: "Done", kind: "end" },
     ],
     links: [
       { source: "check", target: "act" },
