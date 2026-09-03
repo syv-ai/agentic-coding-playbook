@@ -140,13 +140,14 @@ li::marker { color: var(--accent); }
  *   body    = whatever the block does
  */
 .ix { margin: 4.5rem 0; }
-.ix-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1.5rem; margin-bottom: 1.75rem; }
+.ix-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2rem; margin-bottom: 1.75rem; }
+.ix-lead { padding-right: 2rem; }
 .ix-title { font-size: 1.05rem; font-weight: 600; margin: 0; line-height: 1.3; }
 .ix-meta { color: var(--text-faint); font-weight: 400; }
-.ix-desc { margin: 0.3rem 0 0; color: var(--text-muted); }
-.ix-action { display: flex; align-items: center; gap: 0.5rem; }
+.ix-desc { margin: 0.65rem 0 0; color: var(--text-muted); }
+.ix-action { display: flex; align-items: center; align-self: center; gap: 0.5rem; }
 .ix-body:empty { display: none; }
-@media (max-width: 600px) { .ix-head { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .ix-head { grid-template-columns: 1fr; } .ix-lead { padding-right: 0; } }
 
 /* Heading deep links: an empty anchor appended by rehypeHeadingAnchors, shown on hover or focus. */
 h2, h3 { position: relative; }
