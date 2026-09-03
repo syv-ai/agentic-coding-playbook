@@ -10,7 +10,7 @@ export interface FlowOptions { orientation?: "LR" | "TD"; theme: VizTheme; title
 interface Placed extends DiagramNode { size: NodeSize; x: number; y: number }
 
 /** Linear chain. Nodes share an axis, so connectors are straight; labels sit above (LR) or beside (TD) the line. */
-export function renderFlow(container: HTMLElement, spec: FlowSpec, { orientation = "LR", theme, title }: FlowOptions): void {
+export function renderFlow(container: HTMLElement, spec: FlowSpec, { orientation = "TD", theme, title }: FlowOptions): void {
   const horizontal = orientation === "LR";
   const C = theme.colors;
   const { gap: GAP, spacing: SPACING, margin: M } = theme.space;

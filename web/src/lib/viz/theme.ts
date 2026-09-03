@@ -28,10 +28,10 @@ export interface VizTheme {
 }
 
 const FONTS = {
-  label: '600 12px "IBM Plex Sans", sans-serif',
-  sub: '9px "IBM Plex Mono", monospace',
-  edge: '500 8px "IBM Plex Mono", monospace',
-  chip: '12px "IBM Plex Sans", sans-serif',
+  label: '600 14px "IBM Plex Sans", sans-serif',
+  sub: '11px "IBM Plex Mono", monospace',
+  edge: '500 10px "IBM Plex Mono", monospace',
+  chip: '13px "IBM Plex Sans", sans-serif',
 };
 
 /** Read the viz tokens from CSS custom properties on <html>, so light/dark and any palette change apply. */

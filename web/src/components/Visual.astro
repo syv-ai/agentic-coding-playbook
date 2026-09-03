@@ -1,24 +1,53 @@
 ---
+import { validateSpec } from "../lib/viz/budget";
+
 interface Props {
   /** flow: linear chain. flowchart: branches and loops. loop: ring with a hub. funnel: defence in depth. */
   kind: "flow" | "flowchart" | "loop" | "funnel";
   spec: unknown;
+  /** TD by default: a figure wider than the column scales down; a tall one does not. */
   orientation?: "LR" | "TD";
   caption?: string;
 }
-const { kind, spec, orientation = "LR", caption } = Astro.props;
+const { kind, spec, orientation = "TD", caption } = Astro.props;
+
+// The figure budget is enforced here, at build time, so it holds for every author on every branch.
+const problems = validateSpec(kind, spec);
+if (problems.length) {
+  throw new Error(`<Visual> "${caption ?? kind}" is over budget:\n  - ${problems.join("\n  - ")}\nSee .claude/skills/add-visual/SKILL.md.`);
+}
 ---
 <figure class="visual" data-visual={kind} data-orientation={orientation} data-spec={JSON.stringify(spec)}>
-  <div class="visual-canvas"></div>
+  <div class="visual-frame">
+    <div class="visual-canvas"></div>
+    <button class="visual-expand" type="button" data-expand aria-label="Expand figure" title="Expand">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.5 2.5h4v4M6.5 13.5h-4v-4M13.5 2.5 9 7M2.5 13.5 7 9"/></svg>
+    </button>
+  </div>
   {caption && <figcaption>{caption}</figcaption>}
 </figure>
 
 <style>
-  .visual { margin: 1.5rem 0; text-align: center; opacity: 0; transform: translateY(8px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .visual { margin: 1.75rem 0; text-align: center; opacity: 0; transform: translateY(8px); transition: opacity 0.5s ease, transform 0.5s ease; }
   .visual.is-visible { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .visual { opacity: 1; transform: none; transition: none; } }
+  .visual-frame { position: relative; }
   .visual-canvas { overflow-x: auto; }
+  .visual-expand { position: absolute; top: 0.25rem; right: 0.25rem; width: 2rem; height: 2rem; padding: 0; display: grid; place-items: center; background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; opacity: 0; transition: opacity 0.15s; }
+  .visual-expand svg { width: 1rem; height: 1rem; }
+  .visual-frame:hover .visual-expand, .visual-expand:focus-visible { opacity: 1; }
+  .visual-expand:hover { color: var(--text); border-color: var(--accent); }
+  html[data-render="deck"] .visual-expand { display: none; }
   figcaption { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem; }
+</style>
+
+<style is:global>
+  /* Lightbox opened by the expand button; one dialog is shared by every figure on the page. */
+  .visual-lightbox { border: 0; padding: 1.5rem 1.5rem 1.25rem; border-radius: 16px; background: var(--bg); color: var(--text); max-width: 94vw; max-height: 94vh; overflow: auto; text-align: center; }
+  .visual-lightbox::backdrop { background: rgba(10, 10, 11, 0.7); }
+  .visual-lightbox .visual-lightbox-body svg { width: min(88vw, 1400px); max-width: none; height: auto; }
+  .visual-lightbox figcaption { font-size: 0.95rem; color: var(--text-muted); margin-top: 0.75rem; }
+  .visual-lightbox .visual-lightbox-close { position: absolute; top: 0.75rem; right: 0.75rem; }
 </style>
 
 <script>

@@ -34,8 +34,8 @@ export interface DiagramEdge {
 export interface Point { x: number; y: number }
 export interface NodeSize { w: number; h: number; lines: string[] }
 
-export const LINE_H = 16;
-export const SUB_H = 12;
+export const LINE_H = 18;
+export const SUB_H = 14;
 
 /** Snap up to the grid (default 8) so every node dimension is divisible by 4. */
 export const snapUp = (v: number, g = 8) => Math.ceil(v / g) * g;
@@ -126,7 +126,7 @@ export function drawEdgeLabel(parent: AnySel, at: Point, text: string, theme: Vi
   const C = theme.colors;
   const t = text.toUpperCase();
   const w = snapUp(theme.measure(t, theme.fonts.edge) * 1.12 + 8, 4);
-  const h = 12, gap = 6;
+  const h = 14, gap = 6;
   const g = parent.append("g").attr("class", "edge-label");
   const x = place === "above" ? at.x - w / 2 : at.x + gap;
   const y = place === "above" ? at.y - gap - h : at.y - h / 2;
@@ -149,7 +149,8 @@ export function newSvg(container: HTMLElement, w: number, h: number, title?: str
   container.querySelectorAll("svg").forEach((s) => s.remove());
   const svg = d3.select(container).append("svg")
     .attr("viewBox", `0 0 ${w} ${h}`).attr("width", w).attr("height", h)
-    .attr("role", "img").style("display", "inline-block");
+    .attr("role", "img").style("display", "inline-block")
+    .style("width", "100%").style("max-width", `${w}px`).style("height", "auto");
   if (title) svg.attr("aria-label", title);
   return svg;
 }

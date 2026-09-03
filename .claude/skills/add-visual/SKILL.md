@@ -11,14 +11,14 @@ Every figure is custom D3 (no Mermaid), rendered client-side by `web/src/lib/viz
 
 | Showing | `kind` | Spec |
 |---|---|---|
-| A chain: this, then this, then this | `flow` | `nodes`, `links`; `orientation` `LR` or `TD` |
+| A chain: this, then this, then this | `flow` | `nodes`, `links`; `orientation` `TD` (default) or `LR` |
 | Decision logic, branches, a loop that exits | `flowchart` | `nodes`, `links`; `orientation` |
 | A reinforcing cycle where the last step feeds the first, optionally writing to a shared centre | `loop` | `stations` (3 to 8, clockwise from the top), optional `hub`, `spokes` `in`/`out`/`none` |
 | Defence in depth: layers that each shed a defect class | `funnel` | `entry`, `layers`, `exit` |
 
 One-offs get inline SVG in the MDX. App-like interactives are React islands in the chapter's `_components/` folder, wrapped in `Interactive`.
 
-Before drawing, ask whether a sentence or a table would do the job. Above nine nodes it is two figures.
+Before drawing, ask whether a sentence or a table would do the job. The budget is enforced at build time by `src/lib/viz/budget.ts`: 2 to 9 nodes, at most 2 focal nodes (1 in a loop), 1 accent link, labels of 28 characters per line, edge labels of 14. Over budget, `astro build` fails and names the figure.
 
 ## Grammar (shared by every form, in `primitives.ts`)
 
@@ -26,14 +26,15 @@ Before drawing, ask whether a sentence or a table would do the job. Above nine n
 - **Colour is editorial.** At most one or two nodes per figure set `focal: true` and take the accent tint and stroke. At most one link sets `accent: true` (the happy path). If you want to accent four things you have not decided what the figure is about.
 - **Labels.** Node names in sans; `sub` (ports, states, qualifiers) in mono. Link `label` is short, drawn uppercase mono on an opaque mask with a 6px gap off the stroke, never on it.
 - **Connectors.** Orthogonal with rounded elbows (r = 8), drawn before nodes, a 12px gap before every arrowhead, one attach point per connector when several share a box edge, back-edges in a lane outside the nodes. The ring arcs and hub spokes of `loop` are the sanctioned exceptions. `dashed: true` for optional or return relationships.
-- **Grid.** Node dimensions are multiples of 8, positions of 4, gaps 24 to 64.
+- **Grid and size.** Node dimensions are multiples of 8, positions of 4, gaps 24 to 64. Names are 14px, sublabels 11px mono, edge labels 10px mono: readable at natural size, which is the largest the figure is drawn. A figure scales down with the column and never up; the expand button opens it in a lightbox.
+- **Build vertically.** `orientation` defaults to `TD`. A figure wider than the column shrinks until it fits, a tall one just takes more page. Use `LR` only for a short chain.
 
 ## How
 
 ```mdx
 import Visual from "../../../components/Visual.astro";
 
-<Visual kind="flowchart" orientation="LR" caption="One line under the figure; it also becomes the accessible name."
+<Visual kind="flowchart" caption="One line under the figure; it also becomes the accessible name."
   spec={{
     nodes: [
       { id: "check", label: "Write the check", sub: "before any code", focal: true },

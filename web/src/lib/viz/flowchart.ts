@@ -17,7 +17,7 @@ type Side = "front" | "back" | "under";
  * points when several connectors share an edge, and back-edges routed in a lane below
  * (LR) or beside (TD) the nodes so they never pass behind a box.
  */
-export function renderFlowchart(container: HTMLElement, spec: FlowchartSpec, { orientation = "LR", theme, title }: FlowchartOptions): void {
+export function renderFlowchart(container: HTMLElement, spec: FlowchartSpec, { orientation = "TD", theme, title }: FlowchartOptions): void {
   const H = orientation === "LR";
   const C = theme.colors;
   const { gap: GAP, spacing: RANKSEP, margin: M } = theme.space;
