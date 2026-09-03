@@ -122,10 +122,10 @@ th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(
 img, svg { max-width: 100%; }
 button { border-radius: 999px; }
 li::marker { color: var(--accent); }
-.prose ul, .prose ol { padding-left: 1.9rem; }
-.prose li { padding-left: 0.4rem; }
-.prose li + li { margin-top: 0.9rem; }
-.prose li > ul, .prose li > ol { margin-top: 0.9rem; }
+.prose :where(ul, ol) { padding-left: 1.9rem; }
+.prose :where(li) { padding-left: 0.4rem; }
+.prose :where(li + li) { margin-top: 0.9rem; }
+.prose :where(li > ul, li > ol) { margin-top: 0.9rem; }
 
 /* Pill buttons shared by every interactive block. */
 .btn { font: inherit; font-size: 0.9rem; padding: 0.45rem 1.1rem; border: 1px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; white-space: nowrap; }
@@ -147,6 +147,10 @@ li::marker { color: var(--accent); }
 .ix-desc { margin: 0.65rem 0 0; color: var(--text-muted); }
 .ix-action { display: flex; align-items: center; align-self: center; gap: 0.5rem; }
 .ix-body:empty { display: none; }
+/* Interactive blocks own their typography; the prose rhythm stops at their edge. */
+.ix :where(p, ul, ol) { margin: 0; }
+.ix :where(ul, ol) { padding: 0; }
+.ix :where(li) { padding: 0; margin: 0; }
 @media (max-width: 600px) { .ix-head { grid-template-columns: 1fr; } .ix-lead { padding-right: 0; } }
 
 /* Heading deep links: an empty anchor appended by rehypeHeadingAnchors, shown on hover or focus. */
@@ -158,7 +162,8 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus-visible { opacity: 1; }
 .fig-ref { white-space: nowrap; }
 html[data-render="deck"] .anchor { display: none; }
 .prose { max-width: var(--measure); }
-.prose p, .prose ul, .prose ol { margin: 0 0 1.75rem; }
+/* :where() keeps these at class-level specificity so a component's own rules win on a tie. */
+.prose :where(p, ul, ol) { margin: 0 0 1.75rem; }
 .muted { color: var(--text-muted); }
 .faint { color: var(--text-faint); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
