@@ -144,13 +144,14 @@ li::marker { color: var(--accent); }
 .ix-lead { padding-right: 2rem; }
 .ix-title { font-size: 1.05rem; font-weight: 600; margin: 0; line-height: 1.3; }
 .ix-meta { color: var(--text-faint); font-weight: 400; }
-.ix-desc { margin: 0.65rem 0 0; color: var(--text-muted); }
 .ix-action { display: flex; align-items: center; align-self: center; gap: 0.5rem; }
 .ix-body:empty { display: none; }
-/* Interactive blocks own their typography; the prose rhythm stops at their edge. */
-.ix :where(p, ul, ol) { margin: 0; }
-.ix :where(ul, ol) { padding: 0; }
-.ix :where(li) { padding: 0; margin: 0; }
+/* Interactive blocks own their typography; the prose rhythm stops at their edge.
+   Two classes deep so these outrank the .prose rules whatever their order in the file. */
+.prose .ix :where(p, ul, ol), .ix :where(p, ul, ol) { margin: 0; }
+.prose .ix :where(ul, ol), .ix :where(ul, ol) { padding: 0; }
+.prose .ix :where(li), .ix :where(li) { padding: 0; margin: 0; }
+.prose .ix .ix-desc, .ix .ix-desc { margin: 0.65rem 0 0; color: var(--text-muted); }
 @media (max-width: 600px) { .ix-head { grid-template-columns: 1fr; } .ix-lead { padding-right: 0; } }
 
 /* Heading deep links: an empty anchor appended by rehypeHeadingAnchors, shown on hover or focus. */
