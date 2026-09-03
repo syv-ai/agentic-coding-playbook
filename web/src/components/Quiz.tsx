@@ -26,13 +26,20 @@ type View = "landing" | "questions" | "result";
 /** Landing, then one question at a time, then the result. Answers persist in the browser between visits. */
 export default function Quiz({ id, questions, title = "Test your understanding", description }: Props) {
   const key = `quiz:${id}`;
-  const [answers, setAnswers] = useState<Answers>(() => readJSON<Answers>(key, {}));
+  // Stored answers are read after mount, not during the first render, so the server-rendered
+  // HTML and the first client render agree (otherwise React reports a hydration mismatch).
+  const [answers, setAnswers] = useState<Answers>({});
+  const [loaded, setLoaded] = useState(false);
   const [view, setView] = useState<View>("landing");
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    writeJSON(key, answers);
-  }, [key, answers]);
+    setAnswers(readJSON<Answers>(key, {}));
+    setLoaded(true);
+  }, [key]);
+  useEffect(() => {
+    if (loaded) writeJSON(key, answers);
+  }, [key, answers, loaded]);
 
   const total = questions.length;
   const answered = questions.filter((_, i) => answers[i] !== undefined).length;

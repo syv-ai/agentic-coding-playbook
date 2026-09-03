@@ -9,12 +9,17 @@ export default function AutoHeight({ children }: { children?: ReactNode }) {
   const inner = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<number | undefined>(undefined);
 
+  // Measure after every render, so a state change in the children always updates the height even
+  // where ResizeObserver is silent (background tabs). The observer covers changes React does not
+  // cause: fonts loading, the window resizing, a nested figure redrawing.
+  useLayoutEffect(() => {
+    const el = inner.current;
+    if (el) setHeight(el.getBoundingClientRect().height);
+  });
   useLayoutEffect(() => {
     const el = inner.current;
     if (!el || typeof ResizeObserver === "undefined") return;
-    const measure = () => setHeight(el.getBoundingClientRect().height);
-    measure();
-    const ro = new ResizeObserver(measure);
+    const ro = new ResizeObserver(() => setHeight(el.getBoundingClientRect().height));
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
