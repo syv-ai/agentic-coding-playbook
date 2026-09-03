@@ -101,6 +101,9 @@
 
 * { box-sizing: border-box; }
 html { font-family: var(--font-sans); background: var(--bg); color: var(--text); line-height: 1.6; }
+/* In-page links slide rather than jump, and land below the sticky header. */
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+[id] { scroll-margin-top: calc(var(--bar-h) + 1.5rem); }
 body { margin: 0; }
 a { color: var(--link); }
 a:hover { color: var(--accent); }

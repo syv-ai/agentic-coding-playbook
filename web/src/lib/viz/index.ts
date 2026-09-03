@@ -55,6 +55,19 @@ export function mountVisuals(): void {
   figures.forEach(draw);
   figures.forEach((f) => f.querySelector("[data-expand]")?.addEventListener("click", () => expand(f)));
 
+  // "Fig. n" links bring the whole figure into view, centred, and slide there unless motion is reduced.
+  document.addEventListener("click", (e) => {
+    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>("a.fig-ref");
+    if (!link) return;
+    const target = document.getElementById(link.hash.slice(1));
+    if (!target) return;
+    e.preventDefault();
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.classList.add("is-visible");
+    target.scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
+    history.pushState(null, "", link.hash);
+  });
+
   const redraw = () => figures.forEach(draw);
   new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
