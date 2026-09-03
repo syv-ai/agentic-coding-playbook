@@ -3,7 +3,7 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "react",
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals", "node"]
   },
   "include": [".astro/types.d.ts", "src/**/*", "scripts/**/*"],
   "exclude": ["dist"]
