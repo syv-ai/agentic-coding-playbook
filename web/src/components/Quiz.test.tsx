@@ -61,6 +61,17 @@ describe("Quiz", () => {
     expect(screen.getByText("2 / 2")).toBeTruthy();
   });
 
+  it("replaces the title with the question counter while answering and numbers the options", () => {
+    render(<Quiz id="t" questions={two} title="Quick check" />);
+    fireEvent.click(screen.getByText("Start"));
+    expect(screen.queryByText("Quick check")).toBeNull();
+    expect(screen.getByText("Question 1 of 2")).toBeTruthy();
+    const marks = Array.from(document.querySelectorAll(".quiz-n")).map((n) => n.textContent);
+    expect(marks).toEqual(["1", "2"]);
+    fireEvent.click(screen.getByText("After the agent says it is done"));
+    expect(Array.from(document.querySelectorAll(".quiz-n")).map((n) => n.textContent)).toEqual(["✕", "2"]);
+  });
+
   it("shows the question count next to the title", () => {
     render(<Quiz id="t" questions={two} title="Quick check" />);
     expect(screen.getByText("Quick check").textContent).toBe("Quick check · 2 questions");

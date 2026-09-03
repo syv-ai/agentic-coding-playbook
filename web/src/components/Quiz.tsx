@@ -58,7 +58,9 @@ export default function Quiz({ id, questions, title = "Test your understanding",
     setView("questions");
   };
 
-  const meta = view === "questions" ? `question ${step + 1} of ${total}` : `${total} question${total === 1 ? "" : "s"}`;
+  // While answering, the header becomes the question counter; the block title returns on the result view.
+  const headTitle = view === "questions" ? `Question ${step + 1} of ${total}` : title;
+  const meta = view === "questions" ? undefined : `${total} question${total === 1 ? "" : "s"}`;
   const action =
     view === "landing" ? (
       <button type="button" className="btn btn-primary" onClick={start}>{complete ? "Try again" : answered ? "Continue" : "Start"}</button>
@@ -73,7 +75,7 @@ export default function Quiz({ id, questions, title = "Test your understanding",
     );
 
   return (
-    <Interactive className="quiz" title={title} meta={meta} description={view === "landing" ? description : undefined} action={action}>
+    <Interactive className="quiz" title={headTitle} meta={meta} description={view === "landing" ? description : undefined} action={action}>
       {view === "landing" && complete && <p className="quiz-explain">Last result: {score} / {total}.</p>}
 
       {view === "result" && (
@@ -91,9 +93,11 @@ export default function Quiz({ id, questions, title = "Test your understanding",
             <legend>{q.prompt}</legend>
             {q.choices.map((c, ci) => {
               const state = picked === undefined ? "idle" : ci === picked ? (c.correct ? "correct" : "wrong") : c.correct ? "reveal" : "idle";
+              const mark = state === "correct" ? "✓" : state === "wrong" ? "✕" : String(ci + 1);
               return (
                 <button key={ci} type="button" className="quiz-choice" data-state={state} disabled={picked !== undefined} onClick={() => choose(ci)}>
-                  {c.text}
+                  <span className="quiz-n" aria-hidden="true">{mark}</span>
+                  <span className="quiz-text">{c.text}</span>
                 </button>
               );
             })}
@@ -115,14 +119,21 @@ export default function Quiz({ id, questions, title = "Test your understanding",
         .quiz-progress i[data-state="correct"] { background: var(--good); }
         .quiz-progress i[data-state="wrong"] { background: var(--bad); }
         .quiz-q { border: 0; padding: 0; margin: 0; }
-        .quiz-q legend { font-weight: 600; margin-bottom: 0.6rem; padding: 0; }
-        .quiz-choice { display: block; width: 100%; text-align: left; margin: 0.35rem 0; padding: 0.55rem 1rem; border: 1px solid var(--border); background: var(--bg); color: var(--text); font: inherit; cursor: pointer; }
-        .quiz-choice:hover:not(:disabled) { border-color: var(--accent); }
+        .quiz-q legend { font-weight: 600; font-size: 1.05rem; margin-bottom: 1.1rem; padding: 0; }
+        /* Options are a numbered list, not buttons in boxes: the number carries the state. */
+        .quiz-choice { display: grid; grid-template-columns: 1.75rem 1fr; align-items: baseline; gap: 0.9rem; width: 100%; text-align: left; margin: 0; padding: 0.65rem 0; border: 0; border-radius: 0; background: none; color: var(--text); font: inherit; cursor: pointer; }
+        .quiz-choice + .quiz-choice { margin-top: 0.35rem; }
+        .quiz-n { display: inline-grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 999px; border: 1px solid var(--border); font-size: 0.85rem; color: var(--text-muted); transition: background 0.2s, border-color 0.2s, color 0.2s; }
+        .quiz-choice:hover:not(:disabled) .quiz-n { border-color: var(--accent); color: var(--accent); }
+        .quiz-choice:hover:not(:disabled) .quiz-text { color: var(--accent); }
         .quiz-choice:disabled { cursor: default; }
-        .quiz-choice[data-state="correct"] { background: var(--good); color: var(--bg); border-color: var(--good); }
-        .quiz-choice[data-state="wrong"] { background: var(--bad); color: var(--bg); border-color: var(--bad); }
-        .quiz-choice[data-state="reveal"] { border-color: var(--good); color: var(--good); }
-        .quiz-after { margin-top: 0.9rem; }
+        .quiz-choice[data-state="correct"] .quiz-n { background: var(--good); border-color: var(--good); color: var(--bg); }
+        .quiz-choice[data-state="wrong"] .quiz-n { background: var(--bad); border-color: var(--bad); color: var(--bg); }
+        .quiz-choice[data-state="reveal"] .quiz-n { border-color: var(--good); color: var(--good); }
+        .quiz-choice[data-state="wrong"] .quiz-text { color: var(--text-muted); text-decoration: line-through; text-decoration-color: var(--bad); }
+        .quiz-choice[data-state="correct"] .quiz-text, .quiz-choice[data-state="reveal"] .quiz-text { color: var(--good); }
+        .quiz-choice:disabled[data-state="idle"] .quiz-text { color: var(--text-muted); }
+        .quiz-after { margin-top: 1.25rem; }
         .quiz-explain { margin: 0 0 0.9rem; color: var(--text-muted); }
         .quiz-score { font-size: 1.6rem; font-weight: 600; margin: 0 0 0.25rem; }
       `}</style>
