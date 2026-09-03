@@ -3,6 +3,7 @@ import mdx from "@astrojs/mdx";
 import react from "@astrojs/react";
 import { rehypeHeadingIds } from "@astrojs/markdown-remark";
 import { rehypeHeadingAnchors } from "./src/lib/rehype-heading-anchors.ts";
+import { rehypeFigures } from "./src/lib/rehype-figures.ts";
 import { rehypeSlides } from "./src/lib/rehype-slides.ts";
 
 export default defineConfig({
@@ -12,7 +13,7 @@ export default defineConfig({
   output: "static",
   integrations: [mdx(), react()],
   markdown: {
-    // Order matters: ids first, then anchors that use them, then sectioning (which nests the headings).
-    rehypePlugins: [rehypeHeadingIds, rehypeHeadingAnchors, rehypeSlides],
+    // Order matters: ids first, then anchors that use them, figure numbers, then sectioning (which nests everything).
+    rehypePlugins: [rehypeHeadingIds, rehypeHeadingAnchors, rehypeFigures, rehypeSlides],
   },
 });

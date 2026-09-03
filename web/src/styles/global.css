@@ -148,6 +148,7 @@ h2, h3 { position: relative; }
 .anchor::before { content: "#"; }
 h2:hover .anchor, h3:hover .anchor, .anchor:focus-visible { opacity: 1; }
 .anchor:hover { color: var(--accent); }
+.fig-ref { white-space: nowrap; }
 html[data-render="deck"] .anchor { display: none; }
 .prose { max-width: var(--measure); }
 .prose p, .prose ul, .prose ol { margin: 0 0 1rem; }

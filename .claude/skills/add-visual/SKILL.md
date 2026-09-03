@@ -36,7 +36,7 @@ Before drawing, ask whether a sentence or a table would do the job. The budget i
 ```mdx
 import Visual from "../../../components/Visual.astro";
 
-<Visual kind="flowchart" caption="One line under the figure; it also becomes the accessible name."
+<Visual id="loop" kind="flowchart" caption="One line under the figure; it also becomes the accessible name."
   spec={{
     nodes: [
       { id: "check", label: "Write the check", sub: "before any code", focal: true },
@@ -48,6 +48,8 @@ import Visual from "../../../components/Visual.astro";
 ```
 
 The spec is serialised into `data-spec`; `mountVisuals()` renders every figure on load, redraws when the theme changes, and reveals on scroll.
+
+Captions are numbered "Fig. n" in document order at build time (`rehype-figures.ts`). Give every figure an `id` and refer to it in prose with `<Fig id="loop" />`, which becomes a "Fig. n" link; forward references work and an unknown id fails the build. Write the caption so it reads after the number: what the figure shows, one sentence.
 
 ## Motion
 

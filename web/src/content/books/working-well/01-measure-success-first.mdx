@@ -25,6 +25,7 @@ Open with the loop drawing, not the claim. Ask the room what stops the loop in t
 ## The loop only optimises for what can stop it
 
 <Visual
+  id="loop"
   kind="flowchart"
   caption="The loop with a check in it. The only exit is the check passing; remove the check and the only exit is the agent deciding it is finished."
   spec={{
@@ -45,7 +46,7 @@ Open with the loop drawing, not the claim. Ask the room what stops the loop in t
   }}
 />
 
-A check is anything that can fail on its own, without a person reading: a test, a type error, a lint rule, a script that hits the endpoint and compares the body, a build. What it is not is a description of what good looks like. Descriptions steer the agent's first attempt. Checks steer every attempt after that.
+A check is anything that can fail on its own, without a person reading: a test, a type error, a lint rule, a script that hits the endpoint and compares the body, a build. In <Fig id="loop" /> it is the one diamond, and the only way out. What it is not is a description of what good looks like. Descriptions steer the agent's first attempt. Checks steer every attempt after that.
 
 ## Why it holds
 

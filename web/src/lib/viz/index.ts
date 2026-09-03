@@ -41,7 +41,7 @@ function expand(fig: HTMLElement): void {
   const dialog = lightbox();
   const clone = svg.cloneNode(true) as SVGSVGElement;
   dialog.querySelector(".visual-lightbox-body")!.replaceChildren(clone);
-  dialog.querySelector("figcaption")!.textContent = fig.querySelector("figcaption")?.textContent ?? "";
+  dialog.querySelector("figcaption")!.innerHTML = fig.querySelector("figcaption")?.innerHTML ?? "";
   dialog.showModal();
 }
 
