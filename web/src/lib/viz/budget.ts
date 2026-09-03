@@ -22,6 +22,15 @@ function checkNodes(nodes: Rec[], problems: string[], { max = MAX_NODES, maxFoca
     else String(n.label).split("\n").forEach((line) => { if (line.length > MAX_LABEL) problems.push(`node "${n.id}" label line "${line}" is over ${MAX_LABEL} characters; shorten it or break the line`); });
     if (n.kind !== undefined && !NODE_KINDS.has(String(n.kind))) problems.push(`node "${n.id}" has unknown kind "${n.kind}"`);
   });
+  const placed = nodes.filter((n) => n.at !== undefined);
+  if (placed.length && placed.length !== nodes.length) problems.push(`${placed.length} of ${nodes.length} ${name} have "at"; place every node on the grid or none`);
+  const cells = new Set<string>();
+  placed.forEach((n) => {
+    const at = n.at as unknown;
+    if (!Array.isArray(at) || at.length !== 2 || !at.every((v) => Number.isInteger(v) && v >= 0)) problems.push(`node "${n.id}" at must be [column, row] with whole numbers from 0`);
+    else if (cells.has(at.join(","))) problems.push(`two nodes share the cell [${at.join(", ")}]`);
+    else cells.add(at.join(","));
+  });
   const focal = nodes.filter((n) => n.focal).length;
   if (focal > maxFocal) problems.push(`${focal} focal ${name}; the accent goes on at most ${maxFocal}. Decide what the figure is about.`);
   return ids;

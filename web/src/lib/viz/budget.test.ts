@@ -35,6 +35,14 @@ describe("validateSpec", () => {
     expect(out).toMatch(/over 14 characters/);
   });
 
+  it("checks grid placement: all or none, whole numbers, one node per cell", () => {
+    const nodes = [{ id: "a", label: "A", at: [0, 0] }, { id: "b", label: "B", at: [0, 0] }];
+    expect(validateSpec("flowchart", { nodes, links: [] }).join("\n")).toMatch(/share the cell \[0, 0\]/);
+    expect(validateSpec("flowchart", { nodes: [{ id: "a", label: "A", at: [0, 0] }, { id: "b", label: "B" }], links: [] }).join("\n")).toMatch(/1 of 2 nodes have "at"/);
+    expect(validateSpec("flowchart", { nodes: [{ id: "a", label: "A", at: [0.5, 0] }, { id: "b", label: "B", at: [1, 0] }], links: [] }).join("\n")).toMatch(/whole numbers/);
+    expect(validateSpec("flowchart", { nodes: [{ id: "a", label: "A", at: [0, 0] }, { id: "b", label: "B", at: [1, 0] }], links: [{ source: "a", target: "b" }] })).toEqual([]);
+  });
+
   it("applies loop and funnel budgets", () => {
     const stations = (n: number) => Array.from({ length: n }, (_, i) => ({ id: `s${i}`, label: `S${i}` }));
     expect(validateSpec("loop", { stations: stations(2) })[0]).toMatch(/2 stations/);

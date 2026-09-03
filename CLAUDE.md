@@ -32,5 +32,5 @@ Interactives
 
 Figures
 - Only `<Visual kind=...>`: `flow`, `flowchart`, `loop`, `funnel`. Shape carries type. At most two focal nodes, one accent link, nine nodes.
-- Build into a portrait rectangle. `TD` is the default; ranks step sideways as they step down so the figure fills roughly a 3:4 shape, never a single narrow column and never wider than the reading column. Figure text is 14px or larger at natural size. Figures scale down, never up, and expand to a lightbox on demand.
+- Layout is editorial: beyond a plain chain, every node gets `at: [column, row]` and the figure is composed to fill a portrait rectangle, roughly 3:4, with no empty corners. The router draws the connectors. Automatic ranking is for chains only, and even then steps sideways rather than stacking one column. Figure text is 14px or larger at natural size. Figures scale down, never up, and expand to a lightbox on demand.
 - Motion: nodes light up one after another, slowly (about 1.6s each, a 2.4s rest), then restart; connectors never move; no hover effects; reduced motion gets a static figure.

@@ -84,6 +84,44 @@ describe("renderFlowchart", () => {
     el.querySelectorAll(".edge").forEach((e) => expect(isOrthogonal(e.getAttribute("d")!)).toBe(true));
   });
 
+  it("places nodes on an editorial grid and routes between cells: straight in a row or column, L through a free cell", () => {
+    const el = document.createElement("div");
+    const at: Record<string, [number, number]> = { check: [0, 0], act: [0, 1], run: [1, 1], pass: [1, 2], done: [1, 3] };
+    renderFlowchart(el, { ...spec, nodes: spec.nodes.map((n) => ({ ...n, at: at[n.id] })) }, { theme: readTheme() });
+    const pos = Object.fromEntries(Array.from(el.querySelectorAll<SVGGElement>(".node")).map((n, i) => {
+      const [x, y] = /translate\(([-\d.]+),([-\d.]+)\)/.exec(n.getAttribute("transform")!)!.slice(1).map(Number);
+      const sh = n.querySelector(".shape")!;
+      const w = Number(sh.getAttribute("width") ?? 160), h = Number(sh.getAttribute("height") ?? 80);
+      return [spec.nodes[i].id, { cx: x + w / 2, cy: y + h / 2 }];
+    }));
+    expect(pos.check.cx).toBe(pos.act.cx);
+    expect(pos.act.cy).toBe(pos.run.cy);
+    expect(pos.run.cx).toBe(pos.pass.cx);
+    expect(pos.pass.cx).toBe(pos.done.cx);
+    const ds = Array.from(el.querySelectorAll(".edge")).map((e) => e.getAttribute("d")!);
+    ds.forEach((d) => expect(isOrthogonal(d)).toBe(true));
+    expect(ds[0]).toMatch(/^M[-\d.]+,[-\d.]+ L[-\d.]+,[-\d.]+$/); // check → act: one vertical segment
+    expect(ds[1]).toMatch(/^M[-\d.]+,[-\d.]+ L[-\d.]+,[-\d.]+$/); // act → run: one horizontal segment
+    expect((ds[4].match(/A\d+,\d+/g) ?? []).length).toBe(1); // pass → act: one L through the empty cell
+    const svg = el.querySelector("svg")!;
+    const w = Number(svg.getAttribute("width")), h = Number(svg.getAttribute("height"));
+    expect(w / h).toBeGreaterThan(0.6);
+    expect(w / h).toBeLessThan(1.1);
+    const labels = Array.from(el.querySelectorAll(".edge-label rect")).map((r) => Number(r.getAttribute("x")) + Number(r.getAttribute("width")));
+    labels.forEach((right) => expect(right).toBeLessThanOrEqual(w));
+  });
+
+  it("falls back to a Z route through the row gap when the L path is blocked", () => {
+    const el = document.createElement("div");
+    renderFlowchart(el, {
+      nodes: [{ id: "a", label: "A", at: [0, 0] }, { id: "b", label: "B", at: [1, 0] }, { id: "c", label: "C", at: [1, 1] }],
+      links: [{ source: "a", target: "c" }],
+    }, { theme: readTheme() });
+    const d = el.querySelector(".edge")!.getAttribute("d")!;
+    expect(isOrthogonal(d)).toBe(true);
+    expect((d.match(/A\d+,\d+/g) ?? []).length).toBe(2); // two elbows; the short final leg shrinks its radius
+  });
+
   it("pulses nodes only, in spec order", () => {
     const el = document.createElement("div");
     renderFlowchart(el, spec, { orientation: "TD", theme: readTheme() });
