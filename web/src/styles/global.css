@@ -21,7 +21,7 @@
 
   /* Visual (D3) tokens: read by src/lib/viz/theme.ts */
   --viz-bg: var(--bg);
-  --viz-fill: #ffffff;
+  --viz-fill: var(--viz-bg);
   --viz-border: #1a1a1e;
   --viz-text: #1a1a1e;
   --viz-sub: #5c5c66;
@@ -54,7 +54,7 @@
     --warn: #fbbf24;
     --bad: #f87171;
     --code-bg: #141417;
-    --viz-fill: #000000;
+    --viz-fill: var(--viz-bg);
     --viz-border: #ffffff;
     --viz-text: #ffffff;
     --viz-sub: #a1a1aa;
@@ -85,7 +85,7 @@
   --warn: #fbbf24;
   --bad: #f87171;
   --code-bg: #141417;
-  --viz-fill: #000000;
+  --viz-fill: var(--viz-bg);
   --viz-border: #ffffff;
   --viz-text: #ffffff;
   --viz-sub: #a1a1aa;

@@ -54,6 +54,20 @@ describe("renderFlow", () => {
     el.querySelectorAll(".edge").forEach((e) => expect(e.getAttribute("d")).toMatch(/A8,8/));
   });
 
+  it("outlines only nodes in the canvas colour, and sets canvas text in the standard text colour", () => {
+    const el = document.createElement("div");
+    const theme = readTheme();
+    renderFlow(el, spec, { orientation: "LR", theme });
+    const shapes = Array.from(el.querySelectorAll<SVGElement>(".node .shape"));
+    const start = shapes[0], focal = shapes[1], step = shapes[2];
+    expect(start.getAttribute("stroke")).toBe("none"); // soft fill, no border
+    expect(focal.getAttribute("stroke")).toBe("none"); // accent tint, no border
+    expect(step.getAttribute("fill")).toBe(theme.colors.fill);
+    expect(step.getAttribute("stroke")).toBe(theme.colors.border);
+    expect(el.querySelector(".edge-label text")!.getAttribute("fill")).toBe(theme.colors.text);
+    expect(el.querySelector(".node text.sub")!.getAttribute("fill")).toBe(theme.colors.sub);
+  });
+
   it("is idempotent: re-rendering replaces the svg", () => {
     const el = document.createElement("div");
     renderFlow(el, spec, { orientation: "TD", theme: readTheme() });
@@ -65,7 +79,7 @@ describe("renderFlow", () => {
     const el = document.createElement("div");
     renderFlow(el, spec, { orientation: "LR", theme: readTheme() });
     const anims = Array.from(el.querySelectorAll("animate"));
-    expect(el.querySelectorAll(".node > .shape > animate").length).toBe(6); // fill + stroke per node
+    expect(el.querySelectorAll(".node > .shape > animate").length).toBe(4); // fill everywhere, stroke only on the outlined node
     expect(el.querySelectorAll(".edge > animate").length).toBe(0);
     expect(new Set(anims.map((a) => a.getAttribute("dur"))).size).toBe(1);
     expect(anims.every((a) => a.getAttribute("repeatCount") === "indefinite")).toBe(true);

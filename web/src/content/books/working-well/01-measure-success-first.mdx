@@ -30,10 +30,10 @@ Open with the loop drawing, not the claim. Ask the room what stops the loop in t
   spec={{
     nodes: [
       { id: "check", label: "Write the check", sub: "before any code", focal: true, at: [0, 0] },
-      { id: "act", label: "Agent acts", sub: "one round of work", at: [0, 1] },
+      { id: "act", label: "Agent acts", at: [0, 1] },
       { id: "run", label: "Run the check", sub: "the agent runs it", at: [1, 1] },
       { id: "pass", label: "Passes?", kind: "decision", at: [1, 2] },
-      { id: "done", label: "Done", sub: "a fact, not a claim", kind: "end", at: [1, 3] },
+      { id: "done", label: "Done", kind: "end", at: [1, 3] },
     ],
     links: [
       { source: "check", target: "act" },

@@ -60,7 +60,7 @@ export function renderFlowchart(container: HTMLElement, spec: FlowchartSpec, { o
   routes.forEach(({ l, points }) => {
     if (!l.label) return;
     const { at, place } = labelSpot(points);
-    drawEdgeLabel(labels, at, l.label, theme, place, l.accent ? C.accent : undefined);
+    drawEdgeLabel(labels, at, l.label, theme, place);
   });
 
   const groups = root.append("g").selectAll("g").data(nodes).join("g")

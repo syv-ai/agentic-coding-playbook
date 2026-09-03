@@ -24,7 +24,8 @@ Chrome
 - Header content aligns with the page content column. The book switcher is a borderless pill dropdown, centred. Sidebars collapse; their toggles appear on hover.
 - Buttons are pills. List items have space between them and accent-coloured markers. Subheadings carry a `#` deep link.
 - No left-border callouts, no raised card backgrounds, no shadows. Emphasis is a 6% tint of the meaning colour, or typography. Quotes: accent opening mark, the work title is the link, never a bare URL.
-- Colour: text keeps at least 4.5:1 contrast on its background in both themes. No same-hue text on its own fill. A fill that differs from the background is bounded by the colour delta, not a border. No dark grey on black.
+- Colour: text keeps at least 4.5:1 contrast on its background in both themes. No same-hue text on its own fill. A shape is filled or outlined, never both: a fill is bounded by its colour delta, a border belongs only to a shape in the canvas colour. No dark grey on black.
+- Text is the standard text colour everywhere, in figures included. The only exceptions are node subtitles, which are muted and used sparingly, and text on a coloured fill, which takes that fill's text token.
 
 Interactives
 - Every quiz and demo wraps in `Interactive` (`src/components/Interactive.tsx`): title (· meta) and description on the left, the primary action on the right, body below. Nothing shows before the reader starts except that header.

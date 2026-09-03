@@ -38,7 +38,7 @@ const PAIRS: [string, string, number][] = [
   ["--accent-text", "--accent", 4.5], ["--text", "--bg-raised", 4.5],
   ["--viz-text", "--viz-fill", 4.5], ["--viz-sub", "--viz-fill", 4.5], ["--viz-text", "--viz-fill-soft", 4.5], ["--viz-sub", "--viz-fill-soft", 4.5],
   ["--viz-text", "--viz-accent-tint", 4.5], ["--viz-sub", "--viz-bg", 4.5], ["--viz-accent-text", "--viz-accent", 4.5],
-  ["--viz-defect-text", "--viz-defect", 4.5], ["--viz-bg", "--viz-text", 4.5],
+  ["--viz-defect-text", "--viz-defect", 4.5], ["--viz-bg", "--viz-text", 4.5], ["--viz-text", "--viz-bg", 4.5],
 ];
 
 describe.each([["light", light], ["dark", dark]] as const)("%s theme contrast", (_name, tokens) => {

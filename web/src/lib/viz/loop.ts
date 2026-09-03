@@ -91,7 +91,7 @@ export function renderLoop(container: HTMLElement, spec: LoopSpec, { theme, titl
     hubG = svg.append("g").attr("class", "hub node").attr("transform", `translate(${cx - hubSize.w / 2},${cy - hubSize.h / 2})`);
     const shape = drawNode(hubG, { id: "hub", label: spec.hub.label, sub: spec.hub.sub, kind: "store" }, hubSize, theme);
     // The hub is the one inverted box: ink fill, paper text.
-    shape.attr("fill", C.text).attr("stroke", C.text);
+    shape.attr("fill", C.text).attr("stroke", "none");
     hubG.selectAll("text").attr("fill", C.bg);
   }
 

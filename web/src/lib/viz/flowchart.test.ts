@@ -125,7 +125,7 @@ describe("renderFlowchart", () => {
   it("pulses nodes only, in spec order", () => {
     const el = document.createElement("div");
     renderFlowchart(el, spec, { orientation: "TD", theme: readTheme() });
-    expect(el.querySelectorAll(".node > .shape > animate").length).toBe(10);
+    expect(el.querySelectorAll(".node > .shape > animate").length).toBe(8); // 5 fills + 3 strokes (the outlined steps and diamond)
     expect(el.querySelectorAll(".edge > animate").length).toBe(0);
   });
 });

@@ -58,9 +58,11 @@ export function drawNode(g: AnySel, n: DiagramNode, size: NodeSize, theme: VizTh
   const C = theme.colors;
   const kind = n.kind ?? "step";
   const terminal = kind === "start" || kind === "end";
+  // A node is either filled or outlined, never both: fills are bounded by their colour delta alone.
   const fill = n.focal ? C.accentTint : terminal || kind === "store" ? C.fillSoft : C.fill;
-  const stroke = n.focal ? C.accent : terminal ? C.borderSoft : kind === "store" ? C.sub : C.border;
-  const strokeWidth = n.focal ? 1.2 : 1;
+  const outlined = fill === C.fill;
+  const stroke = outlined ? C.border : "none";
+  const strokeWidth = outlined ? 1 : 0;
   const { w, h } = size;
 
   const shape: AnySel = kind === "decision"
@@ -88,7 +90,7 @@ export function pulseNode(g: AnySel, n: DiagramNode, theme: VizTheme, slot: numb
   const C = theme.colors;
   const shape = g.select(".shape");
   theme.pulse(shape, "fill", shape.attr("fill"), C.accent, slot, slots);
-  theme.pulse(shape, "stroke", shape.attr("stroke"), C.accent, slot, slots);
+  if (shape.attr("stroke") !== "none") theme.pulse(shape, "stroke", shape.attr("stroke"), C.accent, slot, slots);
   g.selectAll("text").each(function () {
     const t = d3.select(this);
     theme.pulse(t, "fill", t.attr("fill"), C.accentText, slot, slots);
@@ -119,7 +121,7 @@ export function elbowPath(points: Point[], r = 8): string {
 }
 
 /**
- * Connector label: uppercase mono on an opaque mask, never on the stroke.
+ * Connector label: uppercase mono in the standard text colour on an opaque mask, never on the stroke.
  * `above` centres it 6px above a horizontal segment; `beside` puts it 6px right of a vertical one.
  */
 export interface Box { x: number; y: number; w: number; h: number }
@@ -131,14 +133,14 @@ export function edgeLabelBox(at: Point, text: string, theme: VizTheme, place: "a
   return place === "above" ? { x: at.x - w / 2, y: at.y - gap - h, w, h } : { x: at.x + gap, y: at.y - h / 2, w, h };
 }
 
-export function drawEdgeLabel(parent: AnySel, at: Point, text: string, theme: VizTheme, place: "above" | "beside", color?: string) {
+export function drawEdgeLabel(parent: AnySel, at: Point, text: string, theme: VizTheme, place: "above" | "beside") {
   const C = theme.colors;
   const t = text.toUpperCase();
   const { x, y, w, h } = edgeLabelBox(at, t, theme, place);
   const g = parent.append("g").attr("class", "edge-label");
   g.append("rect").attr("x", x).attr("y", y).attr("width", w).attr("height", h).attr("rx", 2).attr("fill", C.bg);
   g.append("text").attr("x", x + w / 2).attr("y", y + h / 2 + 0.5).attr("text-anchor", "middle").attr("dominant-baseline", "central")
-    .attr("fill", color ?? C.sub).style("font", theme.fonts.edge).style("letter-spacing", "0.12em").text(t);
+    .attr("fill", C.text).style("font", theme.fonts.edge).style("letter-spacing", "0.12em").text(t);
   return g;
 }
 

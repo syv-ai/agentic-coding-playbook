@@ -57,7 +57,7 @@ export function renderFlow(container: HTMLElement, spec: FlowSpec, { orientation
       .attr("marker-start", l.dir === "both" ? (l.accent ? mk.accent : mk.plain) : null);
     if (l.label) {
       const { at, place } = labelSpot(points);
-      drawEdgeLabel(labels, at, l.label, theme, place, l.accent ? C.accent : undefined);
+      drawEdgeLabel(labels, at, l.label, theme, place);
     }
   });
 

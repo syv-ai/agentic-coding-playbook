@@ -53,8 +53,8 @@ describe("renderLoop", () => {
     expect(el.querySelectorAll(".spoke").length).toBe(0);
     expect(el.querySelectorAll(".hub").length).toBe(0);
     renderLoop(el, spec, { theme: readTheme() });
-    expect(el.querySelectorAll(".station > .shape > animate").length).toBe(10);
-    expect(el.querySelectorAll(".hub > .shape > animate").length).toBe(2);
+    expect(el.querySelectorAll(".station > .shape > animate").length).toBe(9); // 5 fills + 4 strokes; the focal station is filled, not outlined
+    expect(el.querySelectorAll(".hub > .shape > animate").length).toBe(1); // filled, so no stroke to pulse
     expect(el.querySelectorAll(".ring > animate, .spoke > animate").length).toBe(0);
   });
 });
