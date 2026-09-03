@@ -71,6 +71,19 @@ describe("renderFlowchart", () => {
     expect(Math.abs(starts[0][1] - starts[1][1])).toBeGreaterThanOrEqual(12);
   });
 
+  it("top-down, ranks step sideways to fill a portrait rectangle within the column", () => {
+    const el = document.createElement("div");
+    renderFlowchart(el, spec, { orientation: "TD", theme: readTheme() });
+    const xs = Array.from(el.querySelectorAll<SVGGElement>(".node")).map((n) => Number(/translate\(([-\d.]+),/.exec(n.getAttribute("transform")!)![1]));
+    expect(xs[1]).toBeGreaterThan(xs[0]);
+    expect(xs[4]).toBeGreaterThan(xs[1]);
+    const svg = el.querySelector("svg")!;
+    const w = Number(svg.getAttribute("width")), h = Number(svg.getAttribute("height"));
+    expect(w / h).toBeGreaterThan(0.5);
+    expect(w).toBeLessThanOrEqual(640 + 2 * 16 + 64); // column plus margins and the return lane
+    el.querySelectorAll(".edge").forEach((e) => expect(isOrthogonal(e.getAttribute("d")!)).toBe(true));
+  });
+
   it("pulses nodes only, in spec order", () => {
     const el = document.createElement("div");
     renderFlowchart(el, spec, { orientation: "TD", theme: readTheme() });

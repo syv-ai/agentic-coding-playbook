@@ -27,7 +27,7 @@ Before drawing, ask whether a sentence or a table would do the job. The budget i
 - **Labels.** Node names in sans; `sub` (ports, states, qualifiers) in mono. Link `label` is short, drawn uppercase mono on an opaque mask with a 6px gap off the stroke, never on it.
 - **Connectors.** Orthogonal with rounded elbows (r = 8), drawn before nodes, a 12px gap before every arrowhead, one attach point per connector when several share a box edge, back-edges in a lane outside the nodes. The ring arcs and hub spokes of `loop` are the sanctioned exceptions. `dashed: true` for optional or return relationships.
 - **Grid and size.** Node dimensions are multiples of 8, positions of 4, gaps 24 to 64. Names are 14px, sublabels 11px mono, edge labels 10px mono: readable at natural size, which is the largest the figure is drawn. A figure scales down with the column and never up; the expand button opens it in a lightbox.
-- **Build vertically.** `orientation` defaults to `TD`. A figure wider than the column shrinks until it fits, a tall one just takes more page. Use `LR` only for a short chain.
+- **Build into a portrait rectangle.** `orientation` defaults to `TD`, and top-down figures step sideways rank by rank (`stagger()` in `primitives.ts`) until they fill about a 3:4 shape, capped at the column width (`theme.space.aspect`, `theme.space.maxWidth`). A single narrow column is as wrong as a figure that overflows. Use `LR` only for a short chain.
 
 ## How
 
@@ -49,7 +49,7 @@ The spec is serialised into `data-spec`; `mountVisuals()` renders every figure o
 
 ## Motion
 
-One rule: **elements light up one after another in reading order, pause, and restart. Connectors never move.** Use `pulseNode(g, node, theme, slot, slots)` for every node of the figure with one shared `slots` count. It is a no-op when `theme.animate` is false (reduced motion). No hover effects, no travelling dots, no blinking.
+One rule: **elements light up one after another in reading order, slowly, pause, and restart. Connectors never move.** The pace is one number in `theme.pulse` (1.6s per element, 2.4s rest); do not speed it up per figure. Use `pulseNode(g, node, theme, slot, slots)` for every node of the figure with one shared `slots` count. It is a no-op when `theme.animate` is false (reduced motion). No hover effects, no travelling dots, no blinking.
 
 ## Adding a form
 

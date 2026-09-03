@@ -9,8 +9,12 @@ export interface VizColors {
 
 export interface VizTheme {
   colors: VizColors;
-  /** gap: arrowhead to target (always visible). spacing: rank gap. margin: canvas padding. All on the 4px grid. */
-  space: { gap: number; spacing: number; margin: number };
+  /**
+   * gap: arrowhead to target (always visible). spacing: rank gap. margin: canvas padding. All on the 4px grid.
+   * aspect: target width/height for a top-down figure; ranks step sideways until the figure fills that portrait shape.
+   * maxWidth: never wider than the reading column at natural size.
+   */
+  space: { gap: number; spacing: number; margin: number; aspect: number; maxWidth: number };
   /** label: node names (sans). sub: technical sublabels (mono). edge: connector labels (mono, tracked, uppercase). */
   fonts: { label: string; sub: string; edge: string; chip: string };
   /** Append a shared arrowhead marker and return its url(#id). */
@@ -59,7 +63,7 @@ export function readTheme(root: HTMLElement = document.documentElement): VizThem
       accentText: v("--viz-accent-text", "#ffffff"),
       accentTint: v("--viz-accent-tint", "#f1e8fd"),
     },
-    space: { gap: 12, spacing: 64, margin: 16 },
+    space: { gap: 12, spacing: 64, margin: 16, aspect: 0.75, maxWidth: 640 },
     fonts: FONTS,
     arrow(svg, id, color) {
       let defs = svg.select<SVGDefsElement>("defs");
@@ -74,11 +78,11 @@ export function readTheme(root: HTMLElement = document.documentElement): VizThem
       ctx.font = font;
       return ctx.measureText(text).width;
     },
-    pulse(el, attr, rest, active, slot, slots, step = 0.7) {
+    pulse(el, attr, rest, active, slot, slots, step = 1.6) {
       if (!animate) return;
-      const pause = 1.2; // seconds of rest at the end of every cycle
+      const pause = 2.4; // seconds of rest at the end of every cycle
       const total = slots * step + pause;
-      const ramp = Math.min(0.15, step * 0.2) / total; // short fade in and out
+      const ramp = Math.min(0.4, step * 0.25) / total; // unhurried fade in and out
       const t0 = (slot * step) / total;
       const t1 = ((slot + 1) * step) / total;
       const times = [0, t0, t0 + ramp, t1 - ramp, t1, 1];

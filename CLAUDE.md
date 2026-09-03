@@ -32,5 +32,5 @@ Interactives
 
 Figures
 - Only `<Visual kind=...>`: `flow`, `flowchart`, `loop`, `funnel`. Shape carries type. At most two focal nodes, one accent link, nine nodes.
-- Build vertically. `TD` is the default because a figure wider than the column scales down and a tall one does not. Figure text is 14px or larger at natural size. Figures scale down, never up, and expand to a lightbox on demand.
-- Motion: nodes light up one after another and restart; connectors never move; no hover effects; reduced motion gets a static figure.
+- Build into a portrait rectangle. `TD` is the default; ranks step sideways as they step down so the figure fills roughly a 3:4 shape, never a single narrow column and never wider than the reading column. Figure text is 14px or larger at natural size. Figures scale down, never up, and expand to a lightbox on demand.
+- Motion: nodes light up one after another, slowly (about 1.6s each, a 2.4s rest), then restart; connectors never move; no hover effects; reduced motion gets a static figure.

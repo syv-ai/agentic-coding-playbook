@@ -122,14 +122,20 @@ export function elbowPath(points: Point[], r = 8): string {
  * Connector label: uppercase mono on an opaque mask, never on the stroke.
  * `above` centres it 6px above a horizontal segment; `beside` puts it 6px right of a vertical one.
  */
+export interface Box { x: number; y: number; w: number; h: number }
+
+/** Where a connector label's mask will sit; used for drawing and for sizing the canvas. */
+export function edgeLabelBox(at: Point, text: string, theme: VizTheme, place: "above" | "beside"): Box {
+  const w = snapUp(theme.measure(text.toUpperCase(), theme.fonts.edge) * 1.12 + 8, 4);
+  const h = 14, gap = 6;
+  return place === "above" ? { x: at.x - w / 2, y: at.y - gap - h, w, h } : { x: at.x + gap, y: at.y - h / 2, w, h };
+}
+
 export function drawEdgeLabel(parent: AnySel, at: Point, text: string, theme: VizTheme, place: "above" | "beside", color?: string) {
   const C = theme.colors;
   const t = text.toUpperCase();
-  const w = snapUp(theme.measure(t, theme.fonts.edge) * 1.12 + 8, 4);
-  const h = 14, gap = 6;
+  const { x, y, w, h } = edgeLabelBox(at, t, theme, place);
   const g = parent.append("g").attr("class", "edge-label");
-  const x = place === "above" ? at.x - w / 2 : at.x + gap;
-  const y = place === "above" ? at.y - gap - h : at.y - h / 2;
   g.append("rect").attr("x", x).attr("y", y).attr("width", w).attr("height", h).attr("rx", 2).attr("fill", C.bg);
   g.append("text").attr("x", x + w / 2).attr("y", y + h / 2 + 0.5).attr("text-anchor", "middle").attr("dominant-baseline", "central")
     .attr("fill", color ?? C.sub).style("font", theme.fonts.edge).style("letter-spacing", "0.12em").text(t);
@@ -153,4 +159,26 @@ export function newSvg(container: HTMLElement, w: number, h: number, title?: str
     .style("width", "100%").style("max-width", `${w}px`).style("height", "auto");
   if (title) svg.attr("aria-label", title);
   return svg;
+}
+
+/** The longest segment carries the label: above it when horizontal, beside it when vertical. */
+export function labelSpot(points: Point[]): { at: Point; place: "above" | "beside" } {
+  let best = 0, len = -1;
+  for (let i = 0; i < points.length - 1; i++) {
+    const d = Math.hypot(points[i + 1].x - points[i].x, points[i + 1].y - points[i].y);
+    if (d > len) { len = d; best = i; }
+  }
+  const a = points[best], b = points[best + 1];
+  return { at: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }, place: Math.abs(a.y - b.y) < 1 ? "above" : "beside" };
+}
+
+/**
+ * Sideways step per rank for a top-down figure, so it fills a portrait rectangle instead of a
+ * single column. Zero when the figure is already wide enough; capped so each node still overlaps
+ * the one above it and the figure never exceeds the column.
+ */
+export function stagger(ranks: number, naturalW: number, naturalH: number, maxNodeW: number, theme: VizTheme): number {
+  if (ranks < 2) return 0;
+  const targetW = Math.min(theme.space.maxWidth, Math.max(naturalW, naturalH * theme.space.aspect));
+  return snap(Math.max(0, Math.min((targetW - naturalW) / (ranks - 1), maxNodeW * 0.6)));
 }

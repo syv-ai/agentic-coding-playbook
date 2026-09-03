@@ -17,8 +17,9 @@ describe("renderFlow", () => {
     renderFlow(el, spec, { orientation: "LR", theme: readTheme() });
     expect(el.querySelectorAll("svg").length).toBe(1);
     expect(el.querySelectorAll(".node").length).toBe(3);
-    expect(el.querySelectorAll("line.edge").length).toBe(2);
-    expect(el.querySelector("line[marker-start]")).toBeTruthy();
+    expect(el.querySelectorAll(".edge").length).toBe(2);
+    expect(el.querySelector(".edge[marker-start]")).toBeTruthy();
+    el.querySelectorAll(".edge").forEach((e) => expect(e.getAttribute("d")).toMatch(/^M[-\d.]+,[-\d.]+ L[-\d.]+,[-\d.]+$/)); // one row: straight
     const svg = el.querySelector("svg")!;
     expect(svg.getAttribute("role")).toBe("img");
     const edgesG = el.querySelector(".edges")!, firstNode = el.querySelector(".node")!;
@@ -31,13 +32,26 @@ describe("renderFlow", () => {
     const label = el.querySelector(".edge-label")!;
     expect(label.querySelector("rect")).toBeTruthy();
     expect(label.querySelector("text")?.textContent).toBe("THEN");
-    const line = el.querySelector("line.edge")!;
+    const lineY = Number(/^M[-\d.]+,([-\d.]+)/.exec(el.querySelector(".edge")!.getAttribute("d")!)![1]);
     const mask = label.querySelector("rect")!;
-    expect(Number(mask.getAttribute("y")) + Number(mask.getAttribute("height"))).toBeLessThanOrEqual(Number(line.getAttribute("y1")) - 6);
+    expect(Number(mask.getAttribute("y")) + Number(mask.getAttribute("height"))).toBeLessThanOrEqual(lineY - 6);
     el.querySelectorAll(".node rect.shape").forEach((r) => {
       expect(Number(r.getAttribute("width")) % 4).toBe(0);
       expect(Number(r.getAttribute("height")) % 4).toBe(0);
     });
+  });
+
+  it("steps sideways rank by rank top-down, so the figure fills a portrait rectangle with orthogonal elbows", () => {
+    const el = document.createElement("div");
+    renderFlow(el, spec, { orientation: "TD", theme: readTheme() });
+    const xs = Array.from(el.querySelectorAll<SVGGElement>(".node")).map((n) => Number(/translate\(([-\d.]+),/.exec(n.getAttribute("transform")!)![1]));
+    expect(xs[1]).toBeGreaterThan(xs[0]);
+    expect(xs[2]).toBeGreaterThan(xs[1]);
+    const svg = el.querySelector("svg")!;
+    const w = Number(svg.getAttribute("width")), h = Number(svg.getAttribute("height"));
+    expect(w / h).toBeGreaterThan(0.5);
+    expect(w).toBeLessThanOrEqual(640);
+    el.querySelectorAll(".edge").forEach((e) => expect(e.getAttribute("d")).toMatch(/A8,8/));
   });
 
   it("is idempotent: re-rendering replaces the svg", () => {

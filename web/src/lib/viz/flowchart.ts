@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as dagre from "@dagrejs/dagre";
 import type { VizTheme } from "./theme";
-import { drawEdgeLabel, drawNode, elbowPath, markers, newSvg, pulseNode, sizeNode, snap, snapUp, type DiagramEdge, type DiagramNode, type NodeSize, type Point } from "./primitives";
+import { drawEdgeLabel, drawNode, edgeLabelBox, elbowPath, labelSpot, markers, newSvg, pulseNode, sizeNode, snap, snapUp, stagger, type DiagramEdge, type DiagramNode, type NodeSize, type Point } from "./primitives";
 
 export type FlowchartNode = DiagramNode;
 export type FlowchartLink = DiagramEdge;
@@ -33,6 +33,20 @@ export function renderFlowchart(container: HTMLElement, spec: FlowchartSpec, { o
 
   const nodes: Placed[] = spec.nodes.map((n) => ({ ...n, size: sized.get(n.id)!, cx: snap(g.node(n.id).x), cy: snap(g.node(n.id).y) }));
   const byId = new Map(nodes.map((n) => [n.id, n]));
+
+  // Top-down figures step sideways rank by rank until they fill a portrait rectangle.
+  // Each rank is re-centred on its own mean first, so dagre's small per-rank nudges cannot turn into wiggles.
+  if (!H) {
+    const rankYs = [...new Set(nodes.map((n) => n.cy))].sort((a, b) => a - b);
+    const naturalW = Math.max(...nodes.map((n) => n.cx + n.size.w / 2)) - Math.min(...nodes.map((n) => n.cx - n.size.w / 2));
+    const naturalH = Math.max(...nodes.map((n) => n.cy + n.size.h / 2)) - Math.min(...nodes.map((n) => n.cy - n.size.h / 2));
+    const step = stagger(rankYs.length, naturalW, naturalH, Math.max(...nodes.map((n) => n.size.w)), theme);
+    rankYs.forEach((y, i) => {
+      const rank = nodes.filter((n) => n.cy === y);
+      const mean = rank.reduce((a, n) => a + n.cx, 0) / rank.length;
+      rank.forEach((n) => { n.cx = snap(n.cx - mean + i * step); });
+    });
+  }
 
   // Primary axis u runs with the flow, cross axis v across it.
   const U = (n: Placed) => (H ? n.cx : n.cy);
@@ -78,8 +92,13 @@ export function renderFlowchart(container: HTMLElement, spec: FlowchartSpec, { o
     return { l, points: [pt(su, V(s) + DV(s) / 2), pt(su, lane), pt(tu, lane), pt(tu, V(t) + DV(t) / 2 + GAP)] };
   });
 
-  // ---- Canvas -------------------------------------------------------------
-  const all = [...nodes.flatMap((n) => [{ x: n.cx - n.size.w / 2, y: n.cy - n.size.h / 2 }, { x: n.cx + n.size.w / 2, y: n.cy + n.size.h / 2 }]), ...routes.flatMap((r) => r.points)];
+  // ---- Canvas: nodes, routes and label masks all fit inside ---------------
+  const labelBoxes = routes.filter((r) => r.l.label).map((r) => { const { at, place } = labelSpot(r.points); return edgeLabelBox(at, r.l.label!, theme, place); });
+  const all = [
+    ...nodes.flatMap((n) => [{ x: n.cx - n.size.w / 2, y: n.cy - n.size.h / 2 }, { x: n.cx + n.size.w / 2, y: n.cy + n.size.h / 2 }]),
+    ...routes.flatMap((r) => r.points),
+    ...labelBoxes.flatMap((b) => [{ x: b.x, y: b.y }, { x: b.x + b.w, y: b.y + b.h }]),
+  ];
   const minX = Math.min(...all.map((p) => p.x)), minY = Math.min(...all.map((p) => p.y));
   const maxX = Math.max(...all.map((p) => p.x)), maxY = Math.max(...all.map((p) => p.y));
   const W = snapUp(maxX - minX + 2 * M, 4), Hh = snapUp(maxY - minY + 2 * M, 4);
@@ -100,15 +119,8 @@ export function renderFlowchart(container: HTMLElement, spec: FlowchartSpec, { o
   const labels = root.append("g").attr("class", "edge-labels");
   routes.forEach(({ l, points }) => {
     if (!l.label) return;
-    // Longest segment carries the label; horizontal segments take it above, vertical ones beside.
-    let best = 0, len = -1;
-    for (let i = 0; i < points.length - 1; i++) {
-      const d = Math.hypot(points[i + 1].x - points[i].x, points[i + 1].y - points[i].y);
-      if (d > len) { len = d; best = i; }
-    }
-    const a = points[best], b = points[best + 1];
-    const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
-    drawEdgeLabel(labels, mid, l.label, theme, Math.abs(a.y - b.y) < 1 ? "above" : "beside", l.accent ? C.accent : undefined);
+    const { at, place } = labelSpot(points);
+    drawEdgeLabel(labels, at, l.label, theme, place, l.accent ? C.accent : undefined);
   });
 
   const groups = root.append("g").selectAll("g").data(nodes).join("g")
