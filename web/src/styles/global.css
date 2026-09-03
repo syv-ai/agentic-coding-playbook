@@ -112,8 +112,10 @@ pre { background: var(--code-bg); padding: 1rem; border-radius: 8px; overflow-x:
 :not(pre) > code { background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 4px; }
 h1, h2, h3 { line-height: 1.2; letter-spacing: -0.01em; }
 h1 { font-size: 2.2rem; margin: 0 0 1rem; }
-h2 { font-size: 1.5rem; margin: 2.75rem 0 1.25rem; }
-h3 { font-size: 1.15rem; margin: 2rem 0 0.9rem; }
+h2 { font-size: 1.5rem; margin: 3rem 0 1.5rem; }
+h3 { font-size: 1.15rem; margin: 2.25rem 0 1rem; }
+/* The heading owns the space below it; the next block drops its own top margin so the two never collapse into the larger. */
+h1 + *, h2 + *, h3 + * { margin-top: 0; }
 hr { border: 0; border-top: 1px solid var(--border); margin: 2rem 0; }
 table { border-collapse: collapse; width: 100%; }
 th, td { text-align: left; padding: 0.4rem 0.6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
