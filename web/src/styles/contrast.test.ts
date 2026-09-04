@@ -33,7 +33,7 @@ const light = block(/:root\s*\{/);
 const dark = { ...light, ...block(/:root\[data-theme="dark"\]\s*\{/) };
 
 const PAIRS: [string, string, number][] = [
-  ["--text", "--bg", 4.5], ["--text-muted", "--bg", 4.5], ["--text-faint", "--bg", 3], ["--link", "--bg", 4.5],
+  ["--text", "--bg", 4.5], ["--text-strong", "--bg", 4.5], ["--text-muted", "--bg", 4.5], ["--text-faint", "--bg", 3], ["--link", "--bg", 4.5],
   ["--good", "--bg", 4.5], ["--warn", "--bg", 4.5], ["--bad", "--bg", 4.5],
   ["--accent-text", "--accent", 4.5], ["--text", "--bg-raised", 4.5],
   ["--viz-text", "--viz-fill", 4.5], ["--viz-sub", "--viz-fill", 4.5], ["--viz-text", "--viz-fill-soft", 4.5], ["--viz-sub", "--viz-fill-soft", 4.5],

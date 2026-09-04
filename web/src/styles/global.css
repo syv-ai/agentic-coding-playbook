@@ -4,6 +4,7 @@
   --bg-raised: #f5f5f7;
   --bg-sunken: #ebebef;
   --text: #1a1a1e;
+  --text-strong: #000000;
   --text-muted: #5c5c66;
   --text-faint: #8e8e98;
   --border: #d9d9df;
@@ -43,7 +44,8 @@
     --bg: #0a0a0b;
     --bg-raised: #141417;
     --bg-sunken: #000000;
-    --text: #e8e8ec;
+    --text: #d6d6dc;
+    --text-strong: #ffffff;
     --text-muted: #b6b6bd;
     --text-faint: #7d7d86;
     --border: #2a2a30;
@@ -74,7 +76,8 @@
   --bg: #0a0a0b;
   --bg-raised: #141417;
   --bg-sunken: #000000;
-  --text: #e8e8ec;
+  --text: #d6d6dc;
+  --text-strong: #ffffff;
   --text-muted: #b6b6bd;
   --text-faint: #7d7d86;
   --border: #2a2a30;
@@ -110,7 +113,9 @@ a:hover { color: var(--accent); }
 code, pre, kbd { font-family: var(--font-mono); font-size: 0.92em; }
 pre { background: var(--code-bg); padding: 1rem 1.25rem; border-radius: 8px; overflow-x: auto; margin: 2.5rem 0; }
 :not(pre) > code { background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 4px; }
-h1, h2, h3 { line-height: 1.2; letter-spacing: -0.01em; }
+h1, h2, h3 { line-height: 1.2; letter-spacing: -0.01em; color: var(--text-strong); }
+/* Weight reads as brightness too: bold is the strong colour, body text sits a step below it. */
+strong, b { color: var(--text-strong); }
 h1 { font-size: 2.2rem; margin: 0 0 1rem; }
 h2 { font-size: 1.5rem; margin: 4.5rem 0 1.75rem; }
 h3 { font-size: 1.15rem; margin: 3rem 0 1.25rem; }
