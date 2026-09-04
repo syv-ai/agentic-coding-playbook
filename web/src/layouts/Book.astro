@@ -1,6 +1,7 @@
 ---
 import Base from "./Base.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
+import Search from "../components/Search.astro";
 import { BASE, bookPath, chapterPath, deckPath } from "../lib/paths";
 import { getBooks, type Book, type Chapter } from "../lib/site";
 import { neighbours } from "../lib/chapters";
@@ -36,7 +37,7 @@ const h2s = headings.filter((h) => h.depth === 2);
         </ul>
       </details>
       <div class="bar-right">
-        <div id="search" class="search"></div>
+        <Search />
         <ThemeToggle />
       </div>
     </div>
@@ -59,10 +60,10 @@ const h2s = headings.filter((h) => h.depth === 2);
         ))}
       </div>
     </nav>
-    <main class="main prose" data-pagefind-body={current ? "" : undefined}>
+    <main class="main prose" data-pagefind-body={current ? "" : undefined} data-pagefind-meta={current ? `book:Book ${book.data.order} · ${book.data.title}` : undefined}>
       <slot />
       {current && (
-        <footer class="chapter-nav">
+        <footer class="chapter-nav" data-pagefind-ignore>
           <span>{nav.prev ? <a href={chapterPath(BASE, book.slug, nav.prev.slug)}>← {nav.prev.data.title}</a> : <a href={bookPath(BASE, book.slug)}>← Book contents</a>}</span>
           <span>{nav.next && <a href={chapterPath(BASE, book.slug, nav.next.slug)}>{nav.next.data.title} →</a>}</span>
         </footer>
@@ -88,7 +89,6 @@ const h2s = headings.filter((h) => h.depth === 2);
   .bar-inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 1rem; height: var(--bar-h); padding: 0 1.25rem; max-width: 80rem; margin: 0 auto; }
   .brand { font-weight: 600; color: var(--text); text-decoration: none; }
   .bar-right { display: flex; align-items: center; justify-content: flex-end; gap: 0.75rem; }
-  .search { min-width: 12rem; }
 
   .book-menu { position: relative; font-size: 0.9rem; }
   .book-menu summary { list-style: none; cursor: pointer; padding: 0.3rem 0.9rem; border-radius: 999px; color: var(--text); white-space: nowrap; }
@@ -129,7 +129,6 @@ const h2s = headings.filter((h) => h.depth === 2);
     .bar-inner { grid-template-columns: 1fr auto; }
     .bar-inner .book-menu { justify-self: end; }
     .shell[data-left="closed"] .sidebar .panel-body, .shell[data-right="closed"] .toc .panel-body { display: block; }
-    .search { display: none; }
   }
 </style>
 
@@ -159,17 +158,3 @@ const h2s = headings.filter((h) => h.depth === 2);
   });
 </script>
 
-<link rel="stylesheet" href={`${BASE}pagefind/pagefind-ui.css`} />
-<script is:inline define:vars={{ base: BASE }}>
-  // The bundle exists only after `npm run build`; in `astro dev` the script 404s and the box stays empty.
-  var s = document.createElement("script");
-  s.src = base + "pagefind/pagefind-ui.js";
-  s.onload = function () {
-    new PagefindUI({ element: "#search", bundlePath: base + "pagefind/", showSubResults: true, showImages: false });
-  };
-  document.head.appendChild(s);
-</script>
-
-<style is:global>
-  .search { --pagefind-ui-scale: 0.8; --pagefind-ui-primary: var(--accent); --pagefind-ui-text: var(--text); --pagefind-ui-background: var(--bg); --pagefind-ui-border: var(--border); --pagefind-ui-font: var(--font-sans); --pagefind-ui-border-radius: 999px; }
-</style>

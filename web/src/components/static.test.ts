@@ -4,6 +4,7 @@ import Source from "./Source.astro";
 import Notes from "./Notes.astro";
 import BookOnly from "./BookOnly.astro";
 import DeckOnly from "./DeckOnly.astro";
+import Search from "./Search.astro";
 
 describe("static components", () => {
   it("Callout renders its kind and label", async () => {
@@ -36,5 +37,15 @@ describe("static components", () => {
     expect(await c.renderToString(Notes, { slots: { default: "n" } })).toContain("data-notes");
     expect(await c.renderToString(BookOnly, { slots: { default: "b" } })).toContain("data-book-only");
     expect(await c.renderToString(DeckOnly, { slots: { default: "d" } })).toContain("data-deck-only");
+  });
+
+  it("Notes and DeckOnly stay out of the search index; Search renders a trigger and a dialog", async () => {
+    const c = await AstroContainer.create();
+    expect(await c.renderToString(Notes, { slots: { default: "n" } })).toContain("data-pagefind-ignore");
+    expect(await c.renderToString(DeckOnly, { slots: { default: "d" } })).toContain("data-pagefind-ignore");
+    const html = await c.renderToString(Search);
+    expect(html).toContain("data-search-trigger");
+    expect(html).toContain("<dialog");
+    expect(html).toContain("data-search-input");
   });
 });

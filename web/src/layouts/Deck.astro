@@ -2,6 +2,7 @@
 import Base from "./Base.astro";
 import { BASE, chapterPath } from "../lib/paths";
 import type { Book, Chapter } from "../lib/site";
+import Search from "../components/Search.astro";
 
 interface Props { book: Book; chapter: Chapter }
 const { book, chapter } = Astro.props;
@@ -24,6 +25,7 @@ const bookUrl = chapterPath(BASE, book.slug, chapter.slug);
         <span class="counter"></span>
         <button type="button" data-deck-next aria-label="Next slide">→</button>
         <button type="button" data-deck-notes aria-label="Toggle notes">N</button>
+        <Search />
         <a href={bookUrl} aria-label="Back to book">Esc</a>
       </span>
     </div>

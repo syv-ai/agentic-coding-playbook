@@ -1,0 +1,73 @@
+---
+/**
+ * Site search: a pill trigger for the header and the dialog it opens (Cmd/Ctrl+K, Esc).
+ * The index is built by Pagefind after `astro build`; the dialog loads its runtime on first open.
+ * Logic lives in src/scripts/search.ts; styles are global because the dialog is a body-level overlay.
+ */
+---
+<button class="search-trigger" type="button" data-search-trigger aria-label="Search" aria-keyshortcuts="Meta+K Control+K">
+  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg>
+  <span class="search-trigger-label">Search</span>
+  <kbd class="search-trigger-hint" data-search-hint>⌘K</kbd>
+</button>
+<dialog class="search-dialog" data-search-dialog aria-label="Search the playbook">
+  <div class="search-row">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="4.5"/><path d="m10.5 10.5 3 3"/></svg>
+    <input type="search" data-search-input placeholder="Search the playbook" autocomplete="off" spellcheck="false" aria-label="Search" role="combobox" aria-autocomplete="list" aria-controls="search-results" aria-expanded="true" />
+    <kbd class="search-esc">Esc</kbd>
+  </div>
+  <ul class="search-results" id="search-results" role="listbox" data-search-results></ul>
+  <p class="search-status" data-search-status hidden></p>
+</dialog>
+
+<style is:global>
+  .search-trigger { display: inline-flex; align-items: center; gap: 0.5rem; height: 2rem; padding: 0 0.85rem 0 0.7rem; font: inherit; font-size: 0.85rem; background: none; border: 1px solid var(--border); color: var(--text-muted); cursor: pointer; white-space: nowrap; }
+  .search-trigger:hover { border-color: var(--accent); color: var(--text); }
+  .search-trigger svg, .search-row svg { width: 1rem; height: 1rem; flex: none; }
+  .search-trigger-hint, .search-esc { font-family: var(--font-sans); font-size: 0.72rem; color: var(--text-faint); }
+  @media (max-width: 1000px) {
+    .search-trigger { width: 2rem; padding: 0; justify-content: center; }
+    .search-trigger-label, .search-trigger-hint { display: none; }
+  }
+
+  /* A flat panel in the canvas colour, outlined, on a dark backdrop: the figure lightbox's recipe. */
+  .search-dialog { width: min(40rem, 92vw); margin: 12vh auto 0; padding: 0; border: 1px solid var(--border); border-radius: 16px; background: var(--bg); color: var(--text); }
+  .search-dialog::backdrop { background: rgba(10, 10, 11, 0.7); }
+  @media (prefers-reduced-motion: no-preference) { .search-dialog[open] { animation: search-in 0.15s ease-out; } }
+  @keyframes search-in { from { opacity: 0; } }
+  .search-row { display: flex; align-items: center; gap: 0.7rem; padding: 0.8rem 1.1rem; color: var(--text-muted); }
+  .search-row input { flex: 1; min-width: 0; font: inherit; font-size: 1.05rem; background: none; border: 0; outline: 0; color: var(--text); }
+  .search-row input::-webkit-search-cancel-button { display: none; }
+  .search-esc { border: 1px solid var(--border); border-radius: 999px; padding: 0.1rem 0.55rem; }
+  .search-results { list-style: none; margin: 0; padding: 0.4rem; max-height: 60vh; overflow-y: auto; overscroll-behavior: contain; border-top: 1px solid var(--border); }
+  .search-results:empty { display: none; }
+  .search-results li { margin: 0; padding: 0; }
+  .search-results li a { display: block; padding: 0.65rem 0.8rem; border-radius: 10px; text-decoration: none; color: var(--text); }
+  .search-results li[aria-selected="true"] a { background: var(--bg-raised); }
+  .search-result-title { display: block; font-weight: 600; color: var(--text-strong); }
+  .search-result-kicker { display: block; font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .search-result-excerpt { display: block; font-size: 0.85rem; margin-top: 0.15rem; }
+  .search-result-excerpt mark { background: none; color: var(--text-strong); font-weight: 600; }
+  .search-status { margin: 0; padding: 0.8rem 1.1rem 0.95rem; font-size: 0.9rem; color: var(--text-muted); border-top: 1px solid var(--border); }
+  @media (max-width: 600px) { .search-dialog { margin-top: 5vh; } .search-results { max-height: 70vh; } }
+</style>
+
+<script>
+  import { BASE } from "../lib/paths";
+  import { mountSearch, type PagefindLike } from "../scripts/search";
+  const trigger = document.querySelector<HTMLElement>("[data-search-trigger]");
+  const dialog = document.querySelector<HTMLDialogElement>("[data-search-dialog]");
+  if (trigger && dialog) {
+    mountSearch({
+      trigger,
+      dialog,
+      // The bundle exists only after `npm run build`; in `astro dev` this import fails and the dialog says so.
+      load: async () => {
+        const pf = await import(/* @vite-ignore */ `${BASE}pagefind/pagefind.js`);
+        await pf.options({ baseUrl: BASE });
+        await pf.init();
+        return pf as PagefindLike;
+      },
+    });
+  }
+</script>

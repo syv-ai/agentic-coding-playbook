@@ -23,7 +23,7 @@ interface Props {
  */
 export default function Interactive({ title, titleStyle = "title", meta, description, action, children, className }: Props) {
   return (
-    <section className={`ix${className ? ` ${className}` : ""}`}>
+    <section className={`ix${className ? ` ${className}` : ""}`} data-pagefind-ignore="">
       <header className="ix-head">
         <div className="ix-lead">
           <h3 className={titleStyle === "counter" ? "ix-title ix-title--counter" : "ix-title"}>

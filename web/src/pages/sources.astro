@@ -2,16 +2,18 @@
 import { getEntry, render } from "astro:content";
 import Base from "../layouts/Base.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
+import Search from "../components/Search.astro";
 import { BASE } from "../lib/paths";
 const entry = (await getEntry("pages", "sources"))!;
 const { Content } = await render(entry);
 ---
 <Base title={entry.data.title} render="book">
-  <header class="bar"><div class="bar-inner"><a href={BASE}>Agentic Coding Playbook</a><ThemeToggle /></div></header>
-  <main class="wrap prose"><h1>{entry.data.title}</h1><Content /></main>
+  <header class="bar"><div class="bar-inner"><a href={BASE}>Agentic Coding Playbook</a><span class="bar-right"><Search /><ThemeToggle /></span></div></header>
+  <main class="wrap prose" data-pagefind-body><h1>{entry.data.title}</h1><Content /></main>
 </Base>
 <style>
   .bar { border-bottom: 1px solid var(--border); }
+  .bar-right { display: flex; align-items: center; gap: 0.75rem; }
   .bar-inner { display: flex; justify-content: space-between; align-items: center; height: var(--bar-h); padding: 0 1.25rem; max-width: 44rem; margin: 0 auto; }
   .bar a { color: var(--text); text-decoration: none; font-weight: 600; }
   .wrap { max-width: 44rem; margin: 0 auto; padding: 2rem 1.25rem; }
