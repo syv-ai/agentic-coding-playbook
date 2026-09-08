@@ -60,6 +60,12 @@ describe("static components", () => {
     const video = await c.renderToString(Video, { props: { id: "abc123", title: "A talk" } });
     expect(video).toContain("i.ytimg.com/vi/abc123/maxresdefault.jpg");
     expect(video).toContain('aria-label="Play: A talk"');
+    expect(video).toContain('data-params="autoplay=1&amp;rel=0&amp;playsinline=1"');
     expect(video).not.toContain("<iframe");
+    const quiet = await c.renderToString(Video, { props: { id: "abc123", title: "A talk", controls: false, muted: true, loop: true, start: 42 } });
+    expect(quiet).toContain("controls=0");
+    expect(quiet).toContain("mute=1");
+    expect(quiet).toContain("loop=1&amp;playlist=abc123");
+    expect(quiet).toContain("start=42");
   });
 });

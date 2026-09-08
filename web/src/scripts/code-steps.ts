@@ -69,6 +69,7 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
   const nextBtn = root.querySelector<HTMLButtonElement>("[data-steps-next]");
   const count = templates.length;
   let index = 0;
+  let reserve = false;
 
   const pre = () => stage.querySelector<HTMLElement>("pre")!;
   const code = () => pre().querySelector<HTMLElement>("code") ?? pre();
@@ -124,7 +125,7 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
     index = to;
     const t = templates[to];
     if (meta) meta.textContent = `· step ${to + 1} of ${count}`;
-    const setText = (el: HTMLElement | null, text: string) => { if (el) { el.textContent = text; el.hidden = !text; } };
+    const setText = (el: HTMLElement | null, text: string) => { if (el) { el.textContent = text; el.hidden = !text && !reserve; } };
     if (animate && head) slideHeight(head, () => setText(desc, t.dataset.desc ?? "")); else setText(desc, t.dataset.desc ?? "");
     if (animate && note) slideHeight(note, () => setText(note, t.dataset.note ?? "")); else setText(note, t.dataset.note ?? "");
     if (dots) dots.querySelectorAll("i").forEach((d, i) => d.classList.toggle("on", i === to));
@@ -144,6 +145,31 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
   // Auto-run: one timer per block, restarted after every tick so a manual step does not shorten the next wait.
   let paused = false;
   const every = Number(root.dataset.auto ?? 0);
+  reserve = every > 0;
+  // In auto mode the block keeps the height of its tallest step, its longest description and its longest note,
+  // so the page below never moves while the steps run through.
+  const reserveSpace = () => {
+    const lineH = pre().querySelector(".line")?.getBoundingClientRect().height ?? 0;
+    const cs = getComputedStyle(pre());
+    const maxLines = Math.max(...templates.map((t) => t.content.querySelectorAll(".line").length));
+    stage.style.minHeight = `${maxLines * lineH + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)}px`;
+    const tallest = (el: HTMLElement, measure: HTMLElement, texts: string[]) => {
+      const keep = el.textContent, hidden = el.hidden;
+      el.hidden = false;
+      let h = 0;
+      for (const t of texts) { el.textContent = t; h = Math.max(h, measure.offsetHeight); }
+      el.textContent = keep; el.hidden = hidden;
+      return h;
+    };
+    if (desc && head) head.style.minHeight = `${tallest(desc, head, templates.map((t) => t.dataset.desc ?? ""))}px`;
+    if (note) { note.style.minHeight = `${tallest(note, note, templates.map((t) => t.dataset.note ?? ""))}px`; note.hidden = false; }
+  };
+  if (reserve) {
+    reserveSpace();
+    if (typeof document !== "undefined" && "fonts" in document) document.fonts.ready.then(reserveSpace);
+    let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+    window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(reserveSpace, 150); });
+  }
   if (every > 0 && count > 1) {
     const inDeck = root.ownerDocument.documentElement.dataset.render === "deck";
     const tick = () => {

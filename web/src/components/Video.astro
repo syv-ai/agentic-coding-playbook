@@ -7,13 +7,27 @@ interface Props {
   /** The YouTube video id, the part after `v=`. */
   id: string;
   title: string;
+  /** Show YouTube's player controls. Off hides the bar, the title overlay and the end screen. */
+  controls?: boolean;
+  /** Start without sound. */
+  muted?: boolean;
+  /** Start again at the end. */
+  loop?: boolean;
+  /** Start at this many seconds in. */
+  start?: number;
 }
-const { id, title } = Astro.props;
+const { id, title, controls = true, muted = false, loop = false, start } = Astro.props;
+const params = new URLSearchParams({ autoplay: "1", rel: "0", playsinline: "1" });
+if (!controls) { params.set("controls", "0"); params.set("modestbranding", "1"); params.set("iv_load_policy", "3"); }
+if (muted) params.set("mute", "1");
+if (loop) { params.set("loop", "1"); params.set("playlist", id); }
+if (start) params.set("start", String(Math.floor(start)));
 ---
-<figure class="video" data-video={id} data-title={title}>
+<figure class="video" data-video={id} data-title={title} data-params={params.toString()}>
   <button type="button" class="video-facade" aria-label={`Play: ${title}`}>
-    <img src={`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`} alt="" loading="lazy" width="1280" height="720" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')" />
-    <span class="video-play btn btn-primary" aria-hidden="true">Play</span>
+    <img src={`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`} alt="" loading="lazy" width="1280" height="720" />
+    <span class="video-veil" aria-hidden="true"></span>
+    <span class="video-play" aria-hidden="true"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4.5 2.8v10.4a.6.6 0 0 0 .9.5l8.3-5.2a.6.6 0 0 0 0-1L5.4 2.3a.6.6 0 0 0-.9.5Z"/></svg></span>
   </button>
   <figcaption>{title}</figcaption>
 </figure>
@@ -23,21 +37,38 @@ const { id, title } = Astro.props;
   .video-facade, .video iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 12px; overflow: hidden; background: var(--bg-sunken); }
   .video-facade { position: relative; padding: 0; cursor: pointer; }
   .video-facade img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .video-play { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 0.55rem 1.4rem; font-size: 0.95rem; }
-  .video-play::before { content: "▶"; font-size: 0.75em; margin-right: 0.5rem; }
+  /* A frosted veil in the page colour over the thumbnail, and a round play button; both lift when the player takes over. */
+  .video-veil { position: absolute; inset: 0; background: color-mix(in srgb, var(--bg) 45%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); transition: opacity 0.35s ease; }
+  .video-play { position: absolute; left: 50%; top: 50%; width: 4.25rem; height: 4.25rem; border-radius: 999px; background: var(--accent); color: var(--accent-text); display: grid; place-items: center; transform: translate(-50%, -50%); transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s ease, filter 0.2s; }
+  .video-play svg { width: 1.5rem; height: 1.5rem; margin-left: 0.2rem; }
   .video-facade:hover .video-play { filter: brightness(1.08); }
+  .video-facade.is-lifting .video-veil { opacity: 0; }
+  .video-facade.is-lifting .video-play { opacity: 0; transform: translate(-50%, calc(-50% - 1rem)); }
+  @media (prefers-reduced-motion: reduce) { .video-veil, .video-play { transition: none; } }
   .video figcaption { font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; text-align: center; }
 </style>
 
 <script>
   for (const fig of document.querySelectorAll<HTMLElement>("figure.video")) {
-    fig.querySelector(".video-facade")?.addEventListener("click", () => {
+    const facade = fig.querySelector<HTMLElement>(".video-facade");
+    // Not every video has the 16:9 thumbnail; fall back to the one YouTube always keeps.
+    const img = fig.querySelector<HTMLImageElement>("img");
+    const fallback = () => { if (img && img.src.includes("maxresdefault")) img.src = img.src.replace("maxresdefault", "hqdefault"); };
+    img?.addEventListener("error", fallback);
+    if (img?.complete && img.naturalWidth === 0) fallback();
+    facade?.addEventListener("click", () => {
+      if (facade.classList.contains("is-lifting")) return;
       const frame = document.createElement("iframe");
-      frame.src = `https://www.youtube-nocookie.com/embed/${fig.dataset.video}?autoplay=1&rel=0`;
+      frame.src = `https://www.youtube-nocookie.com/embed/${fig.dataset.video}?${fig.dataset.params ?? "autoplay=1"}`;
       frame.title = fig.dataset.title ?? "Video";
       frame.allow = "autoplay; encrypted-media; picture-in-picture";
       frame.allowFullscreen = true;
-      fig.querySelector(".video-facade")?.replaceWith(frame);
-    });
+      // The veil and the button lift, then the player takes their place.
+      facade.classList.add("is-lifting");
+      let swapped = false;
+      const swap = () => { if (!swapped) { swapped = true; facade.replaceWith(frame); } };
+      facade.querySelector(".video-play")?.addEventListener("transitionend", swap, { once: true });
+      setTimeout(swap, 450);
+    }, { once: false });
   }
 </script>

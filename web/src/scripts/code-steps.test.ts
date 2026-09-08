@@ -146,4 +146,21 @@ describe("auto-run", () => {
     expect(steps.index).toBe(1);
     void root;
   });
+
+  it("reserves space for the tallest step, description and note, and keeps an empty note in flow", () => {
+    const withEmptyNote = [STEPS[0], { ...STEPS[1], note: "" }, STEPS[2]];
+    const root = block(withEmptyNote, 'data-auto="1000"');
+    const steps = createSteps(root, false);
+    const stage = root.querySelector<HTMLElement>("[data-steps-stage]")!, note = root.querySelector<HTMLElement>("[data-steps-note]")!;
+    expect(stage.style.minHeight).toMatch(/px$/);
+    expect(note.style.minHeight).toMatch(/px$/);
+    expect(root.querySelector<HTMLElement>("[data-steps-desc]")?.textContent).toBe(""); // measuring restored the text
+    steps.next();
+    expect(root.querySelector<HTMLElement>("[data-steps-desc]")?.textContent).toBe("two");
+    expect(note.hidden).toBe(false);
+    expect(note.textContent).toBe("");
+    const manual = createSteps(block(withEmptyNote), false);
+    manual.next();
+    expect(document.querySelector<HTMLElement>("[data-steps-note]")!.hidden).toBe(true);
+  });
 });
