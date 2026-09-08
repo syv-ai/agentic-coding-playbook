@@ -153,17 +153,17 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
   const reserveSpace = () => {
     // Render every step's <pre> into the stage, hidden and out of flow at the stage's width, and take the tallest as it
     // actually lays out: that includes a horizontal scrollbar on a step with long lines, which a line count would miss.
-    let tallest = 0;
+    let tallestStep = 0;
     for (const t of templates) {
       const probe = t.content.querySelector("pre")?.cloneNode(true) as HTMLElement | null;
       if (!probe) continue;
       probe.style.cssText = "position:absolute;left:0;right:0;visibility:hidden;height:auto;margin:0;transition:none";
       stage.appendChild(probe);
-      tallest = Math.max(tallest, probe.offsetHeight);
+      tallestStep = Math.max(tallestStep, probe.offsetHeight);
       probe.remove();
     }
     stage.style.position = "relative";
-    stage.style.minHeight = `${tallest}px`;
+    stage.style.minHeight = `${tallestStep}px`;
     const tallest = (el: HTMLElement, measure: HTMLElement, texts: string[]) => {
       const keep = el.textContent, hidden = el.hidden;
       el.hidden = false;
