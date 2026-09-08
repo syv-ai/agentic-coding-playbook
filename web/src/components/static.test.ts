@@ -58,7 +58,7 @@ describe("static components", () => {
     expect(fold).toContain("More");
     expect(fold).toContain("body");
     const video = await c.renderToString(Video, { props: { id: "abc123", title: "A talk" } });
-    expect(video).toContain("i.ytimg.com/vi/abc123/");
+    expect(video).toContain("i.ytimg.com/vi/abc123/maxresdefault.jpg");
     expect(video).toContain('aria-label="Play: A talk"');
     expect(video).not.toContain("<iframe");
   });

@@ -14,6 +14,7 @@ import Notes from "../../../components/Notes.astro";
 import BookOnly from "../../../components/BookOnly.astro";
 import CodeSteps from "../../../components/CodeSteps.astro";
 import Details from "../../../components/Details.astro";
+import Video from "../../../components/Video.astro";
 import VerifiableLoopDemo from "./_components/VerifiableLoopDemo";
 
 An agent working on a task is a loop: look at the state, act, look again. The loop runs until something says stop. If the only thing that says stop is the agent's own judgment that it is done, the loop optimises for *looking* done. If a check says stop, the loop optimises for *being* done. Nothing else about the agent has to change for that difference to show up in every line it writes.
@@ -109,6 +110,8 @@ The loss-function analogy is the one model-builder point in this chapter. Use it
 <VerifiableLoopDemo client:visible />
 
 Both columns do the same five rounds of work. The left column has no check, so every round ends with the agent's claim. The right column has a check written before round one, so every round ends with a fact. The defects on the left were always there. The only thing the check changed is when they became visible.
+
+<Video id="jR670K7R0cs" title="Software Architecture Explained: SOLID Principles & MVC Pattern" />
 
 ## What it changes
 

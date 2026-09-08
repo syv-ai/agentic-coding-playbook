@@ -29,6 +29,25 @@ export interface Steps {
 
 const raf = (f: () => void) => (typeof requestAnimationFrame === "function" ? requestAnimationFrame(f) : setTimeout(f, 16));
 const LEAVE_MS = 1000;
+const SLIDE_MS = 400;
+
+/**
+ * Change an element's content and slide its height from the old value to the new one, so text that wraps
+ * to another line pushes what follows instead of jumping it. The element needs `transition: height` in CSS.
+ */
+export function slideHeight(el: HTMLElement, mutate: () => void): void {
+  const h0 = el.offsetHeight;
+  mutate();
+  const h1 = el.offsetHeight;
+  if (h0 === h1) return;
+  el.style.height = `${h0}px`;
+  el.style.overflow = "hidden";
+  void el.offsetHeight; // commit the start height before the transition target
+  el.style.height = `${h1}px`;
+  const done = () => { el.style.height = ""; el.style.overflow = ""; };
+  el.addEventListener("transitionend", done, { once: true });
+  setTimeout(done, SLIDE_MS + 100); // transitions can be skipped (reduced motion, hidden tab); never leave the height pinned
+}
 
 /**
  * Drive one walkthrough. `root` holds the stage (a rendered <pre> for step 0), one <template data-step> per step
@@ -37,6 +56,7 @@ const LEAVE_MS = 1000;
 export function createSteps(root: HTMLElement, animate = true): Steps {
   const templates = Array.from(root.querySelectorAll<HTMLTemplateElement>("template[data-step]"));
   const stage = root.querySelector<HTMLElement>("[data-steps-stage]")!;
+  const head = root.querySelector<HTMLElement>(".ix-head");
   const meta = root.querySelector<HTMLElement>("[data-steps-meta]");
   const desc = root.querySelector<HTMLElement>("[data-steps-desc]");
   const note = root.querySelector<HTMLElement>("[data-steps-note]");
@@ -84,8 +104,9 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
         const d = from - el.offsetTop;
         if (d) { el.style.transition = "none"; el.style.transform = `translateY(${d}px)`; }
       });
+      // Leaving lines are out of flow now, so the code element's own height is exactly the new content height.
       const cs = getComputedStyle(pre());
-      const h1 = out.reduce((s, el) => s + el.offsetHeight, 0) + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+      const h1 = container.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
       raf(() => raf(() => {
         out.forEach((el) => { el.style.transition = ""; el.style.transform = ""; el.classList.remove("enter"); });
         leaving.forEach((l) => l.classList.add("leave"));
@@ -99,8 +120,9 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
     index = to;
     const t = templates[to];
     if (meta) meta.textContent = `· step ${to + 1} of ${count}`;
-    if (desc) desc.textContent = t.dataset.desc ?? "";
-    if (note) { note.textContent = t.dataset.note ?? ""; note.hidden = !t.dataset.note; }
+    const setText = (el: HTMLElement | null, text: string) => { if (el) { el.textContent = text; el.hidden = !text; } };
+    if (animate && head) slideHeight(head, () => setText(desc, t.dataset.desc ?? "")); else setText(desc, t.dataset.desc ?? "");
+    if (animate && note) slideHeight(note, () => setText(note, t.dataset.note ?? "")); else setText(note, t.dataset.note ?? "");
     if (dots) dots.querySelectorAll("i").forEach((d, i) => d.classList.toggle("on", i === to));
     if (prevBtn) prevBtn.disabled = to === 0;
     if (nextBtn) nextBtn.disabled = to === count - 1;

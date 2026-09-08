@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { createSteps, lcsPairs, mountCodeSteps } from "./code-steps";
+import { createSteps, lcsPairs, mountCodeSteps, slideHeight } from "./code-steps";
 
 describe("lcsPairs", () => {
   it("pairs equal lines in order, so a moved line is a move and a changed line is a remove plus an add", () => {
@@ -91,5 +91,22 @@ describe("mountCodeSteps in the deck", () => {
     expect(reached).toBe(1); // last step: the deck moves on
     key("ArrowLeft");
     expect(steps.index).toBe(1);
+  });
+});
+
+describe("slideHeight", () => {
+  it("pins the old height, moves to the new one and lets go afterwards; no-op when nothing changes", () => {
+    vi.useFakeTimers();
+    const el = document.createElement("div");
+    let h = 20;
+    Object.defineProperty(el, "offsetHeight", { get: () => h });
+    slideHeight(el, () => { h = 44; });
+    expect(el.style.height).toBe("44px");
+    expect(el.style.overflow).toBe("hidden");
+    vi.runAllTimers();
+    expect(el.style.height).toBe("");
+    slideHeight(el, () => {});
+    expect(el.style.height).toBe("");
+    vi.useRealTimers();
   });
 });

@@ -12,7 +12,7 @@ const { id, title } = Astro.props;
 ---
 <figure class="video" data-video={id} data-title={title}>
   <button type="button" class="video-facade" aria-label={`Play: ${title}`}>
-    <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" loading="lazy" width="480" height="360" />
+    <img src={`https://i.ytimg.com/vi/${id}/maxresdefault.jpg`} alt="" loading="lazy" width="1280" height="720" onerror="this.onerror=null;this.src=this.src.replace('maxresdefault','hqdefault')" />
     <span class="video-play btn btn-primary" aria-hidden="true">Play</span>
   </button>
   <figcaption>{title}</figcaption>

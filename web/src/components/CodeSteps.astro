@@ -53,7 +53,11 @@ if (steps.length < 2) throw new Error(`<CodeSteps> "${title}" needs at least two
   .steps-dots { display: inline-flex; gap: 0.4rem; align-items: center; margin-right: 0.5rem; }
   .steps-dots i { width: 6px; height: 6px; border-radius: 999px; background: var(--border); transition: background 0.3s; }
   .steps-dots i.on { background: var(--accent); }
-  .steps-stage pre { transition: height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  /* Height is pinned while lines move; leaving lines sit out of flow at their old row and must never scroll. */
+  .steps-stage pre { overflow-y: hidden; transition: height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  /* Anything that moves other content slides: a description or note that wraps pushes the code down smoothly. */
+  .code-steps .ix-head, .code-steps .steps-note { transition: height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .code-steps .ix-head { margin-bottom: 1.75rem; }
   .steps-stage code { position: relative; display: block; }
   /* Motion: removed lines lift first, kept lines glide, new lines rise in last. */
   .steps-stage .line { border-radius: 4px; transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s, opacity 0.5s ease 0.45s, background-color 0.6s ease; }
@@ -64,7 +68,7 @@ if (steps.length < 2) throw new Error(`<CodeSteps> "${title}" needs at least two
   .steps-stage .line.leave { opacity: 0; transform: translateY(-0.5rem); transition: transform 0.35s ease, opacity 0.35s ease; }
   .steps-note { font-size: 0.95rem; color: var(--text-muted); margin: 1rem 0 0; }
   .prose .code-steps .steps-note { margin: 1rem 0 0; }
-  @media (prefers-reduced-motion: reduce) { .steps-stage pre, .steps-stage .line { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .steps-stage pre, .steps-stage .line, .code-steps .ix-head, .code-steps .steps-note { transition: none; } }
 </style>
 
 <script>
