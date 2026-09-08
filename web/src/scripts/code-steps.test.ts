@@ -11,9 +11,9 @@ describe("lcsPairs", () => {
 
 const pre = (lines: string[]) => `<pre class="astro-code"><code>${lines.map((l) => `<span class="line"><span>${l}</span></span>`).join("\n")}</code></pre>`;
 
-function block(steps: { desc: string; note: string; lines: string[] }[]) {
+function block(steps: { desc: string; note: string; lines: string[] }[], attrs = "") {
   document.body.innerHTML = `
-    <section data-code-steps>
+    <section data-code-steps ${attrs}>
       <span data-steps-meta></span><span data-steps-desc></span>
       <span data-steps-dots>${steps.map(() => "<i></i>").join("")}</span>
       <button data-steps-prev>Previous</button><button data-steps-next>Next</button>
@@ -108,5 +108,42 @@ describe("slideHeight", () => {
     slideHeight(el, () => {});
     expect(el.style.height).toBe("");
     vi.useRealTimers();
+  });
+});
+
+describe("auto-run", () => {
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => { vi.useRealTimers(); delete document.documentElement.dataset.render; });
+
+  it("cycles through the steps and wraps, and holds while the pointer is over the block", () => {
+    const root = block(STEPS, 'data-auto="1000"');
+    const steps = createSteps(root, false);
+    vi.advanceTimersByTime(1000);
+    expect(steps.index).toBe(1);
+    vi.advanceTimersByTime(2000);
+    expect(steps.index).toBe(0); // wrapped after the last step
+    root.dispatchEvent(new Event("mouseenter"));
+    expect(steps.paused).toBe(true);
+    vi.advanceTimersByTime(3000);
+    expect(steps.index).toBe(0);
+    root.dispatchEvent(new Event("mouseleave"));
+    vi.advanceTimersByTime(1000);
+    expect(steps.index).toBe(1);
+  });
+
+  it("does not run without data-auto, and in the deck only while its slide is active", () => {
+    const idle = createSteps(block(STEPS), false);
+    vi.advanceTimersByTime(5000);
+    expect(idle.index).toBe(0);
+    document.documentElement.dataset.render = "deck";
+    const root = block(STEPS, 'data-auto="500"');
+    document.body.innerHTML = `<section class="slide">${document.body.innerHTML}</section>`;
+    const steps = createSteps(document.querySelector("[data-code-steps]")!, false);
+    vi.advanceTimersByTime(1500);
+    expect(steps.index).toBe(0);
+    document.querySelector("section.slide")!.setAttribute("data-active", "");
+    vi.advanceTimersByTime(500);
+    expect(steps.index).toBe(1);
+    void root;
   });
 });

@@ -25,6 +25,8 @@ export interface Steps {
   go(i: number): void;
   next(): void;
   prev(): void;
+  /** Whether auto-run is currently held (pointer over the block, or focus inside it). */
+  readonly paused: boolean;
 }
 
 const raf = (f: () => void) => (typeof requestAnimationFrame === "function" ? requestAnimationFrame(f) : setTimeout(f, 16));
@@ -52,6 +54,8 @@ export function slideHeight(el: HTMLElement, mutate: () => void): void {
 /**
  * Drive one walkthrough. `root` holds the stage (a rendered <pre> for step 0), one <template data-step> per step
  * with the step's <pre>, and the header slots. `animate` false swaps states instantly (reduced motion, tests).
+ * `data-auto="<ms>"` on the root cycles through the steps, wrapping to the first; the pointer over the block or
+ * focus inside it holds the cycle. In the deck it only runs while the block's slide is active.
  */
 export function createSteps(root: HTMLElement, animate = true): Steps {
   const templates = Array.from(root.querySelectorAll<HTMLTemplateElement>("template[data-step]"));
@@ -137,9 +141,27 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
   if (prevBtn) prevBtn.disabled = true;
   if (nextBtn) nextBtn.disabled = count <= 1;
 
+  // Auto-run: one timer per block, restarted after every tick so a manual step does not shorten the next wait.
+  let paused = false;
+  const every = Number(root.dataset.auto ?? 0);
+  if (every > 0 && count > 1) {
+    const inDeck = root.ownerDocument.documentElement.dataset.render === "deck";
+    const tick = () => {
+      const active = !inDeck || root.closest("[data-active]");
+      if (!paused && active) render((index + 1) % count);
+      setTimeout(tick, every);
+    };
+    setTimeout(tick, every);
+    root.addEventListener("mouseenter", () => { paused = true; });
+    root.addEventListener("mouseleave", () => { paused = false; });
+    root.addEventListener("focusin", () => { paused = true; });
+    root.addEventListener("focusout", () => { paused = root.matches(":hover"); });
+  }
+
   return {
     get index() { return index; },
     get count() { return count; },
+    get paused() { return paused; },
     go,
     next: () => go(index + 1),
     prev: () => go(index - 1),
