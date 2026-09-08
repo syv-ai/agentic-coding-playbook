@@ -38,7 +38,7 @@ if (start) params.set("start", String(Math.floor(start)));
   .video-facade { position: relative; padding: 0; cursor: pointer; }
   .video-facade img { width: 100%; height: 100%; object-fit: cover; display: block; }
   /* A frosted veil in the page colour over the thumbnail, and a round play button; both lift when the player takes over. */
-  .video-veil { position: absolute; inset: 0; background: color-mix(in srgb, var(--bg) 45%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); transition: opacity 0.35s ease; }
+  .video-veil { position: absolute; inset: 0; background: color-mix(in srgb, var(--bg) 45%, transparent); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); transition: opacity 0.35s ease; }
   .video-play { position: absolute; left: 50%; top: 50%; width: 4.25rem; height: 4.25rem; border-radius: 999px; background: var(--accent); color: var(--accent-text); display: grid; place-items: center; transform: translate(-50%, -50%); transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s ease, filter 0.2s; }
   .video-play svg { width: 1.5rem; height: 1.5rem; margin-left: 0.2rem; }
   .video-facade:hover .video-play { filter: brightness(1.08); }

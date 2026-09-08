@@ -109,9 +109,11 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
         const d = from - el.offsetTop;
         if (d) { el.style.transition = "none"; el.style.transform = `translateY(${d}px)`; }
       });
-      // Leaving lines are out of flow now, so the code element's own height is exactly the new content height.
-      const cs = getComputedStyle(pre());
-      const h1 = container.getBoundingClientRect().height + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+      // Leaving lines are out of flow now, so the block's natural height is the new step's real height, scrollbar included.
+      // Nothing paints between these three statements, so the reader never sees the unpinned state.
+      pre().style.height = "";
+      const h1 = pre().offsetHeight;
+      pre().style.height = `${h0}px`;
       raf(() => raf(() => {
         out.forEach((el) => { el.style.transition = ""; el.style.transform = ""; el.classList.remove("enter"); });
         leaving.forEach((l) => l.classList.add("leave"));
@@ -149,10 +151,19 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
   // In auto mode the block keeps the height of its tallest step, its longest description and its longest note,
   // so the page below never moves while the steps run through.
   const reserveSpace = () => {
-    const lineH = pre().querySelector(".line")?.getBoundingClientRect().height ?? 0;
-    const cs = getComputedStyle(pre());
-    const maxLines = Math.max(...templates.map((t) => t.content.querySelectorAll(".line").length));
-    stage.style.minHeight = `${maxLines * lineH + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)}px`;
+    // Render every step's <pre> into the stage, hidden and out of flow at the stage's width, and take the tallest as it
+    // actually lays out: that includes a horizontal scrollbar on a step with long lines, which a line count would miss.
+    let tallest = 0;
+    for (const t of templates) {
+      const probe = t.content.querySelector("pre")?.cloneNode(true) as HTMLElement | null;
+      if (!probe) continue;
+      probe.style.cssText = "position:absolute;left:0;right:0;visibility:hidden;height:auto;margin:0;transition:none";
+      stage.appendChild(probe);
+      tallest = Math.max(tallest, probe.offsetHeight);
+      probe.remove();
+    }
+    stage.style.position = "relative";
+    stage.style.minHeight = `${tallest}px`;
     const tallest = (el: HTMLElement, measure: HTMLElement, texts: string[]) => {
       const keep = el.textContent, hidden = el.hidden;
       el.hidden = false;
