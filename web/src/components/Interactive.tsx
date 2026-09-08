@@ -2,8 +2,8 @@ import type { ReactNode } from "react";
 import AutoHeight from "./AutoHeight";
 
 interface Props {
-  /** What the block is, in a few words. */
-  title: string;
+  /** What the block is, in a few words. May carry a leading mark, like the quiz's check. */
+  title: ReactNode;
   /** "counter" renders the title small and muted, for "Question 2 of 3" while a block is active. */
   titleStyle?: "title" | "counter";
   /** Small muted suffix after the title: "3 questions", "round 2 of 5". */

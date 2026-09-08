@@ -5,6 +5,8 @@ import Notes from "./Notes.astro";
 import BookOnly from "./BookOnly.astro";
 import DeckOnly from "./DeckOnly.astro";
 import Search from "./Search.astro";
+import Details from "./Details.astro";
+import Video from "./Video.astro";
 
 describe("static components", () => {
   it("Callout renders its kind and label", async () => {
@@ -47,5 +49,17 @@ describe("static components", () => {
     expect(html).toContain("data-search-trigger");
     expect(html).toContain("<dialog");
     expect(html).toContain("data-search-input");
+  });
+
+  it("Details renders a native details with the title; Video renders a facade, not an iframe", async () => {
+    const c = await AstroContainer.create();
+    const fold = await c.renderToString(Details, { props: { title: "More" }, slots: { default: "<p>body</p>" } });
+    expect(fold).toContain("<details");
+    expect(fold).toContain("More");
+    expect(fold).toContain("body");
+    const video = await c.renderToString(Video, { props: { id: "abc123", title: "A talk" } });
+    expect(video).toContain("i.ytimg.com/vi/abc123/");
+    expect(video).toContain('aria-label="Play: A talk"');
+    expect(video).not.toContain("<iframe");
   });
 });

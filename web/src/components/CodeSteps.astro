@@ -1,0 +1,73 @@
+---
+/**
+ * Code that changes over several steps, in the Interactive layout. Every step is highlighted at build time;
+ * src/scripts/code-steps.ts moves the lines between steps. Two steps is the plain before-and-after case.
+ */
+import { Code } from "astro:components";
+import { SHIKI_THEMES } from "../lib/shiki";
+
+interface Step {
+  /** One line under the title while this step shows. */
+  desc: string;
+  /** The code for this step, as a template literal. */
+  code: string;
+  /** A sentence or two under the code, optional. */
+  note?: string;
+}
+interface Props {
+  title: string;
+  /** Shiki language id: "python", "ts", "bash", … */
+  lang: string;
+  steps: Step[];
+  /** Small muted suffix after the title, defaults to the language. */
+  meta?: string;
+}
+const { title, lang, steps, meta = lang } = Astro.props;
+if (steps.length < 2) throw new Error(`<CodeSteps> "${title}" needs at least two steps.`);
+---
+<section class="ix code-steps" data-code-steps data-pagefind-ignore>
+  <header class="ix-head">
+    <div class="ix-lead">
+      <h3 class="ix-title">{title} <span class="ix-meta">· {meta} <span data-steps-meta>· step 1 of {steps.length}</span></span></h3>
+      <p class="ix-desc" data-steps-desc>{steps[0].desc}</p>
+    </div>
+    <div class="ix-action">
+      <span class="steps-dots" data-steps-dots aria-hidden="true">{steps.map((_, i) => <i class:list={{ on: i === 0 }}></i>)}</span>
+      <button type="button" class="btn" data-steps-prev disabled>Previous</button>
+      <button type="button" class="btn btn-primary" data-steps-next>Next</button>
+    </div>
+  </header>
+  <div class="steps-stage" data-steps-stage>
+    <Code code={steps[0].code} lang={lang as never} themes={SHIKI_THEMES} defaultColor={false} />
+  </div>
+  <p class="steps-note" data-steps-note hidden={!steps[0].note}>{steps[0].note}</p>
+  {steps.map((s) => (
+    <template data-step data-desc={s.desc} data-note={s.note}>
+      <Code code={s.code} lang={lang as never} themes={SHIKI_THEMES} defaultColor={false} />
+    </template>
+  ))}
+</section>
+
+<style is:global>
+  .code-steps .ix-action { gap: 0.35rem; }
+  .steps-dots { display: inline-flex; gap: 0.4rem; align-items: center; margin-right: 0.5rem; }
+  .steps-dots i { width: 6px; height: 6px; border-radius: 999px; background: var(--border); transition: background 0.3s; }
+  .steps-dots i.on { background: var(--accent); }
+  .steps-stage pre { transition: height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .steps-stage code { position: relative; display: block; }
+  /* Motion: removed lines lift first, kept lines glide, new lines rise in last. */
+  .steps-stage .line { border-radius: 4px; transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s, opacity 0.5s ease 0.45s, background-color 0.6s ease; }
+  .steps-stage .line.chg { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+  .steps-stage .line.chg::before { color: var(--accent); }
+  .steps-stage .line.enter { opacity: 0; transform: translateY(0.5rem); }
+  .steps-stage .line.leave-pre { position: absolute; left: 0; right: 0; pointer-events: none; }
+  .steps-stage .line.leave { opacity: 0; transform: translateY(-0.5rem); transition: transform 0.35s ease, opacity 0.35s ease; }
+  .steps-note { font-size: 0.95rem; color: var(--text-muted); margin: 1rem 0 0; }
+  .prose .code-steps .steps-note { margin: 1rem 0 0; }
+  @media (prefers-reduced-motion: reduce) { .steps-stage pre, .steps-stage .line { transition: none; } }
+</style>
+
+<script>
+  import { mountCodeSteps } from "../scripts/code-steps";
+  mountCodeSteps();
+</script>

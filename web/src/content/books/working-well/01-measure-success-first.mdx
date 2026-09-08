@@ -12,6 +12,8 @@ import Callout from "../../../components/Callout.astro";
 import Source from "../../../components/Source.astro";
 import Notes from "../../../components/Notes.astro";
 import BookOnly from "../../../components/BookOnly.astro";
+import CodeSteps from "../../../components/CodeSteps.astro";
+import Details from "../../../components/Details.astro";
 import VerifiableLoopDemo from "./_components/VerifiableLoopDemo";
 
 An agent working on a task is a loop: look at the state, act, look again. The loop runs until something says stop. If the only thing that says stop is the agent's own judgment that it is done, the loop optimises for *looking* done. If a check says stop, the loop optimises for *being* done. Nothing else about the agent has to change for that difference to show up in every line it writes.
@@ -48,11 +50,49 @@ Open with the loop drawing, not the claim. Ask the room what stops the loop in t
 
 A check is anything that can fail on its own, without a person reading: a test, a type error, a lint rule, a script that hits the endpoint and compares the body, a build. In <Fig id="loop" /> it is the one diamond, and the only way out. What it is not is a description of what good looks like. Descriptions steer the agent's first attempt. Checks steer every attempt after that.
 
+The same loop, as code. Only the exit condition changes, and then how the loop ends when it cannot pass.
+
+<CodeSteps
+  title="What stops the loop"
+  lang="python"
+  steps={[
+    {
+      desc: "The loop stops when the agent thinks it is done.",
+      note: "Nothing says stop except the agent's own judgment, so the loop optimises for looking done.",
+      code: `def run(task):
+    result = agent(task)
+    if looks_done(result):
+        return result
+    return run(task)`,
+    },
+    {
+      desc: "A check decides, and it was written before the loop started.",
+      note: "The exit is now a function the author wrote first. The agent cannot talk its way past it.",
+      code: `def run(task, check):
+    result = agent(task)
+    if check(result).passed:
+        return result
+    return run(task, check)`,
+    },
+    {
+      desc: "The loop gives up, loudly, with the check's report.",
+      note: "A bounded loop that fails with evidence beats an unbounded one that eventually passes by accident.",
+      code: `def run(task, check, attempts=3):
+    result = agent(task)
+    if check(result).passed:
+        return result
+    if attempts == 0:
+        raise GaveUp(check(result).report)
+    return run(task, check, attempts - 1)`,
+    },
+  ]}
+/>
+
 ## Why it holds
 
 We train models and we build harnesses for them. From that side of the table the point is not subtle: a model gets better at whatever the loss function measures, and at nothing else. An agent loop is the same shape at a slower speed. Whatever can stop the loop is its loss function. If that is "the agent reports success", the agent gets very good at reporting success.
 
-The June review of our own practice put it this way: write the check before the loop. A loop without a checkable target is just an automated way to make errors you find too late. Late here means at review, or in production, where the cost of a defect is highest and the context that produced it is gone.
+The June review of our own practice[^review] put it this way: write the check before the loop. A loop without a checkable target is just an automated way to make errors you find too late. Late here means at review, or in production, where the cost of a defect is highest and the context that produced it is gone.
 
 Test-driven development said the same thing about people twenty-five years ago, and it was a hard sell then for a reason that no longer applies: writing the check first cost a person real time. With an agent doing the work, the check is the cheapest part of the task and the only part that has to be right.
 
@@ -127,5 +167,9 @@ Thinking before you code and checking before you build are the same discipline s
 ## For the basics
 
 <BookOnly>
-If the three layers of verification (the agent's own check, automated gates, human review) are new to you, Book 1 chapter 5 covers them. This chapter assumes them and argues about where the first layer goes: before the work, not after.
+<Details title="New to the three layers of verification?">
+The agent's own check, automated gates, and human review. Book 1 chapter 5 covers them. This chapter assumes them and argues about where the first layer goes: before the work, not after.
+</Details>
 </BookOnly>
+
+[^review]: Syv's internal review of its own agentic practice, June 2026.

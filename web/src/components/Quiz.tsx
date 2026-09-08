@@ -66,7 +66,8 @@ export default function Quiz({ id, questions, title = "Test your understanding",
   };
 
   // While answering, the header becomes the question counter; the block title returns on the result view.
-  const headTitle = view === "questions" ? `Question ${step + 1} of ${total}` : title;
+  const perfect = complete && score === total;
+  const headTitle = view === "questions" ? `Question ${step + 1} of ${total}` : perfect ? <><span className="quiz-check" role="img" aria-label="All correct">✓</span>{title}</> : title;
   const meta = view === "questions" ? undefined : `${total} question${total === 1 ? "" : "s"}`;
   const action =
     view === "landing" ? (
@@ -143,6 +144,7 @@ export default function Quiz({ id, questions, title = "Test your understanding",
         .quiz .quiz-after { margin-top: 1.5rem; }
         .quiz .quiz-explain { margin: 0 0 1.25rem; color: var(--text-muted); }
         .quiz .quiz-score { font-size: 1.6rem; font-weight: 600; margin: 0 0 0.35rem; }
+        .quiz .quiz-check { color: var(--good); margin-right: 0.45rem; }
       `}</style>
     </Interactive>
   );

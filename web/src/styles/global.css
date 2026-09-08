@@ -1,8 +1,9 @@
 :root {
   color-scheme: light;
-  --bg: #ffffff;
-  --bg-raised: #f5f5f7;
-  --bg-sunken: #ebebef;
+  /* Warm off-white; the raised, sunken and code fills keep their deltas from it. */
+  --bg: #faf8f3;
+  --bg-raised: #f1eee6;
+  --bg-sunken: #e8e4da;
   --text: #1a1a1e;
   --text-strong: #000000;
   --text-muted: #5c5c66;
@@ -14,7 +15,7 @@
   --good: #15803d;
   --warn: #b45309;
   --bad: #b91c1c;
-  --code-bg: #f1f1f4;
+  --code-bg: #f1eee6;
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
   --measure: 70ch;
@@ -33,9 +34,9 @@
   --viz-defect-text: #1a1a1e;
   --viz-accent: var(--accent);
   --viz-accent-text: var(--accent-text);
-  --viz-fill-soft: #eeeef2;
+  --viz-fill-soft: #edeae1;
   --viz-border-soft: #9a9aa4;
-  --viz-accent-tint: #f1e8fd;
+  --viz-accent-tint: #ede4f8;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -111,7 +112,14 @@ body { margin: 0; }
 a { color: var(--link); }
 a:hover { color: var(--accent); }
 code, pre, kbd { font-family: var(--font-mono); font-size: 0.92em; }
-pre { background: var(--code-bg); padding: 1rem 1.25rem; border-radius: 8px; overflow-x: auto; margin: 2.5rem 0; }
+/* Code blocks have no fill: the code sits on the page with a faint line-number gutter. Shiki emits both themes as variables. */
+pre { background: none; padding: 0.25rem 0; margin: 2.5rem 0; overflow-x: auto; font-size: 0.86rem; line-height: 1.6; }
+pre.astro-code, pre.astro-code span { color: var(--shiki-light); }
+pre.astro-code code { display: block; white-space: normal; counter-reset: line; }
+pre.astro-code .line { display: block; white-space: pre; padding-right: 0.5rem; }
+pre.astro-code .line::before { counter-increment: line; content: counter(line); display: inline-block; width: 2.6rem; padding-right: 1rem; box-sizing: border-box; text-align: right; color: var(--text-faint); user-select: none; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) pre.astro-code, :root:not([data-theme="light"]) pre.astro-code span { color: var(--shiki-dark); } }
+:root[data-theme="dark"] pre.astro-code, :root[data-theme="dark"] pre.astro-code span { color: var(--shiki-dark); }
 :not(pre) > code { background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 4px; }
 h1, h2, h3 { line-height: 1.2; letter-spacing: -0.01em; color: var(--text-strong); }
 /* Weight reads as brightness too: bold is the strong colour, body text sits a step below it. */
@@ -181,3 +189,16 @@ html[data-render="deck"] .anchor { display: none; }
 html[data-render="book"] [data-deck-only] { display: none; }
 html[data-render="deck"] [data-book-only] { display: none; }
 html[data-render="book"] [data-notes] { display: none; }
+
+/* Footnotes: remark-gfm's list becomes a small muted section; the popover is mounted by src/scripts/footnotes.ts. */
+[data-footnote-ref] { text-decoration: none; font-weight: 600; padding: 0 0.15em; }
+[data-footnotes] { margin-top: 5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.9rem; color: var(--text-muted); }
+[data-footnotes] > h2 { position: static; clip: auto; width: auto; height: auto; overflow: visible; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-faint); margin: 0 0 0.75rem; }
+[data-footnotes] > h2 .anchor { display: none; }
+[data-footnotes] ol { padding-left: 1.5rem; }
+[data-footnotes] li + li { margin-top: 0.5rem; }
+[data-footnotes] li p { margin: 0; }
+[data-footnote-backref] { text-decoration: none; margin-left: 0.3em; }
+.fn-pop { position: absolute; z-index: 5; max-width: min(28rem, calc(100vw - 2rem)); padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); color: var(--text); font-size: 0.9rem; line-height: 1.55; }
+.fn-pop p { margin: 0; }
+html[data-render="deck"] [data-footnotes] { display: none; }

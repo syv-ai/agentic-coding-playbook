@@ -1,0 +1,43 @@
+---
+/**
+ * A YouTube video behind a facade: thumbnail and a play pill, the player loads only on click,
+ * from the no-cookie domain, so nothing is fetched from YouTube until the reader chooses.
+ */
+interface Props {
+  /** The YouTube video id, the part after `v=`. */
+  id: string;
+  title: string;
+}
+const { id, title } = Astro.props;
+---
+<figure class="video" data-video={id} data-title={title}>
+  <button type="button" class="video-facade" aria-label={`Play: ${title}`}>
+    <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" loading="lazy" width="480" height="360" />
+    <span class="video-play btn btn-primary" aria-hidden="true">Play</span>
+  </button>
+  <figcaption>{title}</figcaption>
+</figure>
+
+<style is:global>
+  .video { margin: 4rem 0; }
+  .video-facade, .video iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 12px; overflow: hidden; background: var(--bg-sunken); }
+  .video-facade { position: relative; padding: 0; cursor: pointer; }
+  .video-facade img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .video-play { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 0.55rem 1.4rem; font-size: 0.95rem; }
+  .video-play::before { content: "▶"; font-size: 0.75em; margin-right: 0.5rem; }
+  .video-facade:hover .video-play { filter: brightness(1.08); }
+  .video figcaption { font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; text-align: center; }
+</style>
+
+<script>
+  for (const fig of document.querySelectorAll<HTMLElement>("figure.video")) {
+    fig.querySelector(".video-facade")?.addEventListener("click", () => {
+      const frame = document.createElement("iframe");
+      frame.src = `https://www.youtube-nocookie.com/embed/${fig.dataset.video}?autoplay=1&rel=0`;
+      frame.title = fig.dataset.title ?? "Video";
+      frame.allow = "autoplay; encrypted-media; picture-in-picture";
+      frame.allowFullscreen = true;
+      fig.querySelector(".video-facade")?.replaceWith(frame);
+    });
+  }
+</script>

@@ -5,6 +5,7 @@ import { rehypeHeadingIds } from "@astrojs/markdown-remark";
 import { rehypeHeadingAnchors } from "./src/lib/rehype-heading-anchors.ts";
 import { rehypeFigures } from "./src/lib/rehype-figures.ts";
 import { rehypeSlides } from "./src/lib/rehype-slides.ts";
+import { SHIKI_THEMES } from "./src/lib/shiki.ts";
 
 export default defineConfig({
   site: "https://syv-ai.github.io",
@@ -13,6 +14,8 @@ export default defineConfig({
   output: "static",
   integrations: [mdx(), react()],
   markdown: {
+    // Both themes are emitted as CSS variables; global.css picks one per colour scheme.
+    shikiConfig: { themes: SHIKI_THEMES, defaultColor: false },
     // Order matters: ids first, then anchors that use them, figure numbers, then sectioning (which nests everything).
     rehypePlugins: [rehypeHeadingIds, rehypeHeadingAnchors, rehypeFigures, rehypeSlides],
   },

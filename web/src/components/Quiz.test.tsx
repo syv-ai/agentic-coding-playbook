@@ -101,4 +101,19 @@ describe("Quiz", () => {
     expect(screen.getByText("Before the agent starts").closest("button")?.dataset.state).toBe("correct");
     Object.defineProperty(window, "localStorage", original);
   });
+
+  it("shows a green check with the title only when every answer is correct", () => {
+    render(<Quiz id="t" questions={questions} title="Quick check" />);
+    fireEvent.click(screen.getByText("Start"));
+    fireEvent.click(screen.getByText("After the agent says it is done"));
+    fireEvent.click(screen.getByText("See result"));
+    expect(screen.queryByLabelText("All correct")).toBeNull();
+    fireEvent.click(screen.getByText("Try again"));
+    fireEvent.click(screen.getByText("Before the agent starts"));
+    fireEvent.click(screen.getByText("See result"));
+    expect(screen.getByLabelText("All correct")).toBeTruthy();
+    cleanup();
+    render(<Quiz id="t" questions={questions} title="Quick check" />);
+    expect(screen.getByLabelText("All correct")).toBeTruthy(); // landing view, from stored answers
+  });
 });
