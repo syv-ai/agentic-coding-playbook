@@ -61,7 +61,8 @@ if (steps.length < 2) throw new Error(`<CodeSteps> "${title}" needs at least two
   .steps-stage pre { overflow-y: hidden; transition: height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
   /* Anything that moves other content slides: a description or note that wraps pushes the code down smoothly. */
   .code-steps .ix-head, .code-steps .steps-note { transition: height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
-  .code-steps .ix-head { margin-bottom: 1.75rem; }
+  /* While the height is pinned for the slide, the row must hug the top, or the grid centres it in the spare space and the title dips. */
+  .code-steps .ix-head { margin-bottom: 1.75rem; align-content: start; }
   .steps-stage code { position: relative; display: block; }
   /* Motion: removed lines lift first, kept lines glide, new lines rise in last. */
   .steps-stage .line { border-radius: 4px; transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s, opacity 0.5s ease 0.45s, background-color 0.6s ease; }
