@@ -42,4 +42,4 @@ Copy the shape of an existing file. A renderer must:
 - The error/"defect" accent (`VIZ.colors().defect`) is tunable, not canonical — keep it readable, not neon.
 - **Sizing system:** SVGs render at **natural pixel size** (real px, not `width:100%`), so the font is never scaled down. Wide diagrams scroll horizontally (`overflow-x:auto` on the container); narrow ones center. Design diagrams to fit the content column at natural size; very wide ones will scroll. Default orientation `LR`.
 
-Full guidance: the `/add-visual` skill in `.claude/skills/add-visual/`.
+Full guidance: the `add-visual` skill in `.agents/skills/add-visual/`.
