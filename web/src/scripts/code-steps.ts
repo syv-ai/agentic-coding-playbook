@@ -52,14 +52,16 @@ export function slideHeight(el: HTMLElement, mutate: () => void): void {
 }
 
 /**
- * Drive one walkthrough. `root` holds the stage (a rendered <pre> for step 0), one <template data-step> per step
- * with the step's <pre>, and the header slots. `animate` false swaps states instantly (reduced motion, tests).
- * `data-auto="<ms>"` on the root cycles through the steps, wrapping to the first; the pointer over the block or
- * focus inside it holds the cycle. In the deck it only runs while the block's slide is active.
+ * Drive one walkthrough. `root` holds the stage with the live <pre> (`[data-steps-live]`) and one hidden ghost
+ * per step (`[data-step]`, carrying the step's <pre> and its desc/note), plus the header slots. The ghosts are also
+ * what reserves the block's height in auto mode, in CSS; this module never measures for that.
+ * `animate` false swaps states instantly (reduced motion, tests). `data-auto="<ms>"` cycles through the steps,
+ * wrapping; the pointer over the block or focus inside it holds the cycle. In the deck it only runs while the
+ * block's slide is active.
  */
 export function createSteps(root: HTMLElement, animate = true): Steps {
-  const templates = Array.from(root.querySelectorAll<HTMLTemplateElement>("template[data-step]"));
-  const stage = root.querySelector<HTMLElement>("[data-steps-stage]")!;
+  const templates = Array.from(root.querySelectorAll<HTMLElement>("[data-step]"));
+  const live = root.querySelector<HTMLElement>("[data-steps-live]")!;
   const head = root.querySelector<HTMLElement>(".ix-head");
   const meta = root.querySelector<HTMLElement>("[data-steps-meta]");
   const desc = root.querySelector<HTMLElement>("[data-steps-desc]");
@@ -69,15 +71,14 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
   const nextBtn = root.querySelector<HTMLButtonElement>("[data-steps-next]");
   const count = templates.length;
   let index = 0;
-  let reserve = false;
 
-  const pre = () => stage.querySelector<HTMLElement>("pre")!;
+  const pre = () => live.querySelector<HTMLElement>("pre")!;
   const code = () => pre().querySelector<HTMLElement>("code") ?? pre();
   const linesOf = (el: ParentNode) => Array.from(el.querySelectorAll<HTMLElement>(".line"));
   const textOf = (el: HTMLElement) => el.textContent ?? "";
 
   const render = (to: number) => {
-    const target = templates[to].content.querySelector("pre");
+    const target = templates[to].querySelector("pre");
     if (!target) return;
     const container = code();
     const current = linesOf(container);
@@ -127,7 +128,7 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
     index = to;
     const t = templates[to];
     if (meta) meta.textContent = `· step ${to + 1} of ${count}`;
-    const setText = (el: HTMLElement | null, text: string) => { if (el) { el.textContent = text; el.hidden = !text && !reserve; } };
+    const setText = (el: HTMLElement | null, text: string) => { if (el) { el.textContent = text; el.hidden = !text; } };
     if (animate && head) slideHeight(head, () => setText(desc, t.dataset.desc ?? "")); else setText(desc, t.dataset.desc ?? "");
     if (animate && note) slideHeight(note, () => setText(note, t.dataset.note ?? "")); else setText(note, t.dataset.note ?? "");
     if (dots) dots.querySelectorAll("i").forEach((d, i) => d.classList.toggle("on", i === to));
@@ -147,40 +148,6 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
   // Auto-run: one timer per block, restarted after every tick so a manual step does not shorten the next wait.
   let paused = false;
   const every = Number(root.dataset.auto ?? 0);
-  reserve = every > 0;
-  // In auto mode the block keeps the height of its tallest step, its longest description and its longest note,
-  // so the page below never moves while the steps run through.
-  const reserveSpace = () => {
-    // Render every step's <pre> into the stage, hidden and out of flow at the stage's width, and take the tallest as it
-    // actually lays out: that includes a horizontal scrollbar on a step with long lines, which a line count would miss.
-    let tallestStep = 0;
-    for (const t of templates) {
-      const probe = t.content.querySelector("pre")?.cloneNode(true) as HTMLElement | null;
-      if (!probe) continue;
-      probe.style.cssText = "position:absolute;left:0;right:0;visibility:hidden;height:auto;margin:0;transition:none";
-      stage.appendChild(probe);
-      tallestStep = Math.max(tallestStep, probe.offsetHeight);
-      probe.remove();
-    }
-    stage.style.position = "relative";
-    stage.style.minHeight = `${tallestStep}px`;
-    const tallest = (el: HTMLElement, measure: HTMLElement, texts: string[]) => {
-      const keep = el.textContent, hidden = el.hidden;
-      el.hidden = false;
-      let h = 0;
-      for (const t of texts) { el.textContent = t; h = Math.max(h, measure.offsetHeight); }
-      el.textContent = keep; el.hidden = hidden;
-      return h;
-    };
-    if (desc && head) head.style.minHeight = `${tallest(desc, head, templates.map((t) => t.dataset.desc ?? ""))}px`;
-    if (note) { note.style.minHeight = `${tallest(note, note, templates.map((t) => t.dataset.note ?? ""))}px`; note.hidden = false; }
-  };
-  if (reserve) {
-    reserveSpace();
-    if (typeof document !== "undefined" && "fonts" in document) document.fonts.ready.then(reserveSpace);
-    let resizeTimer: ReturnType<typeof setTimeout> | undefined;
-    window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(reserveSpace, 150); });
-  }
   if (every > 0 && count > 1) {
     const inDeck = root.ownerDocument.documentElement.dataset.render === "deck";
     const tick = () => {

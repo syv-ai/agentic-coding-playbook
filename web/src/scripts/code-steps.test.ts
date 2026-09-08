@@ -17,13 +17,15 @@ function block(steps: { desc: string; note: string; lines: string[] }[], attrs =
       <span data-steps-meta></span><span data-steps-desc></span>
       <span data-steps-dots>${steps.map(() => "<i></i>").join("")}</span>
       <button data-steps-prev>Previous</button><button data-steps-next>Next</button>
-      <div data-steps-stage>${pre(steps[0].lines)}</div>
+      <div data-steps-stage>
+        <div data-steps-live>${pre(steps[0].lines)}</div>
+        ${steps.map((s) => `<div data-step data-desc="${s.desc}" data-note="${s.note}">${pre(s.lines)}</div>`).join("")}
+      </div>
       <p data-steps-note></p>
-      ${steps.map((s) => `<template data-step data-desc="${s.desc}" data-note="${s.note}">${pre(s.lines)}</template>`).join("")}
     </section>`;
   return document.querySelector<HTMLElement>("[data-code-steps]")!;
 }
-const shown = () => Array.from(document.querySelectorAll("[data-steps-stage] .line")).map((l) => (l.classList.contains("chg") ? "*" : "") + l.textContent);
+const shown = () => Array.from(document.querySelectorAll("[data-steps-live] .line")).map((l) => (l.classList.contains("chg") ? "*" : "") + l.textContent);
 
 const STEPS = [
   { desc: "one", note: "n1", lines: ["def run(task):", "    return agent(task)"] },
@@ -147,20 +149,10 @@ describe("auto-run", () => {
     void root;
   });
 
-  it("reserves space for the tallest step, description and note, and keeps an empty note in flow", () => {
+  it("hides an empty note", () => {
     const withEmptyNote = [STEPS[0], { ...STEPS[1], note: "" }, STEPS[2]];
-    const root = block(withEmptyNote, 'data-auto="1000"');
-    const steps = createSteps(root, false);
-    const stage = root.querySelector<HTMLElement>("[data-steps-stage]")!, note = root.querySelector<HTMLElement>("[data-steps-note]")!;
-    expect(stage.style.minHeight).toMatch(/px$/);
-    expect(note.style.minHeight).toMatch(/px$/);
-    expect(root.querySelector<HTMLElement>("[data-steps-desc]")?.textContent).toBe(""); // measuring restored the text
+    const steps = createSteps(block(withEmptyNote), false);
     steps.next();
-    expect(root.querySelector<HTMLElement>("[data-steps-desc]")?.textContent).toBe("two");
-    expect(note.hidden).toBe(false);
-    expect(note.textContent).toBe("");
-    const manual = createSteps(block(withEmptyNote), false);
-    manual.next();
     expect(document.querySelector<HTMLElement>("[data-steps-note]")!.hidden).toBe(true);
   });
 });

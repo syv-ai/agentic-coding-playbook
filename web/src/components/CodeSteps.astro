@@ -29,11 +29,14 @@ interface Props {
 const { title, lang, steps, meta = lang, auto, controls = true } = Astro.props;
 if (steps.length < 2) throw new Error(`<CodeSteps> "${title}" needs at least two steps.`);
 ---
-<section class="ix code-steps" data-code-steps data-auto={auto ? Math.round(auto * 1000) : undefined} data-pagefind-ignore>
+<section class="ix code-steps" class:list={{ "is-reserved": !!auto }} data-code-steps data-auto={auto ? Math.round(auto * 1000) : undefined} data-pagefind-ignore>
   <header class="ix-head">
     <div class="ix-lead">
       <h3 class="ix-title">{title} <span class="ix-meta">· {meta} <span data-steps-meta>· step 1 of {steps.length}</span></span></h3>
-      <p class="ix-desc" data-steps-desc>{steps[0].desc}</p>
+      <div class="steps-stack">
+        <p class="ix-desc" data-steps-desc>{steps[0].desc}</p>
+        {steps.map((s) => <p class="ix-desc steps-ghost" aria-hidden="true">{s.desc}</p>)}
+      </div>
     </div>
     <div class="ix-action">
       <span class="steps-dots" data-steps-dots aria-hidden="true">{steps.map((_, i) => <i class:list={{ on: i === 0 }}></i>)}</span>
@@ -41,15 +44,18 @@ if (steps.length < 2) throw new Error(`<CodeSteps> "${title}" needs at least two
       {controls && <button type="button" class="btn btn-primary" data-steps-next>Next</button>}
     </div>
   </header>
-  <div class="steps-stage" data-steps-stage>
-    <Code code={steps[0].code} lang={lang as never} themes={SHIKI_THEMES} defaultColor={false} />
+  <div class="steps-stage steps-stack" data-steps-stage>
+    <div class="steps-live" data-steps-live><Code code={steps[0].code} lang={lang as never} themes={SHIKI_THEMES} defaultColor={false} /></div>
+    {steps.map((s) => (
+      <div class="steps-ghost" data-step data-desc={s.desc} data-note={s.note} aria-hidden="true">
+        <Code code={s.code} lang={lang as never} themes={SHIKI_THEMES} defaultColor={false} />
+      </div>
+    ))}
   </div>
-  <p class="steps-note" data-steps-note hidden={!steps[0].note}>{steps[0].note}</p>
-  {steps.map((s) => (
-    <template data-step data-desc={s.desc} data-note={s.note}>
-      <Code code={s.code} lang={lang as never} themes={SHIKI_THEMES} defaultColor={false} />
-    </template>
-  ))}
+  <div class="steps-stack">
+    <p class="steps-note" data-steps-note hidden={!steps[0].note}>{steps[0].note}</p>
+    {steps.map((s) => <p class="steps-note steps-ghost" aria-hidden="true">{s.note}</p>)}
+  </div>
 </section>
 
 <style is:global>
@@ -58,7 +64,15 @@ if (steps.length < 2) throw new Error(`<CodeSteps> "${title}" needs at least two
   .steps-dots i { width: 6px; height: 6px; border-radius: 999px; background: var(--border); transition: background 0.3s; }
   .steps-dots i.on { background: var(--accent); }
   /* Height is pinned while lines move; leaving lines sit out of flow at their old row and must never scroll. */
-  .steps-stage pre { overflow-y: hidden; transition: height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .steps-stage { margin: 2.5rem 0; }
+  .steps-stage pre { margin: 0; overflow-y: hidden; transition: height 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  /* Every step is in the HTML. Ghost copies are hidden; in a reserved block they stack in one grid cell,
+     so the block is as tall as its tallest step, longest description and longest note from the first paint. */
+  .steps-ghost { display: none; }
+  .is-reserved .steps-stack { display: grid; }
+  .is-reserved .steps-stack > * { grid-area: 1 / 1; }
+  .is-reserved .steps-ghost { display: block; visibility: hidden; pointer-events: none; }
+  .is-reserved .steps-note[hidden] { display: block; visibility: hidden; }
   /* Anything that moves other content slides: a description or note that wraps pushes the code down smoothly. */
   .code-steps .ix-head, .code-steps .steps-note { transition: height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
   /* While the height is pinned for the slide, the row must hug the top, or the grid centres it in the spare space and the title dips. */
@@ -70,9 +84,11 @@ if (steps.length < 2) throw new Error(`<CodeSteps> "${title}" needs at least two
   .steps-stage .line.chg::before { color: var(--accent); }
   .steps-stage .line.enter { opacity: 0; transform: translateY(0.5rem); }
   .steps-stage .line.leave-pre { position: absolute; left: 0; right: 0; pointer-events: none; }
+  /* A leaving line keeps its old number and must not shift the numbers of the lines that stay. */
+  .steps-stage .line.leave-pre::before { counter-increment: none; }
   .steps-stage .line.leave { opacity: 0; transform: translateY(-0.5rem); transition: transform 0.35s ease, opacity 0.35s ease; }
-  .steps-note { font-size: 0.95rem; color: var(--text-muted); margin: 1rem 0 0; }
-  .prose .code-steps .steps-note { margin: 1rem 0 0; }
+  .steps-note { font-size: 0.95rem; color: var(--text-muted); margin: 0; }
+  .prose .code-steps .steps-note { margin: 0; }
   @media (prefers-reduced-motion: reduce) { .steps-stage pre, .steps-stage .line, .code-steps .ix-head, .code-steps .steps-note { transition: none; } }
 </style>
 
