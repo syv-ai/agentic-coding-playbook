@@ -4,7 +4,7 @@ A lightweight way to show the user mockups, diagrams, and option comparisons
 during brainstorming. **Static HTML files — no server, no Node, no build.** You
 write a self-contained HTML file, open it in the user's browser, and immediately
 capture their decision in the terminal with your ask-the-user tool
-(`AskUserQuestion`). The page is for *seeing*; the answer comes back through the
+(`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot). The page is for *seeing*; the answer comes back through the
 tool.
 
 ## When to use
@@ -48,8 +48,8 @@ right?" is visual — browser.
      and ask the user to open it. The flow still works — the answer is captured in
      the terminal regardless.
 
-3. **Immediately ask for the decision** with `AskUserQuestion` (if your harness
-   lacks it, ask in plain text). Mirror the options shown in the HTML as the answer
+3. **Immediately ask for the decision** with `AskUserQuestion` or `askQuestions`
+   (if your harness has neither, ask in plain text). Mirror the options shown in the HTML as the answer
    choices, with the same letters/labels, so the page and the prompt line up. The
    browser selection is cosmetic; the tool answer is the source of truth.
 

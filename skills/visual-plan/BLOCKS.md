@@ -16,7 +16,7 @@ A visual plan is built from blocks. Each part of the plan maps onto the block th
 | **table** | Structured data — config matrices, contract fields, decision grids. | Standard table. |
 | **callout** | A scannable assumption, risk, or settled decision. | Tone: `note`, `warning`, `risk`, or `decision`. Use `decision` for choices already made — they are not open questions. |
 | **checklist** | The closing verification steps — the end-to-end smoke test. | What proves the work is done. Real workflows, on-disk assertions, actual commands. |
-| **open-questions** | Resolvable either/or decisions that would change the plan. | **Bottom of the document only.** Each has a recommended option. Resolved in the terminal via `AskUserQuestion`, not in the browser. |
+| **open-questions** | Resolvable either/or decisions that would change the plan. | **Bottom of the document only.** Each has a recommended option. Resolved in the terminal via `AskUserQuestion` or `askQuestions`, not in the browser. |
 
 ## Quality bar
 

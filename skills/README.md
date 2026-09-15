@@ -56,9 +56,9 @@ Two skills need a little more than the skill folder:
 - `improve-code-design` delegates to two subagents. `gh skill install` copies
   only skill folders, so copy the Copilot versions out of the installed skill
   once: `cp .github/skills/improve-code-design/agents/*.agent.md .github/agents/`.
-- `grill-me` and the visual companions ask through Claude Code's
-  `AskUserQuestion` tool. Copilot has no equivalent, so ask it for one question
-  at a time in plain chat instead; the skills say so where it matters.
+- `grill-me` and the visual companions ask through a question tool:
+  `AskUserQuestion` in Claude Code, `askQuestions` in VS Code. If the question
+  carousel does not appear in VS Code, turn on `chat.askQuestions.enabled`.
 
 ### Then, in your project
 

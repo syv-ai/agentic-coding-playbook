@@ -38,7 +38,7 @@ You MUST create a task for each step and complete them in order.
 3. **Collect open decisions.** Pull every either/or choice that would change the plan into a single open-questions block at the bottom. Each gets a recommended option. Everything already settled stays as prose or a `decision` callout — not a question.
 4. **Render the HTML.** Fill the [template.html](template.html) scaffold. Write it to the OS temp directory (e.g. `$TMPDIR/visual-plan-<slug>.html`), not into the repo. The only external resources are the Tailwind and Mermaid CDNs; the file is otherwise static.
 5. **Open it.** Open the file in the user's browser (`open` on macOS, `xdg-open` on Linux, `start` on Windows).
-6. **Capture decisions in the terminal.** For each open question, ask via `AskUserQuestion` with the recommended option first, labelled "(Recommended)". The HTML highlighting is cosmetic only — the decision is recorded in the terminal, not the browser.
+6. **Capture decisions in the terminal.** For each open question, ask via `AskUserQuestion` (Claude Code) or `askQuestions` (VS Code Copilot) with the recommended option first, labelled "(Recommended)". The HTML highlighting is cosmetic only — the decision is recorded in the terminal, not the browser.
 7. **Fold answers back into the plan.** Update the markdown plan doc with the resolved decisions so executing-plans works from the settled version. The HTML is a disposable review aid; the markdown is what ships.
 
 ## Hard rules
