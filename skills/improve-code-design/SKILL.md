@@ -44,11 +44,11 @@ The failure modes in FAMILIES.md apply to **you** while you run this skill. You 
 Run these before reading code. They are faster and more complete than grepping, and they surface candidates you would otherwise have to notice.
 
 ```
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/improve-code-design/scripts/tells.py" PATH [--lang py|ts|both]
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/improve-code-design/scripts/cochange.py" PATH [--since 2y]
+python3 "$SKILL_DIR/scripts/tells.py" PATH [--lang py|ts|both]
+python3 "$SKILL_DIR/scripts/cochange.py" PATH [--since 2y]
 ```
 
-`${CLAUDE_PLUGIN_ROOT}` resolves to the installed plugin directory. A bare `scripts/...` path resolves against the repo under review and will not be found. If the variable is unset — the skill is being used standalone rather than from a plugin — fall back to the path relative to this file.
+`$SKILL_DIR` stands for the directory this SKILL.md lives in. As a Claude Code plugin that is `${CLAUDE_PLUGIN_ROOT}/skills/improve-code-design`; installed with `gh skill install` it is `.github/skills/improve-code-design` (Copilot) or wherever your agent keeps skills; via `npx skills` it is `.claude/skills/improve-code-design`. A bare `scripts/...` path resolves against the repo under review and will not be found.
 
 Stdlib only, no third-party imports. `python3` is the portable spelling; `python` is absent on many machines. If neither resolves, say the mechanical pass was skipped rather than substituting grep and calling it equivalent.
 
@@ -63,8 +63,10 @@ Output is candidates. Everything still goes through the gate.
 Delegate enumeration instead. Judgment stays with you, because the Structure family is only visible when every unit is in one context.
 
 ```
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/improve-code-design/scripts/inventory.py" plan PATH --batch 8
+python3 "$SKILL_DIR/scripts/inventory.py" plan PATH --batch 8
 ```
+
+The two subagents this skill uses, `design-inventory` and `design-auditor`, ship with the collection: as Claude Code agents in the plugin's `agents/`, and as Copilot custom agents in this skill's own `agents/*.agent.md`. On Copilot, copy those two files into the repo's `.github/agents/` once; without that the names below will not resolve. If your harness cannot run subagents at all, do the same work in a fresh chat per batch and paste the tables back, rather than inlining it into this conversation.
 
 Hand one batch per invocation of the **`design-inventory`** subagent. Its system prompt is frozen: it returns a factual table — what each file owns, what would force an edit, what it reaches into, its public surface, and a fixed checklist of observations — and evaluates nothing. Do not paraphrase its instructions or add "and note anything problematic you see" to the request. That single addition reintroduces the satisficing this protocol exists to remove.
 
@@ -77,7 +79,7 @@ Judgment stays with you. The Structure family is only visible with every table i
 Then prove coverage rather than asserting it:
 
 ```
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/improve-code-design/scripts/inventory.py" check PATH --covered covered.txt
+python3 "$SKILL_DIR/scripts/inventory.py" check PATH --covered covered.txt
 ```
 
 Anything not covered goes in the report as not examined. **A tally that reads as complete when it is not is worse than a missing candidate.**
@@ -96,7 +98,7 @@ Read FAMILIES.md. Apply three tests explicitly, in this order:
 
 Draft your candidates, then hand the list to the **`design-auditor`** subagent. It applies the eight rules below against candidates it did not author, verifies each rule rather than accepting your claims, and returns KEEP / DOWNGRADE / DROP with evidence.
 
-> Use the design-auditor subagent on these candidates: `<list>`. Comment mode: `<Trusted|Untrusted>`. Worked suppressions: `${CLAUDE_PLUGIN_ROOT}/skills/improve-code-design/NEGATIVES.md`.
+> Use the design-auditor subagent on these candidates: `<list>`. Comment mode: `<Trusted|Untrusted>`. Worked suppressions: `$SKILL_DIR/NEGATIVES.md`.
 
 You cannot gate your own findings reliably. You wrote them, you spent effort on them, and by this point every one of them has an advocate. That is the whole reason the auditor is a separate context.
 
@@ -119,7 +121,7 @@ A candidate you cannot defend against all eight is not worth drafting. Kill it y
 
 Two or more strong candidates → publish the artifact. Fewer → say it in the conversation and stop. Never build the artifact to justify the review.
 
-The report is a **Claude artifact**, published with the `Artifact` tool: load the `artifact-design` skill, write the page to your scratchpad, publish, and give the user the URL. Full contract — the tag, CSP, theming and layout rules, the token palette, and what goes on a card — in REPORT.md. Mention once that publishing uploads the quoted source to claude.ai; it is private until shared.
+The report is a **Claude artifact**, published with the `Artifact` tool: load the `artifact-design` skill, write the page to your scratchpad, publish, and give the user the URL. Full contract — the tag, CSP, theming and layout rules, the token palette, and what goes on a card — in REPORT.md. Mention once that publishing uploads the quoted source to claude.ai; it is private until shared. On a harness without the `Artifact` tool (Copilot and others), write the same page to a file outside the repo and open it in the browser.
 
 Every candidate carries: title in the codebase's own nouns · family · standard name · what it costs · the remedy, named · what the remedy costs and how you would know it was the wrong call.
 

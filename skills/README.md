@@ -3,11 +3,12 @@
 The official Syv.ai agentic-coding skills — the practical companion to the
 [Agentic Coding Playbook](../README.md). A curated, best-of-breed set of skills
 for steering an agent through real work: planning, execution, quality, and
-verification. Tool-agnostic in spirit; written for Claude Code.
+verification. Tool-agnostic in spirit; written for Claude Code, and usable from
+GitHub Copilot and other agents that read `SKILL.md` folders.
 
 ## Install
 
-Two ways — pick one.
+Three ways — pick one.
 
 ### A. As a Claude Code plugin (recommended)
 
@@ -36,6 +37,28 @@ npx skills add syv-ai/agentic-coding-playbook --agent claude-code --copy
 
 Requires Node.js 18+. (`--agent claude-code` also ensures the skills land in
 `.claude/skills/` rather than a generic agent directory.)
+
+### C. With GitHub Copilot (or any other agent `gh skill` supports)
+
+The GitHub CLI installs the skills into the directory your agent reads
+(`.github/skills/` for Copilot):
+
+```bash
+gh skill install syv-ai/agentic-coding-playbook --all
+```
+
+Add `--agent github-copilot` if you have several agents set up. Skills are then
+available in Copilot chat as `/skill-name`, and Copilot picks them up on its own
+when a task matches a skill's description.
+
+Two skills need a little more than the skill folder:
+
+- `improve-code-design` delegates to two subagents. `gh skill install` copies
+  only skill folders, so copy the Copilot versions out of the installed skill
+  once: `cp .github/skills/improve-code-design/agents/*.agent.md .github/agents/`.
+- `grill-me` and the visual companions ask through Claude Code's
+  `AskUserQuestion` tool. Copilot has no equivalent, so ask it for one question
+  at a time in plain chat instead; the skills say so where it matters.
 
 ### Then, in your project
 
@@ -68,15 +91,9 @@ Requires Node.js 18+. (`--agent claude-code` also ensures the skills land in
 
 **Architecture, lifecycle & meta**
 - [`improve-codebase-architecture`](improve-codebase-architecture/) — find shallow modules, propose deeper ones.
-- [`improve-code-design`](improve-code-design/) — name the anti-pattern a piece of code is an instance of, the principle it violates, and the pattern that fixes it. Its sibling above asks "is this module deep?"; this one asks "does this violate a named principle, and is there a named remedy?" Enumeration is delegated to the `design-inventory` agent and the suppression gate to `design-auditor`, both in [`agents/`](../agents/); findings land as a published Claude artifact.
+- [`improve-code-design`](improve-code-design/) — name the anti-pattern a piece of code is an instance of, the principle it violates, and the pattern that fixes it. Its sibling above asks "is this module deep?"; this one asks "does this violate a named principle, and is there a named remedy?" Enumeration is delegated to the `design-inventory` agent and the suppression gate to `design-auditor`, both in [`agents/`](../agents/) (Copilot copies ship inside the skill under `agents/`).
 - [`handoff`](handoff/) — compact the conversation into a handoff doc for a fresh session.
 - [`write-a-skill`](write-a-skill/) — author new skills for this collection, with progressive disclosure.
-
-**Company brain (syv-internal)** — deliberately *not* registered in the plugin, so they are
-not installed by method A. Use method B, or copy the directory. Both require GitHub access to
-the private `syv-ai/1brain` repo.
-- [`hjernen`](hjernen/) — query or contribute to syv.ai's shared brain (the private `1brain` repo) from any session; bootstraps a local clone and defers to the repo's own schema.
-- [`tilbud`](tilbud/) — write a client proposal in the company's fixed format and render the branded PDF; builds on `hjernen`.
 
 **Setup**
 - [`setup`](setup/) — set up a project's stack and dev-env feedback loops (new or existing repo).

@@ -4,7 +4,7 @@ Write only when there are **two or more strong candidates**. One candidate, or n
 
 ## Form: a published artifact
 
-The report is a **Claude artifact**, not a local HTML file. Load the `artifact-design` skill, write the page to your scratchpad directory, then publish it with the `Artifact` tool.
+The report is a **Claude artifact**, not a local HTML file. Load the `artifact-design` skill, write the page to your scratchpad directory, then publish it with the `Artifact` tool. On a harness without that tool (Copilot and others), the page is the same; write it to a file outside the repo and open it in the browser instead of publishing.
 
 ```
 Artifact(
