@@ -1,12 +1,13 @@
 #!/bin/bash
 # Guardrails — block dangerous commands before the agent runs them.
 #
-# Registered as a PreToolUse hook on the Bash tool. It reads the tool call on
+# Claude Code contract: a PreToolUse hook on the Bash tool. It reads the tool call on
 # stdin, extracts the command, and matches it against DANGEROUS_PATTERNS.
 # On a match it prints a reason to stderr and exits 2 — which BLOCKS the call
 # and feeds the reason back to the agent.
 #
-# Tailor DANGEROUS_PATTERNS to THIS project's risk surface (run /guardrails).
+# Other harnesses: adapt the input parsing and the block signal to their hook contract.
+# Tailor DANGEROUS_PATTERNS to this project's risk surface (see the guardrails skill).
 # Patterns are case-insensitive extended regex (grep -iE).
 
 INPUT=$(cat)

@@ -1,0 +1,29 @@
+name: Check skills
+
+on:
+  pull_request:
+    paths:
+      - "skills/**"
+      - "agents/**"
+      - "scripts/sync-subagents.py"
+      - ".github/workflows/skills.yml"
+  push:
+    branches: [main]
+    paths:
+      - "skills/**"
+      - "agents/**"
+      - "scripts/sync-subagents.py"
+      - ".github/workflows/skills.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  subagents-in-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+      - run: python3 scripts/sync-subagents.py --check

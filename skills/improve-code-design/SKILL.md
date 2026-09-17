@@ -7,138 +7,101 @@ description: Find named design problems in a codebase — the anti-patterns codi
 
 Name the anti-pattern, name what it costs, name the remedy. Names are the product: "extract this into a Strategy" is actionable, "clean this up" is not.
 
-You already know the theory. What you do not know is which of it applies here, and your default failure is to report too much. The reference files exist to constrain output, not to teach.
+You already know the theory. What you don't know is which of it applies here, and your default failure is to report too much. The reference files exist to constrain output, not to teach.
 
-## Scope
-
-**In:** does this code violate a named principle, and is there a named remedy?
-
-**Out:** bugs (flag briefly, don't develop), style, unconventional-but-clear naming. Misleading names are in.
+**In scope:** does this code violate a named principle, and is there a named remedy? **Out:** bugs (flag briefly, don't develop), style, unconventional-but-clear naming. Misleading names are in.
 
 ## Be ruthless
 
-A weak candidate costs more than a missing one — it teaches the reader this skill pads, and the strong candidates get skimmed with the rest.
+A weak candidate costs more than a missing one: it teaches the reader the review pads, and the strong findings get skimmed with the rest.
 
-- **Reporting nothing is a valid result.** Say so plainly and stop. See NEGATIVES.md for what that looks like.
-- Every candidate must complete this sentence or it is dropped: *this works; here is what it costs, and here is how you would know I was wrong.*
-- Lead with the uncomfortable finding. Hedging to be agreeable makes the report worthless.
-- Argue from impact and evidence, never from seniority or taste.
+- Reporting nothing is a valid result. Say so plainly and stop — NEGATIVES.md shows what that looks like.
+- Every candidate completes this sentence or is dropped: *this works; here is what it costs, and here is how you would know I was wrong.*
+- Lead with the uncomfortable finding, and argue from impact and evidence rather than seniority or taste.
+- The failure modes in FAMILIES.md apply to you while you run this skill: you serve the immediate ask, imitate what you read first, and don't volunteer breadth nobody requested.
 
-The failure modes in FAMILIES.md apply to **you** while you run this skill. You serve the immediate ask, you imitate what you read first, and you do not volunteer breadth nobody requested.
-
----
+`$SKILL_DIR` below means the directory containing this SKILL.md (`${CLAUDE_SKILL_DIR}` in Claude Code). A bare `scripts/...` path resolves against the repo under review and won't be found.
 
 ## 1. Calibrate
 
-**Comment trust.** Several gate rules below defer to what comments claim. Sample three or four comments making a factual claim about behaviour and check them against the code. Then pick a mode and state it in one line at the top of the review:
+**Comment trust.** Sample three or four comments that make a factual claim about behaviour and check them against the code. State the mode in one line at the top of the review:
 
-- **Trusted** — comments track the code, name rejected alternatives, cite tests. The "justified surprise" gate rule applies in full.
-- **Untrusted** — comments describe intent rather than behaviour, or one contradicts its code. That gate rule is void; verify each claim yourself and say you did.
+- **Trusted** — comments track the code, name rejected alternatives, cite tests. Gate rule 5 applies.
+- **Untrusted** — comments describe intent rather than behaviour, or one contradicts its code. Rule 5 is void; verify claims yourself and say you did.
 
-**One clarifying question, only if it changes a severity.** "How many processes does this run in?" turns a footnote into an outage. "What's your testing philosophy?" changes nothing — don't ask it.
-
-**Stop if there is nothing to review.** Under ~50 lines or a single self-contained function has no structure. Answer directly instead.
+Ask at most one clarifying question, and only if the answer changes a severity ("how many processes does this run in?"). Under ~50 lines or a single self-contained function there is no structure to review — answer directly instead.
 
 ## 2. Mechanical pass
 
-Run these before reading code. They are faster and more complete than grepping, and they surface candidates you would otherwise have to notice.
+Run these before reading code. They surface candidates faster and more completely than grepping.
 
 ```
 python3 "$SKILL_DIR/scripts/tells.py" PATH [--lang py|ts|both]
 python3 "$SKILL_DIR/scripts/cochange.py" PATH [--since 2y]
 ```
 
-`$SKILL_DIR` stands for the directory this SKILL.md lives in. As a Claude Code plugin that is `${CLAUDE_PLUGIN_ROOT}/skills/improve-code-design`; installed with `gh skill install` it is `.github/skills/improve-code-design` (Copilot) or wherever your agent keeps skills; via `npx skills` it is `.claude/skills/improve-code-design`. A bare `scripts/...` path resolves against the repo under review and will not be found.
+Stdlib only. `tells.py` finds duplicate predicates across modules, getters that manufacture defaults, cleanup verbs without a context manager, constant tables keyed by another module's type ids, sibling entry points sharing an input type, and TypeScript boundary tells. `cochange.py` ranks files that change together but live apart — the Structure family, measured. If `python3` isn't available, say the mechanical pass was skipped rather than substituting grep. Output is candidates; everything still goes through the gate.
 
-Stdlib only, no third-party imports. `python3` is the portable spelling; `python` is absent on many machines. If neither resolves, say the mechanical pass was skipped rather than substituting grep and calling it equivalent.
+## 3. Enumerate
 
-`tells.py` finds duplicate predicate names across modules, getters that manufacture a default, cleanup verbs with no context manager, constant tables keyed by another module's type ids, sibling entry points sharing an input type, and the TypeScript boundary tells. `cochange.py` ranks files that change together but live apart — the Structure family, measured rather than guessed.
-
-Output is candidates. Everything still goes through the gate.
-
-## 3. Enumerate, then judge
-
-**Do not delegate "find design problems in X."** That is open-ended search with no stopping criterion. A subagent returns the first real things it sees, and nothing in the task can tell it recall was 20%. This has been tested and it fails exactly this way. Better prompting does not fix a task shape that rewards satisficing.
-
-Delegate enumeration instead. Judgment stays with you, because the Structure family is only visible when every unit is in one context.
+Don't delegate "find design problems in X". It's open-ended search with no stopping criterion, so a subagent returns the first real things it sees at low recall, and better prompting doesn't fix that task shape. Delegate enumeration instead, and keep judgment here, because the Structure family is only visible with every unit in one context.
 
 ```
 python3 "$SKILL_DIR/scripts/inventory.py" plan PATH --batch 8
 ```
 
-The two subagents this skill uses, `design-inventory` and `design-auditor`, ship with the collection: as Claude Code agents in the plugin's `agents/`, and as Copilot custom agents in this skill's own `agents/*.agent.md`. On Copilot, copy those two files into the repo's `.github/agents/` once; without that the names below will not resolve. If your harness cannot run subagents at all, do the same work in a fresh chat per batch and paste the tables back, rather than inlining it into this conversation.
+Hand each batch to the **design-inventory** subagent. It returns a factual table per file and evaluates nothing. Pass the batch and nothing else; adding "and note anything problematic" reintroduces the satisficing this step removes. How to run it depends on the harness:
 
-Hand one batch per invocation of the **`design-inventory`** subagent. Its system prompt is frozen: it returns a factual table — what each file owns, what would force an edit, what it reaches into, its public surface, and a fixed checklist of observations — and evaluates nothing. Do not paraphrase its instructions or add "and note anything problematic you see" to the request. That single addition reintroduces the satisficing this protocol exists to remove.
+- **Claude Code (plugin install):** "Use the design-inventory subagent on batch 3: `<paths>`".
+- **Other harnesses with subagents:** start a subagent whose instructions are the contents of `$SKILL_DIR/subagents/design-inventory.md`, and give it the batch.
+- **No subagents:** run that prompt in a fresh chat per batch and paste the tables back, rather than doing the work inline here.
 
-Invoke it explicitly, one batch at a time:
-
-> Use the design-inventory subagent on batch 3: `<paths>`
-
-Judgment stays with you. The Structure family is only visible with every table in one context, which is here and not there.
-
-Then prove coverage rather than asserting it:
+Below ~15 files, skip delegation and read them yourself. Then prove coverage:
 
 ```
 python3 "$SKILL_DIR/scripts/inventory.py" check PATH --covered covered.txt
 ```
 
-Anything not covered goes in the report as not examined. **A tally that reads as complete when it is not is worse than a missing candidate.**
+Anything uncovered goes in the report as not examined. A tally that reads as complete when it isn't is worse than a missing candidate.
 
-Below ~15 files, skip delegation and read them yourself.
+In Claude Code, if dynamic workflows are available and the user has opted in, the batch fan-out and the audit below can run as one workflow; the steps stay the same.
 
 ## 4. Judge
 
-Read FAMILIES.md. Apply three tests explicitly, in this order:
+Read FAMILIES.md, then apply three tests in order:
 
-1. **Reasons to change** — list the kinds of requirement that would force an edit here. Two unrelated kinds means two jobs.
-2. **Two implementations** — before proposing any seam, does something actually vary? A conditional that has not gained a branch in two years is a conditional, not a violation. Proposing a Strategy for it is the over-build you are supposed to be naming.
-3. **Interface cost** — what must a caller understand to use this correctly, versus what it does for them? A module whose signature is as complicated as its body is a wrapper with a name. This is Over-build wearing an abstraction.
+1. **Reasons to change** — list the kinds of requirement that would force an edit. Two unrelated kinds means two jobs.
+2. **Two implementations** — before proposing a seam, does something actually vary? A conditional that hasn't gained a branch in two years is a conditional. Proposing a Strategy for it is the over-build you're meant to be naming.
+3. **Interface cost** — what must a caller understand, versus what the module does for them? A signature as complicated as its body is a wrapper with a name.
 
 ## 5. Gate
 
-Draft your candidates, then hand the list to the **`design-auditor`** subagent. It applies the eight rules below against candidates it did not author, verifies each rule rather than accepting your claims, and returns KEEP / DOWNGRADE / DROP with evidence.
+You can't reliably gate your own findings — by now each one has an advocate. Hand the drafted list to the **design-auditor** subagent (same three routes as above, with `$SKILL_DIR/subagents/design-auditor.md`):
 
-> Use the design-auditor subagent on these candidates: `<list>`. Comment mode: `<Trusted|Untrusted>`. Worked suppressions: `$SKILL_DIR/NEGATIVES.md`.
+> Use the design-auditor subagent on these candidates: `<list>`. Comment mode: `<Trusted|Untrusted>`. Worked suppressions: `$SKILL_DIR/NEGATIVES.md`. Language list: `$SKILL_DIR/LANGUAGE.md`.
 
-You cannot gate your own findings reliably. You wrote them, you spent effort on them, and by this point every one of them has an advocate. That is the whole reason the auditor is a separate context.
+It verifies each claim and returns KEEP / DOWNGRADE / DROP with evidence. Then read the drops: overturn one only where the evidence doesn't support the cited rule (a count that missed a directory, a test that asserts something else), and say that you did and why. Don't overturn because you liked the finding.
 
-**Then read the drops.** You are the appeal court and it costs nothing, because both the candidate and the evidence are already in front of you. Overturn a drop where the evidence does not actually support the rule cited — a "fewer than three instances" drop backed by a count that missed a directory, a "test pins the coupling" drop citing a test that asserts something else. State that you overturned it and why. Do not overturn on the grounds that you liked the finding.
+The eight rules, so you can draft against them. The auditor prompt owns their definitions and verification steps; if the two disagree, it wins.
 
-The eight rules, so you know what to draft against. **The auditor owns their definitions** — `agents/design-auditor.md` holds the full text and the verification action for each. If this list and that file ever disagree, that file wins.
-
-1. A test pins the coupling
-2. There is no better home
-3. Fewer than three instances
-4. The metric is size
-5. The surprise is justified *(Trusted mode only)*
-6. It is a data carrier
-7. The fix costs more than the defect
-8. It cannot say how it would know it was wrong
-
-A candidate you cannot defend against all eight is not worth drafting. Kill it yourself and save the round trip.
+1. A test pins the coupling · 2. There is no better home · 3. Fewer than three instances · 4. The metric is size · 5. The surprise is justified *(Trusted only)* · 6. It is a data carrier · 7. The fix costs more than the defect · 8. It cannot say how it would know it was wrong
 
 ## 6. Report
 
-Two or more strong candidates → publish the artifact. Fewer → say it in the conversation and stop. Never build the artifact to justify the review.
+Two or more strong candidates → write the report. Fewer → say it in the conversation and stop. Never build the report to justify the review.
 
-The report is a **Claude artifact**, published with the `Artifact` tool: load the `artifact-design` skill, write the page to your scratchpad, publish, and give the user the URL. Full contract — the tag, CSP, theming and layout rules, the token palette, and what goes on a card — in REPORT.md. Mention once that publishing uploads the quoted source to claude.ai; it is private until shared. On a harness without the `Artifact` tool (Copilot and others), write the same page to a file outside the repo and open it in the browser.
-
-Every candidate carries: title in the codebase's own nouns · family · standard name · what it costs · the remedy, named · what the remedy costs and how you would know it was the wrong call.
-
-Coverage and the gate tally go above the findings. Drafted, kept, downgraded, dropped — a reader who can see eleven candidates become three trusts the three.
-
-Do not write agent instructions in the report. Do not start refactoring.
+The report is a self-contained HTML page written outside the repo and opened in the browser. Contract, palette and card structure are in REPORT.md. Every candidate carries: a title in the codebase's own nouns · family · standard name · what it costs · the named remedy · what the remedy costs and how you'd know it was wrong. Coverage and the gate tally (drafted, kept, downgraded, dropped) go above the findings. No agent instructions in the report, and no refactoring yet.
 
 ## 7. Grill
 
-Ask which candidate to work through, then walk the tree: what varies and what does not, which callers are affected, what the tests look like afterwards, what the remedy costs. The **grill-me** skill is a good companion.
+Ask which candidate to work through, then walk the tree: what varies and what doesn't, which callers are affected, what the tests look like afterwards, what the remedy costs. The **grill-me** skill is a good companion.
 
-Duplication is cheaper than the wrong abstraction. When it is unclear whether two things are one thing, leaving them apart is the reversible choice — say so even if you proposed merging them.
+Duplication is cheaper than the wrong abstraction. When it's unclear whether two things are one thing, leaving them apart is the reversible choice — say so even if you proposed merging them.
 
-**The instruction for a coding agent is the output of this conversation, not of the report.** Write it once the design decisions are settled: what to change, what to leave, what must not break.
+The instruction for a coding agent comes out of this conversation, not the report. Write it once decisions are settled: what to change, what to leave, what must not break.
 
 ---
 
-FAMILIES.md · LANGUAGE.md · NEGATIVES.md · REPORT.md
+FAMILIES.md · LANGUAGE.md · NEGATIVES.md · REPORT.md · subagents/
 
-External: [refactoring.guru](https://refactoring.guru/refactoring/smells) · [lawsofsoftwareengineering.com](https://lawsofsoftwareengineering.com/) (`api.json`, `llms.txt` for machine reading)
+External: [refactoring.guru](https://refactoring.guru/refactoring/smells) · [lawsofsoftwareengineering.com](https://lawsofsoftwareengineering.com/)

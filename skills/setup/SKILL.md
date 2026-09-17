@@ -1,77 +1,83 @@
 ---
 name: setup
-description: Set up a project's stack and dev-environment feedback loops — the agent's senses. For a new/empty repo, interview the user on the desired stack and scaffold it; for an existing project, detect the stack and wire up the dev env. Either way, install a format/lint/type/test gate that runs on every commit. Use when starting a project, onboarding to a repo, or when there's no automated quality gate yet.
+description: Set up a project's stack and dev-environment feedback loops — the agent's senses. For a new or empty repo, interview the user on the desired stack and scaffold it; for an existing project, detect the stack and wire up the dev environment. Either way, install a format/lint/type/test gate that runs on every commit. Use when starting a project, onboarding to a repo, or when there's no automated quality gate yet.
 disable-model-invocation: true
 argument-hint: "[optional: desired stack, e.g. 'python cli' or 'node web service']"
 ---
 
 # Setup
 
-Get a repo ready for agentic work.
+Get a repo ready for agentic work: a working dev environment plus the feedback loops that let an agent verify its own work and retry without you — a formatter, a linter or type-check, a test runner, and a gate that runs them on every commit. A failing check blocks the commit, the agent reads the error and fixes it. Agents don't tire of repetition, so deterministic gates pay off disproportionately.
 
-If the user passed arguments (`$ARGUMENTS`), treat them as a hint about the
-desired stack or project type and skip the corresponding interview questions —
-e.g. `/setup python cli` means don't ask about language or project shape, just
-confirm the remaining choices. The goal is a working dev environment plus the **feedback loops** that let an agent verify its own work and retry without you — a formatter, a linter/type-check, a test runner, and a pre-commit gate that runs them on every commit. Friction here is desirable: a failing check blocks the commit, the agent reads the error and fixes it. Agents don't tire of repetition, so deterministic gates are disproportionately powerful.
+If the user passed arguments (`$ARGUMENTS` in Claude Code), treat them as a hint about the stack and skip the matching interview questions — `setup python cli` means don't ask about language or project shape, just confirm the rest.
 
-## Step 0 — Detect the situation
+## 0. Detect the situation
 
-Look before you act:
+- Is this a version-controlled repo at all (`git rev-parse`, or the project's VCS)?
+- Project manifests: `package.json`, `pyproject.toml`, `requirements.txt`, `go.mod`, `Cargo.toml`, `*.csproj`/`*.sln`, `pom.xml`, `Gemfile`, …
+- Existing tooling: lockfiles, `.pre-commit-config.yaml`, `.husky/`, CI config, a configured formatter or linter.
+- The project's instructions file (AGENTS.md, or CLAUDE.md in Claude Code): does it already name the commands?
 
-- `git status` / `git rev-parse` — is this a git repo at all?
-- Project manifests — `package.json`, `pyproject.toml`, `requirements.txt`, `go.mod`, `Cargo.toml`, `*.csproj`/`*.sln`, `pom.xml`, `Gemfile`, etc.
-- Existing tooling — a lockfile, a `.pre-commit-config.yaml` / Husky `.husky/`, CI config under `.github/workflows/`, a configured formatter/linter.
+No manifest → **new project**. Manifest present → **existing project**.
 
-Branch on what you find:
-- **No manifest / empty repo →** *New project* path.
-- **Manifest present →** *Existing project* path.
+## New project: interview, then scaffold
 
-## New project — interview, then scaffold
+Don't guess the stack. Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot); if it has none, ask in plain text. Batch the questions and offer a sensible default for each:
 
-Don't guess the stack. Briefly interview the user (this is the **grill-me** technique, focused on environment choices). Keep questions low-fidelity and offer a sensible default for each:
-
-- **Language & runtime** (and version)?
-- **Package manager** (the non-obvious one — e.g. `uv`/`poetry`/`pip`, `pnpm`/`npm`, etc.)?
-- **What kind of thing** is it — CLI, library, web service, script/automation? (Shapes the layout.)
-- **Test runner** (default to the ecosystem standard)?
-- **Formatter & linter** (default to the ecosystem standard)?
+- Language and runtime version
+- Package manager (`uv`/`poetry`/`pip`, `pnpm`/`npm`, …)
+- What it is: CLI, library, web service, script
+- Test runner, formatter and linter (default to the ecosystem standard)
 
 Then scaffold:
 
-1. `git init` if needed; add a language-appropriate `.gitignore`.
-2. Create the minimal project layout and manifest for the chosen stack.
+1. Initialise version control if needed, with a language-appropriate ignore file.
+2. Create the minimal layout and manifest for the stack.
 3. Install dependencies with the chosen package manager.
-4. Add a formatter, a linter/type-checker, and a test runner — with one trivial passing test so the suite is green from commit one.
-5. Wire the **commit gate** (below).
-6. Make an initial commit.
+4. Add the formatter, linter or type-checker, and test runner, with one trivial passing test so the suite is green from the start.
+5. Wire the commit gate (below).
+6. Make an initial commit if the user wants one.
 
-## Existing project — detect, then wire
+## Existing project: detect, then wire
 
-1. **Identify the stack** from the manifests and lockfiles. Don't assume — read them.
-2. **Set up the dev env:** install dependencies with the project's package manager; note any required runtime versions, env vars, or services (`.env.example`, a README "Getting started", a `docker-compose.yml`).
-3. **Find the real commands** the project already uses for format / lint / type-check / test / build — check `package.json` scripts, a `Makefile`/`Taskfile`, `pyproject.toml`/`tox.ini`, CI workflows. Confirm each one actually runs.
-4. **Fill the gaps:** if there's no formatter, linter, or test gate, propose adding them — but match the project's existing conventions, don't impose a new stack.
-5. **Wire the commit gate** if one isn't already present.
+1. **Identify the stack** from manifests and lockfiles.
+2. **Set up the environment:** install dependencies with the project's package manager; note required runtime versions, env vars or services (`.env.example`, README, `docker-compose.yml`).
+3. **Find the real commands** for format, lint, type-check, test and build — package scripts, `Makefile`/`Taskfile`, `pyproject.toml`/`tox.ini`, CI workflows. Run each one to confirm it works.
+4. **Fill gaps** by proposing a formatter, linter or test gate where missing, matching the project's conventions rather than imposing a new stack.
+5. **Wire the commit gate** if there isn't one.
 
-## The commit gate (every stack)
+## The commit gate
 
-The mechanism differs per ecosystem; the principle is identical — run the fast, deterministic checks on every commit, block the commit on failure, and auto-format so all output meets the project's style.
+The mechanism differs per ecosystem; the principle doesn't. Run the fast, deterministic checks on every commit, block on failure, and auto-format.
 
-- **Pick the project's native pre-commit mechanism:** the cross-language [`pre-commit`](https://pre-commit.com) framework (a `.pre-commit-config.yaml`), Husky + lint-staged for JS/TS, a Git `pre-commit` hook script, or the equivalent.
-- **Run, in order, cheapest first:** auto-format → lint / type-check → the fast test subset. Keep it fast; push slow/e2e tests to CI.
-- **Mirror the same checks in CI** so the gate can't be skipped with `--no-verify`.
+- Use the project's native mechanism: the [`pre-commit`](https://pre-commit.com) framework, Husky + lint-staged for JS/TS, a plain git hook, or the equivalent.
+- Order cheapest first: format → lint/type-check → the fast test subset. Push slow and end-to-end tests to CI.
+- Mirror the same checks in CI if the project has CI, so skipping the local hook doesn't skip the checks.
 
-Confirm the gate works by making a commit that violates a rule and watching it get blocked, then a clean one that passes. Don't claim it works without seeing the block — run it and read the output, never from memory.
+Confirm it works: make a commit that breaks a rule and watch it get blocked, then a clean one that passes. Report the output you saw.
+
+## Record the commands
+
+Add a short section to the project's instructions file so every agent and skill can find the checks without rediscovering them. Only include what an agent couldn't infer; if the file already covers it, leave it alone. If the project has no instructions file, ask before creating one.
+
+```markdown
+## Verification
+- Format: `<command>`
+- Lint / type-check: `<command>`
+- Test: `<command>` (fast subset: `<command>`)
+- The commit gate runs these; CI mirrors them.
+```
 
 ## Done when
 
 - [ ] Dependencies install cleanly from a fresh clone
-- [ ] `format`, `lint`/type-check, and `test` commands exist and run green
-- [ ] A pre-commit gate runs them and blocks a failing commit
-- [ ] The same checks run in CI (if the project has CI)
-- [ ] A short note in the README (or CLAUDE.md) records the non-standard commands
+- [ ] Format, lint/type-check and test commands exist and run green
+- [ ] A commit gate runs them and blocks a failing commit
+- [ ] CI runs the same checks (if the project has CI)
+- [ ] The commands are recorded in the project's instructions file
 
 ## Related skills
 
-- **grill-me** — the interview technique used on the new-project path.
+- **grill-me** — the interview technique for the new-project path.
 - **tdd** — once the test runner is wired, build features test-first.
+- **guardrails** — block destructive commands and set a conservative posture.

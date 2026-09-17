@@ -1,11 +1,12 @@
 # Guardrails — block dangerous commands (PowerShell hook for native Windows).
 #
-# Registered as a PreToolUse hook on the Bash tool. Reads the tool call JSON on
+# Claude Code contract: a PreToolUse hook on the Bash tool. Reads the tool call JSON on
 # stdin; on a deny-list match it writes a reason to stderr and exits 2 — which
 # BLOCKS the call and feeds the reason back to the agent. Otherwise exits 0.
 # Native JSON parsing, no external dependencies (no jq).
 #
-# Tailor $DangerousPatterns to THIS project's risk surface (run /guardrails).
+# Other harnesses: adapt the input parsing and the block signal to their hook contract.
+# Tailor $DangerousPatterns to this project's risk surface (see the guardrails skill).
 # Patterns are case-insensitive .NET regex.
 
 $raw = [Console]::In.ReadToEnd()

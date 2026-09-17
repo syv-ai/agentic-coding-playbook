@@ -1,32 +1,22 @@
 # Report
 
-Write only when there are **two or more strong candidates**. One candidate, or none, goes in the conversation. Do not build the artifact to justify the review — an artifact with sections to fill is the main pressure toward padding, and this rule is what removes it.
+Write only when there are **two or more strong candidates**. One candidate, or none, goes in the conversation. Do not build the report to justify the review — a page with sections to fill is the main pressure toward padding, and this rule is what removes it.
 
-## Form: a published artifact
+## Form: a self-contained page
 
-The report is a **Claude artifact**, not a local HTML file. Load the `artifact-design` skill, write the page to your scratchpad directory, then publish it with the `Artifact` tool. On a harness without that tool (Copilot and others), the page is the same; write it to a file outside the repo and open it in the browser instead of publishing.
+Write one HTML file outside the repo (the OS temp directory, e.g. `<tmpdir>/design-review-<repo>.html`), open it in the browser, and give the user the absolute path. Each revision gets a new file name.
 
-```
-Artifact(
-  file_path: "<scratchpad>/design-review-<repo>.html",
-  favicon: "🔍",
-  description: "Design review of <repo> — <n> findings from <m> candidates.",
-)
-```
+In Claude Code with the `Artifact` tool, you can publish the same page instead: load the `artifact-design` skill, write the file to the scratchpad, publish it, and give the user the URL. Say once that publishing uploads the quoted source excerpts to claude.ai and that the page is private until shared. To revise, republish the same file path, which keeps the URL.
 
-Say once, in the conversation and not in the page, that publishing uploads the quoted source excerpts to claude.ai. The artifact is private until the user shares it. Do not ask permission and do not offer a local fallback unless the user raises it.
+The contract is the same either way:
 
-Four constraints are load-bearing:
+**Content, not a document skeleton, when publishing.** The `Artifact` publisher wraps the page in `<html>`/`<head>`/`<body>`, so a published file holds only a `<title>`, a `<style>` block and page content; doubled skeleton tags break rendering. A local file needs the full skeleton.
 
-**No `<!doctype>`, `<html>`, `<head>`, or `<body>` tags.** The publisher wraps the file in that skeleton. Write page content only, plus a `<style>` block and a `<title>`. Those tags in the file are a rendering bug, not a redundancy.
+**Nothing loads from the network.** No CDN scripts, stylesheets, webfonts or remote images — artifact pages enforce this with a strict CSP, and local pages stay usable offline. Inline the CSS, hand-build diagrams as inline `<svg>`, and use system font stacks.
 
-**Nothing loads from the network.** A strict CSP blocks every external host — CDN scripts, stylesheets, webfonts, images. This is not an offline-machine precaution; it is enforced, and a Tailwind CDN link produces an unstyled page. Inline the CSS. Hand-build diagrams as inline `<svg>`. Use system font stacks rather than a webfont URL. If a graph-shaped diagram is genuinely the right call, `<pre class="mermaid">` renders natively with no library.
-
-**Both themes.** Define the palette as custom properties on `:root`, redefine only those properties under `@media (prefers-color-scheme: dark)`, then again under `:root[data-theme="dark"]` and `:root[data-theme="light"]` so the viewer's toggle wins in both directions. Style every component through the tokens, never inside the media query. Diagram strokes and fills are tokens too — an SVG with a hardcoded `#111` disappears on the dark ground.
+**Both themes.** Define the palette as custom properties on `:root`, redefine only those properties under `@media (prefers-color-scheme: dark)`, then again under `:root[data-theme="dark"]` and `:root[data-theme="light"]` so a viewer toggle wins in both directions. Style components through the tokens, never inside the media query. Diagram strokes and fills are tokens too — an SVG with a hardcoded `#111` disappears on a dark ground.
 
 **Wide content scrolls itself.** Code blocks, before/after pairs and diagrams each sit in a container with `overflow-x: auto`. The page body never scrolls sideways.
-
-To revise a published report, edit the same scratchpad file and call `Artifact` again with the same `file_path` — it redeploys to the same URL. A new path mints a new link.
 
 ## Design
 

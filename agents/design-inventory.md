@@ -1,4 +1,5 @@
 ---
+# Generated from skills/improve-code-design/subagents/design-inventory.md by scripts/sync-subagents.py. Edit the source, not this file.
 name: design-inventory
 description: Returns a factual inventory table for an explicitly supplied batch of files — what each owns, what would force an edit, what it reaches into, its public surface, and a fixed observation checklist. Invoke explicitly with a file list, only from the improve-code-design workflow. Does not evaluate, recommend, or find problems.
 tools: Read, Grep, Glob

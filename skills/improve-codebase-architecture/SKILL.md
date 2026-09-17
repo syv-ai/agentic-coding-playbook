@@ -5,77 +5,69 @@ description: Find deepening opportunities in a codebase — refactors that turn 
 
 # Improve Codebase Architecture
 
-Surface architectural friction and propose **deepening opportunities** — refactors that turn shallow modules into deep ones. The aim is testability and AI-navigability.
+Surface architectural friction and propose **deepening opportunities**: refactors that turn shallow modules into deep ones, for testability and AI-navigability.
 
 ## Glossary
 
-Use these terms exactly in every suggestion. Consistent language is the point — don't drift into "component," "service," "API," or "boundary." Full definitions in [LANGUAGE.md](LANGUAGE.md).
+Use these terms exactly — consistent language is the point, so don't drift into "component", "service", "API" or "boundary". Full definitions and principles in [LANGUAGE.md](LANGUAGE.md).
 
 - **Module** — anything with an interface and an implementation (function, class, package, slice).
-- **Interface** — everything a caller must know to use the module: types, invariants, error modes, ordering, config. Not just the type signature.
+- **Interface** — everything a caller must know: types, invariants, error modes, ordering, config.
 - **Implementation** — the code inside.
-- **Depth** — leverage at the interface: a lot of behaviour behind a small interface. **Deep** = high leverage. **Shallow** = interface nearly as complex as the implementation.
-- **Seam** — where an interface lives; a place behaviour can be altered without editing in place. (Use this, not "boundary.")
+- **Depth** — leverage at the interface. **Deep** = a lot of behaviour behind a small interface; **shallow** = interface nearly as complex as the implementation.
+- **Seam** — where an interface lives; a place behaviour can be altered without editing in place.
 - **Adapter** — a concrete thing satisfying an interface at a seam.
-- **Leverage** — what callers get from depth.
-- **Locality** — what maintainers get from depth: change, bugs, knowledge concentrated in one place.
+- **Leverage** — what callers get from depth. **Locality** — what maintainers get: change, bugs and knowledge concentrated in one place.
 
-Key principles (see [LANGUAGE.md](LANGUAGE.md) for the full list):
+Three checks carry most of the weight:
 
-- **Deletion test**: imagine deleting the module. If complexity vanishes, it was a pass-through. If complexity reappears across N callers, it was earning its keep.
+- **Deletion test** — imagine deleting the module. If complexity vanishes, it was a pass-through; if it reappears across N callers, it was earning its keep.
 - **The interface is the test surface.**
 - **One adapter = hypothetical seam. Two adapters = real seam.**
 
-If the project has a domain glossary / CONTEXT.md or recorded architecture decisions (ADRs), let them inform the work: the domain language gives names to good seams; ADRs record decisions the skill should not re-litigate. Neither is required — proceed without them if they don't exist.
+If the project keeps a domain glossary (e.g. CONTEXT.md) or architecture decision records (ADRs), let them inform the work: domain language names good seams, and ADRs record decisions not to re-litigate. Neither is required.
 
-## Process
+## 1. Explore
 
-### 1. Explore
+Read the glossary and any ADRs in the area first. Then walk the codebase — delegate to an exploration subagent if your harness has one; otherwise keep the exploration narrow, starting from the area the user named. Explore organically and note where you feel friction:
 
-If the project has a domain glossary / CONTEXT.md or ADRs in the area you're touching, read them first.
+- Where does understanding one concept mean bouncing between many small modules?
+- Where are modules shallow — interface nearly as complex as the implementation?
+- Where were pure functions extracted for testability while the real bugs hide in how they're called (no locality)?
+- Where do tightly coupled modules leak across their seams?
+- What is untested, or hard to test through its current interface?
 
-Then use the Agent tool with `subagent_type=Explore` to walk the codebase. Don't follow rigid heuristics — explore organically and note where you experience friction:
+Apply the deletion test to anything you suspect is shallow.
 
-- Where does understanding one concept require bouncing between many small modules?
-- Where are modules **shallow** — interface nearly as complex as the implementation?
-- Where have pure functions been extracted just for testability, but the real bugs hide in how they're called (no **locality**)?
-- Where do tightly-coupled modules leak across their seams?
-- Which parts of the codebase are untested, or hard to test through their current interface?
+## 2. Report
 
-Apply the **deletion test** to anything you suspect is shallow: would deleting it concentrate complexity, or just move it? A "yes, concentrates" is the signal you want.
+Write a self-contained HTML file to the OS temp directory (`$TMPDIR`, falling back to `/tmp`, or `%TEMP%` on Windows) as `architecture-review-<timestamp>.html`, so nothing lands in the repo. Open it (`open` on macOS, `xdg-open` on Linux, `start` on Windows) and give the user the absolute path.
 
-### 2. Present candidates as an HTML report
+Each candidate gets a card with:
 
-Write a self-contained HTML file to the OS temp directory so nothing lands in the repo. Resolve the temp dir from `$TMPDIR`, falling back to `/tmp` (or `%TEMP%` on Windows), and write to `<tmpdir>/architecture-review-<timestamp>.html` so each run gets a fresh file. Open it for the user — `xdg-open <path>` on Linux, `open <path>` on macOS, `start <path>` on Windows — and tell them the absolute path.
+- **Files** involved
+- **Problem** — why the current architecture causes friction
+- **Solution** — plain-English description of the change
+- **Benefits** — in terms of locality and leverage, and how tests improve
+- **Before / after diagram** — side by side, illustrating the shallowness and the deepening
+- **Recommendation strength** — `Strong`, `Worth exploring` or `Speculative`
 
-The report uses **Tailwind via CDN** for layout and styling, and **Mermaid via CDN** for diagrams where a graph/flow/sequence reliably communicates the structure. Mix Mermaid with hand-crafted CSS/SVG visuals — use Mermaid when relationships are graph-shaped (call graphs, dependencies, sequences), and hand-built divs/SVG when you want something more editorial (mass diagrams, cross-sections, collapse animations). Each candidate gets a **before/after visualisation**. Be visual.
+End with a **top recommendation**: which candidate to tackle first and why. Scaffold, diagram patterns and styling are in [HTML-REPORT.md](HTML-REPORT.md).
 
-For each candidate, render a card with:
+Use the project's domain vocabulary for the domain and LANGUAGE.md vocabulary for the architecture: "the Order intake module", not "the FooBarHandler" or "the Order service".
 
-- **Files** — which files/modules are involved
-- **Problem** — why the current architecture is causing friction
-- **Solution** — plain English description of what would change
-- **Benefits** — explained in terms of locality and leverage, and how tests would improve
-- **Before / After diagram** — side-by-side, custom-drawn, illustrating the shallowness and the deepening
-- **Recommendation strength** — one of `Strong`, `Worth exploring`, `Speculative`, rendered as a badge
+If a candidate contradicts an ADR, include it only when the friction justifies reopening the decision, and mark it on the card ("contradicts ADR-0007 — worth reopening because…").
 
-End the report with a **Top recommendation** section: which candidate you'd tackle first and why.
+Don't propose interfaces yet. Once the file is written, ask which candidate the user wants to explore.
 
-**Use the project's domain vocabulary for the domain, and [LANGUAGE.md](LANGUAGE.md) vocabulary for the architecture.** If the project's glossary defines "Order," talk about "the Order intake module" — not "the FooBarHandler," and not "the Order service."
+## 3. Grill
 
-**ADR conflicts**: if the project records ADRs and a candidate contradicts one, only surface it when the friction is real enough to warrant revisiting the ADR. Mark it clearly in the card (e.g. a warning callout: _"contradicts ADR-0007 — but worth reopening because…"_). Don't list every theoretical refactor an ADR forbids.
+When the user picks a candidate, walk the design tree with them: constraints, dependencies, the shape of the deepened module, what sits behind the seam, which tests survive. The **grill-me** skill is a good companion.
 
-See [HTML-REPORT.md](HTML-REPORT.md) for the full HTML scaffold, diagram patterns, and styling guidance.
+Record decisions as they settle:
 
-Do NOT propose interfaces yet. After the file is written, ask the user: "Which of these would you like to explore?"
-
-### 3. Grilling loop
-
-Once the user picks a candidate, drop into a grilling conversation (the **grill-me** skill is a good companion here). Walk the design tree with them — constraints, dependencies, the shape of the deepened module, what sits behind the seam, what tests survive.
-
-Side effects happen inline as decisions crystallize:
-
-- **Naming a deepened module after a concept not in the project's glossary?** If the project keeps a glossary / CONTEXT.md, add the term there (create the file lazily if it doesn't exist and the user wants one). Otherwise, just note the new term in your write-up.
-- **Sharpening a fuzzy term during the conversation?** Update the glossary right there, if the project keeps one.
-- **User rejects the candidate with a load-bearing reason?** If the project records ADRs, offer one, framed as: _"Want me to record this as an ADR so future architecture reviews don't re-suggest it?"_ Only offer when the reason would actually be needed by a future explorer to avoid re-suggesting the same thing — skip ephemeral reasons ("not worth it right now") and self-evident ones.
-- **Want to explore alternative interfaces for the deepened module?** See [INTERFACE-DESIGN.md](INTERFACE-DESIGN.md).
+- **A new name for a deepened module?** If the project keeps a glossary, add the term there; otherwise note it in your write-up.
+- **A fuzzy term sharpened?** Update the glossary, if there is one.
+- **Candidate rejected for a load-bearing reason?** If the project records ADRs, offer one so future reviews don't re-suggest it. Skip ephemeral reasons ("not now") and self-evident ones.
+- **Want alternative interfaces?** See [INTERFACE-DESIGN.md](INTERFACE-DESIGN.md).
+- **How to deepen given the dependencies?** See [DEEPENING.md](DEEPENING.md).

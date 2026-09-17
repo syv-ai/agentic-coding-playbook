@@ -59,7 +59,7 @@ This is the whole output. No hedging, no invented Small finding, no architecture
 >
 > Nothing here is worth changing. The thing most likely to bite later is `_FORMATS`, and the trigger is a third format; at two it is not a problem.
 
-No artifact was written. Two strong candidates is the threshold, and there were none.
+No report was written. Two strong candidates is the threshold, and there were none.
 
 ## The test before reporting anything
 
