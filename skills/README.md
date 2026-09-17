@@ -95,7 +95,7 @@ never touches it.
 - [`receiving-code-review`](receiving-code-review/) — process review feedback with rigour, not performative agreement.
 
 **Safety**
-- [`guardrails`](guardrails/) — lock down a repo/session: deterministic hooks that block destructive commands where the agent supports them, plus a conservative posture that asks for explicit approval before touching remote databases, internal systems, production, secrets, or PII. *(User-only command.)*
+- [`guardrails`](guardrails/) — review what an agent could damage in this repo, note the safety controls already in place, and ask whether to cover each remaining risk with the agent's own settings (permission rules, sandbox). *(User-only command.)*
 
 **Architecture, lifecycle & meta**
 - [`improve-codebase-architecture`](improve-codebase-architecture/) — find shallow modules, propose deeper ones.

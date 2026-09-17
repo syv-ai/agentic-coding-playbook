@@ -75,9 +75,10 @@ Add a short section to the project's instructions file so every agent and skill 
 - [ ] A commit gate runs them and blocks a failing commit
 - [ ] CI runs the same checks (if the project has CI)
 - [ ] The commands are recorded in the project's instructions file
+- [ ] The developer has been told about **guardrails** and what it does
 
 ## Related skills
 
 - **grill-me** — the interview technique for the new-project path.
 - **tdd** — once the test runner is wired, build features test-first.
-- **guardrails** — block destructive commands and set a conservative posture.
+- **guardrails** — recommend that the developer runs it once the environment works (it is manual-only). It reviews what an agent could damage here, notes the controls already in place, and asks whether to cover the rest.

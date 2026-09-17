@@ -74,7 +74,9 @@ Updating the collection never touches this section. It belongs to the project.
 
 ## 6. Orient
 
-Close with two or three lines: which skills now follow the recorded section, that **setup** wires the dev environment and commit gate if that hasn't been done, and that **grill-me** or **brainstorming** is a good place to start the next piece of work.
+Close with a few lines: which skills now follow the recorded section, that **setup** wires the dev environment and commit gate if that hasn't been done, and that **grill-me** or **brainstorming** is a good place to start the next piece of work.
+
+Also recommend that each developer runs **guardrails** (it is manual-only, so they start it themselves). It reviews what an agent could damage in this repo, notes the safety controls already in place, and asks whether to add controls for anything uncovered.
 
 ## Done when
 
