@@ -1,142 +1,92 @@
 ---
 name: writing-plans
-description: Use when you have a spec or requirements for a multi-step task, before touching code
+description: Writes an implementation plan from a spec or agreed requirements — files to touch, ordered tasks, and how to verify each step. Use when a change spans several files or steps, when the approach needs to be pinned down before coding, or when another session or agent will do the implementation.
 ---
 
-# Writing Plans
+# Writing plans
 
-## Overview
+Write a plan that someone with no context on this codebase could follow: which files to touch, in what order, what behaviour each task produces, and how to check it. Assume a skilled engineer who doesn't know the toolset, the domain or the project's test habits.
 
-Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
+## Scale to the task
 
-Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
+If the change can be described in one sentence, skip the written plan and just do it (or say the steps in a line or two). Write a full plan when the change spans several files, the order of work matters, the approach needs agreement, or another session will execute it. Match the detail to the risk: a three-task change needs a short list, not a document.
 
-**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
+## Where the plan goes
 
-**Context:** If working in an isolated worktree, it should already exist when execution begins.
+Where plans are saved, and whether they are kept at all, comes from the project's instructions file (AGENTS.md, or CLAUDE.md in Claude Code). If it says nothing, look for an existing convention (a plans folder, plans attached to work items). If still unclear, ask with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot; plain text if it has none) and offer to record the answer as a short section in the instructions file. A plan can live only in the conversation when it won't be executed elsewhere.
 
-**Save plans to:** `docs/plans/YYYY-MM-DD-<feature-name>.md`
-- (User preferences for plan location override this default)
+## Scope check
 
-## Scope Check
+If the spec covers several independent subsystems, suggest one plan per subsystem. Each plan should produce working, testable software on its own.
 
-If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
+## Structure
 
-## File Structure
+**Map the files first.** Before the tasks, list the files to create or modify and what each is responsible for. This is where decomposition gets decided:
 
-Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
+- One clear responsibility per file; files that change together live together.
+- Split by responsibility, not by technical layer.
+- In an existing codebase, follow its patterns. Only include a split if a file you are changing has become unwieldy.
 
-- Design units with clear boundaries and well-defined interfaces. Each file should have one clear responsibility.
-- You reason best about code you can hold in context at once, and your edits are more reliable when files are focused. Prefer smaller, focused files over large ones that do too much.
-- Files that change together should live together. Split by responsibility, not by technical layer.
-- In existing codebases, follow established patterns. If the codebase uses large files, don't unilaterally restructure - but if a file you're modifying has grown unwieldy, including a split in the plan is reasonable.
-
-This structure informs the task decomposition. Each task should produce self-contained changes that make sense independently.
-
-## Bite-Sized Task Granularity
-
-**Each step is one action (2-5 minutes):**
-- "Write the failing test" - step
-- "Run it to make sure it fails" - step
-- "Implement the minimal code to make the test pass" - step
-- "Run the tests and make sure they pass" - step
-- "Commit" - step
-
-## Plan Document Header
-
-**Every plan MUST start with this header:**
+**Start with a short header:**
 
 ```markdown
-# [Feature Name] Implementation Plan
+# <Feature> implementation plan
 
-> **For agentic workers:** Use the executing-plans skill to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
-
-**Goal:** [One sentence describing what this builds]
-
-**Architecture:** [2-3 sentences about approach]
-
-**Tech Stack:** [Key technologies/libraries]
-
----
+**Goal:** <one sentence: what this builds>
+**Approach:** <2–3 sentences>
+**Stack:** <key technologies>
 ```
 
-## Task Structure
+**Then the tasks.** Each task is a self-contained change that makes sense on its own:
 
 ````markdown
-### Task N: [Component Name]
+### Task N: <name>
 
-**Files:**
-- Create: `exact/path/to/file.py`
-- Modify: `exact/path/to/existing.py:123-145`
-- Test: `tests/exact/path/to/test.py`
+**Files:** create `path/new.py` · modify `path/existing.py:120-145` · test `tests/path/test_x.py`
 
-- [ ] **Step 1: Write the failing test**
+**Behaviour:** <what this task makes true, stated so it can be checked>
 
-```python
-def test_specific_behavior():
-    result = function(input)
-    assert result == expected
-```
-
-- [ ] **Step 2: Run test to verify it fails**
-
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: FAIL with "function not defined"
-
-- [ ] **Step 3: Write minimal implementation**
+- [ ] Write a failing test for <behaviour>
+- [ ] Implement until it passes
+- [ ] Verify: `pytest tests/path/test_x.py -v` → passes
 
 ```python
-def function(input):
-    return expected
-```
-
-- [ ] **Step 4: Run test to verify it passes**
-
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: PASS
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add tests/path/test.py src/path/file.py
-git commit -m "feat: add specific feature"
+# Only where code pins a decision: an interface, a tricky algorithm,
+# or a test that defines the behaviour precisely.
+def test_rejects_expired_token(): ...
 ```
 ````
 
-## No Placeholders
+Use checkboxes (`- [ ]`) so progress can be tracked. Add a commit step per task only if the project commits per task.
 
-Every step must contain the actual content an engineer needs. These are **plan failures** — never write them:
-- "TBD", "TODO", "implement later", "fill in details"
-- "Add appropriate error handling" / "add validation" / "handle edge cases"
-- "Write tests for the above" (without actual test code)
-- "Similar to Task N" (repeat the code — the engineer may be reading tasks out of order)
-- Steps that describe what to do without showing how (code blocks required for code steps)
-- References to types, functions, or methods not defined in any task
+**End with end-to-end verification:** the commands or actions that prove the whole feature works as a user would use it, with the expected result.
 
-## Remember
-- Exact file paths always
-- Complete code in every step — if a step changes code, show the code
-- Exact commands with expected output
-- DRY, YAGNI, TDD, frequent commits
+## Be specific
 
-## Self-Review
+Every task needs what the implementer needs to act without guessing:
 
-After writing the complete plan, look at the spec with fresh eyes and check the plan against it. This is a checklist you run yourself — not a subagent dispatch.
+- Exact file paths, and line ranges for modifications.
+- The behaviour to produce, stated so it can be verified.
+- A verification command with its expected result.
+- Code where prose would be ambiguous. Elsewhere, behaviour and names are enough; don't write out code the implementer will obviously write the same way.
 
-**1. Spec coverage:** Skim each section/requirement in the spec. Can you point to a task that implements it? List any gaps.
+These are gaps, not plans: "TBD", "add error handling", "handle edge cases", "write tests for the above" without saying which, "similar to Task N" when the tasks may be read out of order, and names used in one task but never defined.
 
-**2. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
+## Review
 
-**3. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.
+After writing the plan, check it against the spec:
 
-If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
+1. **Coverage** — can you point to a task for every requirement? Add tasks for gaps.
+2. **Gaps** — search for the patterns above and fix them.
+3. **Consistency** — names, signatures and types match across tasks (`clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug).
 
-For a deeper independent check, you can hand the plan to a fresh agent using the prompt in `plan-document-reviewer-prompt.md`.
+For a larger plan, also get a fresh-context review with [plan-document-reviewer-prompt.md](plan-document-reviewer-prompt.md).
 
-## Execution Handoff
+## Next step
 
-After saving the plan, confirm completion:
+Once the plan is saved, ask the user how to continue:
 
-**"Plan complete and saved to `docs/plans/<filename>.md`. Use the executing-plans skill to implement it task-by-task, with checkpoints for review."**
+- **Continue in this session** (default) with the **executing-plans** skill.
+- **Start fresh** — use the **handoff** skill, then run **executing-plans** in a new session with clean context.
 
-- **REQUIRED SUB-SKILL:** Use the executing-plans skill to execute the plan with review checkpoints.
+For plans with real either/or decisions left open, the **visual-plan** skill can render the plan for review first.

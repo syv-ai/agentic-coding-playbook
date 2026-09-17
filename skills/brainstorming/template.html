@@ -10,7 +10,7 @@
      *
      * Self-contained: no server, no build, no dependencies. Open the file
      * directly in a browser. Selection highlighting is cosmetic only — the
-     * decision is captured in the terminal via the agent's ask-the-user tool.
+     * decision is captured in the conversation via the agent's ask-the-user tool.
      *
      * Inject your content fragment where the <!-- CONTENT --> marker is.
      */
@@ -196,13 +196,13 @@
   </div>
 
   <div class="indicator-bar">
-    <span>Look this over, then give your answer in the terminal.</span>
+    <span>Look this over, then give your answer in the conversation.</span>
   </div>
 
   <script>
     // Cosmetic only: highlight the clicked option/card. There is no server and
     // nothing is sent anywhere — the agent captures your decision in the
-    // terminal via its ask-the-user tool. Add `data-multiselect` to a container
+    // conversation via its ask-the-user tool. Add `data-multiselect` to a container
     // to allow selecting more than one.
     function toggleSelect(el) {
       var container = el.closest('.options') || el.closest('.cards');

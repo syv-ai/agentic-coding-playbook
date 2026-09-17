@@ -1,49 +1,31 @@
-# Spec Document Reviewer Prompt Template
+# Spec reviewer prompt
 
-Use this template when dispatching a spec document reviewer subagent.
+Use this to get a fresh-context review of a written spec before planning. Hand it to a subagent if your harness has one; otherwise paste it into a new chat along with the spec. The reviewer should not be the agent that wrote the spec.
 
-**Purpose:** Verify the spec is complete, consistent, and ready for implementation planning.
-
-**Dispatch after:** Spec document is written to docs/specs/
+Fill in the location of the spec — a file path, an issue or work-item link, or the spec text itself.
 
 ```
-Task tool (general-purpose):
-  description: "Review spec document"
-  prompt: |
-    You are a spec document reviewer. Verify this spec is complete and ready for planning.
+You are reviewing a spec before implementation planning starts. Check that it is complete, consistent and ready to plan from.
 
-    **Spec to review:** [SPEC_FILE_PATH]
+Spec: [SPEC PATH, LINK OR TEXT]
 
-    ## What to Check
+Check for:
+- Completeness: TODOs, placeholders, "TBD", unfinished sections.
+- Consistency: requirements that contradict each other.
+- Clarity: requirements ambiguous enough that someone could build the wrong thing.
+- Scope: whether it is focused enough for one plan, or covers independent subsystems.
+- YAGNI: features nobody asked for.
+- Verification: whether it says how to confirm the feature works end to end.
 
-    | Category | What to Look For |
-    |----------|------------------|
-    | Completeness | TODOs, placeholders, "TBD", incomplete sections |
-    | Consistency | Internal contradictions, conflicting requirements |
-    | Clarity | Requirements ambiguous enough to cause someone to build the wrong thing |
-    | Scope | Focused enough for a single plan — not covering multiple independent subsystems |
-    | YAGNI | Unrequested features, over-engineering |
+Only flag issues that would cause real problems during planning. A missing section, a contradiction, or a requirement that can be read two ways is an issue. Wording, style and uneven detail are not. A reviewer asked to find gaps will usually report some even when the spec is sound, so approve unless the gaps would lead to a flawed plan.
 
-    ## Calibration
+Reply in this format:
 
-    **Only flag issues that would cause real problems during implementation planning.**
-    A missing section, a contradiction, or a requirement so ambiguous it could be
-    interpreted two different ways — those are issues. Minor wording improvements,
-    stylistic preferences, and "sections less detailed than others" are not.
+Status: Approved | Issues found
 
-    Approve unless there are serious gaps that would lead to a flawed plan.
+Issues:
+- [section]: [issue] — [why it matters for planning]
 
-    ## Output Format
-
-    ## Spec Review
-
-    **Status:** Approved | Issues Found
-
-    **Issues (if any):**
-    - [Section X]: [specific issue] - [why it matters for planning]
-
-    **Recommendations (advisory, do not block approval):**
-    - [suggestions for improvement]
+Recommendations (advisory, not blocking):
+- [suggestion]
 ```
-
-**Reviewer returns:** Status, Issues (if any), Recommendations

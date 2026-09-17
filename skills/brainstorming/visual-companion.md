@@ -1,66 +1,26 @@
-# Visual Companion Guide (static)
+# Visual companion
 
-A lightweight way to show the user mockups, diagrams, and option comparisons
-during brainstorming. **Static HTML files — no server, no Node, no build.** You
-write a self-contained HTML file, open it in the user's browser, and immediately
-capture their decision in the terminal with your ask-the-user tool
-(`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot). The page is for *seeing*; the answer comes back through the
-tool.
+Show the user mockups, diagrams and option comparisons as **static HTML files** — no server, no build, no dependencies. The page is for seeing; the answer comes back through your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot), or in plain text if it has none.
 
-## When to use
+## When to use it
 
-Decide per-question, not per-session. The test: **would the user understand this
-better by seeing it than reading it?**
+Decide per question: **would the user understand this better by seeing it than by reading it?**
 
-**Use the browser** when the content itself is visual:
-- UI mockups — wireframes, layouts, navigation, component designs
-- Architecture diagrams — components, data flow, relationship maps
-- Side-by-side visual comparisons — two layouts, two color schemes, two directions
-- Design polish — look and feel, spacing, visual hierarchy
-- Spatial relationships — state machines, flowcharts, entity relationships
+- **Browser:** UI mockups and wireframes, layouts, architecture and data-flow diagrams, side-by-side visual comparisons, look and feel, state machines.
+- **Text:** requirements and scope, conceptual A/B/C choices, trade-off lists, API and data-model decisions.
 
-**Use the terminal** when the content is text or tabular:
-- Requirements and scope questions — "what does X mean?", "which features?"
-- Conceptual A/B/C choices described in words
-- Tradeoff lists, comparison tables
-- Technical decisions — API design, data modeling, approach selection
-
-A question *about* a UI topic isn't automatically a visual question. "What kind of
-wizard do you want?" is conceptual — terminal. "Which of these wizard layouts feels
-right?" is visual — browser.
+A question *about* a UI topic isn't automatically visual. "What kind of wizard do you want?" is conceptual. "Which of these wizard layouts feels right?" is visual.
 
 ## The loop
 
-1. **Write a self-contained HTML file.** Read [template.html](template.html),
-   replace the `<!-- CONTENT -->` marker with your content fragment (see classes
-   below), and write the result to a fresh file — e.g.
-   `<tmpdir>/brainstorm-<slug>.html` in the OS temp dir, or a `.brainstorm/`
-   scratch dir in the project (remind the user to gitignore it). The template
-   inlines all CSS and a cosmetic select script, so the output file opens anywhere
-   with no dependencies. **Never reuse a filename** — each screen/version gets a
-   new file (`layout.html`, `layout-v2.html`, …).
+1. **Write a page.** Read [template.html](template.html), replace the `<!-- CONTENT -->` marker with your content fragment, and write the result to a new file in the OS temp directory (e.g. `<tmpdir>/brainstorm-<slug>.html`). Use a new filename for every screen and version (`layout.html`, `layout-v2.html`) so earlier versions stay comparable.
+2. **Open it** best-effort: `open <file>` on macOS, `xdg-open <file>` on Linux, `start "" <file>` on Windows. If that fails (remote or headless), print the absolute `file://` path and ask the user to open it.
+3. **Ask for the decision** with the question tool, mirroring the page's options with the same letters and labels. Clicking in the page only highlights; the tool answer is what counts.
+4. **Iterate or move on.** If the feedback changes the screen, write a new version and open it. Move on once the question is settled.
 
-2. **Open it for the user**, best-effort, platform-detected:
-   - macOS: `open <file>`
-   - Linux: `xdg-open <file>`
-   - Windows: `start "" <file>` (cmd) or `Start-Process <file>` (PowerShell)
-   - If opening fails (remote/headless/unknown), print the absolute `file://` path
-     and ask the user to open it. The flow still works — the answer is captured in
-     the terminal regardless.
+## Content fragments
 
-3. **Immediately ask for the decision** with `AskUserQuestion` or `askQuestions`
-   (if your harness has neither, ask in plain text). Mirror the options shown in the HTML as the answer
-   choices, with the same letters/labels, so the page and the prompt line up. The
-   browser selection is cosmetic; the tool answer is the source of truth.
-
-4. **Iterate or advance.** If the feedback changes the current screen, write a new
-   version file and open it again. Only move on once the current question is
-   settled.
-
-## Writing content fragments
-
-Inject just the content that goes inside `#content`. The template provides the
-header, theme, and CSS. Minimal example:
+Inject only what goes inside `#content`; the template provides the frame, theme and CSS.
 
 ```html
 <h2>Which layout works better?</h2>
@@ -78,25 +38,21 @@ header, theme, and CSS. Minimal example:
 </div>
 ```
 
-Then ask with `AskUserQuestion`: "Which layout?" → options **A — Single column**,
-**B — Two column**.
+Then ask "Which layout?" with options **A — Single column** and **B — Two column**.
 
-## CSS classes available (from the template)
+## Classes in the template
 
-- **Options (A/B/C):** `.options > .option[data-choice] > .letter + .content`.
-  Add `data-multiselect` to `.options` to allow multiple selections.
+- **Options (A/B/C):** `.options > .option[data-choice] > .letter + .content`. Add `data-multiselect` to `.options` to allow several.
 - **Cards (visual designs):** `.cards > .card[data-choice] > .card-image + .card-body`
 - **Mockup container:** `.mockup > .mockup-header + .mockup-body`
-- **Split view (side-by-side):** `.split > .mockup + .mockup`
-- **Pros/Cons:** `.pros-cons > .pros + .cons`
-- **Wireframe blocks:** `.mock-nav`, `.mock-sidebar`, `.mock-content`,
-  `.mock-button`, `.mock-input`, `.placeholder`
-- **Typography/sections:** `h2`, `h3`, `.subtitle`, `.section`, `.label`
+- **Split view:** `.split > .mockup + .mockup`
+- **Pros/cons:** `.pros-cons > .pros + .cons`
+- **Wireframe blocks:** `.mock-nav`, `.mock-sidebar`, `.mock-content`, `.mock-button`, `.mock-input`, `.placeholder`
+- **Typography:** `h2`, `h3`, `.subtitle`, `.section`, `.label`
 
 ## Diagrams
 
-For flowcharts / state machines / entity relationships, you can embed Mermaid from
-a CDN when online:
+For flowcharts, state machines and entity relationships, Mermaid from a CDN works when the user is online:
 
 ```html
 <script type="module">
@@ -106,17 +62,12 @@ a CDN when online:
 <pre class="mermaid">graph TD; A--&gt;B; A--&gt;C;</pre>
 ```
 
-Offline, keep diagrams as plain HTML/CSS (boxes via `.mockup`/`.placeholder`).
+Offline, build diagrams from plain HTML and CSS (`.mockup`, `.placeholder`).
 
-## Design tips
+## Tips
 
-- Scale fidelity to the question — wireframes for layout, polish for polish.
-- Explain the question on the page ("Which feels more professional?"), not just "Pick one".
-- 2–4 options per screen.
-- Iterate before advancing; new file per version.
-- Use real content when it matters (real images for a portfolio); placeholders hide design issues.
-
-## Cleanup
-
-Temp-dir files are disposable — the OS clears them. If you wrote into a project
-`.brainstorm/` dir, mention the user can delete it (and should gitignore it).
+- Scale fidelity to the question: wireframes for layout, polish for polish.
+- Put the question on the page ("Which feels more professional?"), not just "Pick one".
+- Two to four options per screen.
+- Use real content when it matters; placeholders hide design problems.
+- Files in the temp directory are disposable. If you wrote them into the project instead, mention that the user can delete them and should keep them out of version control.

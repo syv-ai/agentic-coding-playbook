@@ -9,14 +9,14 @@ A visual plan is built from blocks. Each part of the plan maps onto the block th
 | **prose** | The narrative spine — objective, approach, rationale, risks. | Plain formatted text. The default. Don't dress it up. |
 | **annotated-code** | A load-bearing file change, walked through with margin notes anchored to specific lines. | The standout block. Show only the lines that matter; annotate the decisions, not the syntax. |
 | **code** | A short throwaway snippet with no callouts. | When you just need to show a shape, not walk through it. |
-| **diagram** | Architecture, data flow, dependency, or state relationships. | Mermaid for graph-shaped flows; hand-built divs + inline SVG for editorial visuals. Mix them — see the architecture skill's `HTML-REPORT.md`. |
+| **diagram** | Architecture, data flow, dependency, or state relationships. | Mermaid for graph-shaped flows; hand-built divs + inline SVG for editorial visuals. Mix them. |
 | **file-map** | Which files are created/modified/tested, and what each is responsible for. | Monospaced. Mark `create` / `modify` / `test`. This is the multi-file plan's anchor. |
 | **columns** | Before/after or current/target comparisons read in parallel. | Two labelled columns, side by side. |
 | **tabs** | Several files, states, or directions that would clutter if stacked. | Group related code under tabs instead of inline stacking. |
 | **table** | Structured data — config matrices, contract fields, decision grids. | Standard table. |
 | **callout** | A scannable assumption, risk, or settled decision. | Tone: `note`, `warning`, `risk`, or `decision`. Use `decision` for choices already made — they are not open questions. |
 | **checklist** | The closing verification steps — the end-to-end smoke test. | What proves the work is done. Real workflows, on-disk assertions, actual commands. |
-| **open-questions** | Resolvable either/or decisions that would change the plan. | **Bottom of the document only.** Each has a recommended option. Resolved in the terminal via `AskUserQuestion` or `askQuestions`, not in the browser. |
+| **open-questions** | Resolvable either/or decisions that would change the plan. | **Bottom of the document only.** Each has a recommended option. Resolved in the conversation with the harness's question tool, not in the browser. |
 
 ## Quality bar
 

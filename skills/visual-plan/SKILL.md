@@ -1,50 +1,36 @@
 ---
 name: visual-plan
-description: Use when a plan is multi-file, architecture-heavy, data-heavy, UI-heavy, ambiguous, or risky enough that the wrong direction would be expensive to undo. Renders the plan as a single self-contained HTML review surface — diagrams, file maps, annotated code, open questions — opened in the browser, with decisions captured in the terminal.
+description: Renders an implementation plan as a single self-contained HTML review page — diagrams, file map, annotated code and open questions — opened in the browser, with decisions captured back in the conversation. Use when a plan is multi-file, architecture-, data- or UI-heavy, or risky enough that going the wrong way would be expensive to undo.
 ---
 
-# Visual Plan
+# Visual plan
 
-Turn a text implementation plan into a **scannable visual review surface** a human can approve at a glance, instead of reading linear prose in the terminal. The output is one self-contained HTML file — no server, no build, no dependencies, no account. Open it in a browser; capture decisions back in the terminal.
-
-This is a **presentation layer for review**, not a planning method. The plan itself still comes from the writing-plans skill (or an existing plan doc). visual-plan renders it for human eyes when the stakes justify the extra effort.
-
-**Announce at start:** "I'm using the visual-plan skill to render this plan for review."
+Turn a text plan into a page a person can review at a glance instead of reading linear prose. The output is one self-contained HTML file: no server, no build, no account. It is a presentation layer for review, not a planning method — the plan still comes from the **writing-plans** skill or an existing plan.
 
 ## When to use it
 
-Use it when the cost of going the wrong way is high:
+Use it when being wrong is expensive: multi-file changes where order matters, architecture or data-model work, UI work the user should react to visually, or plans with open decisions that would change the approach.
 
-- **Multi-file** changes where the file map and ordering matter.
-- **Architecture-heavy** work — the relationships are easier to see than to read.
-- **Data-heavy** work — schemas, migrations, contracts.
-- **UI-heavy** work — wireframes and layouts the user should react to visually.
-- **Ambiguous or risky** work with open decisions that would change the plan.
+Skip it for routine fixes and small changes. If the plan fits in a few lines, write it in the conversation and move on.
 
-**Skip it** for routine fixes, single-file edits, or one-line changes. A visual surface for a trivial plan is wasted effort — write the plan in the terminal and move on.
+## Related skills
 
-## Relationship to other skills
-
-- **writing-plans** produces the markdown plan (`docs/plans/YYYY-MM-DD-<feature>.md`). visual-plan renders that plan; it does not replace it. The markdown remains the source of truth and the executing-plans input.
-- **prototype** builds a throwaway *running* artifact to settle a design question. visual-plan shows a *static* picture of the proposed work. If the user needs to click something to decide, reach for prototype instead.
-- **brainstorming**'s visual companion uses the same static-HTML + `AskUserQuestion` pattern for design questions; visual-plan applies it to a finished plan.
+- **writing-plans** produces the plan. The plan document remains the source of truth and what **executing-plans** works from.
+- **prototype** builds something runnable. If the user needs to click something to decide, use that instead.
+- **brainstorming**'s visual companion uses the same static-HTML pattern for design questions.
 
 ## Workflow
 
-You MUST create a task for each step and complete them in order.
+1. **Get the plan.** Use the plan from **writing-plans**, or read the existing one. Where plans live comes from the project's instructions file (AGENTS.md, or CLAUDE.md in Claude Code). If there is no plan yet, write one first — this skill renders a plan, it doesn't invent one.
+2. **Map it onto blocks.** Pick the block that makes each part clearest, using [BLOCKS.md](BLOCKS.md). Most of the plan stays prose. Show only load-bearing code, with annotations.
+3. **Collect open decisions.** Put every either/or choice that would change the plan into one open-questions block at the bottom, each with a recommended option. Settled decisions stay as prose or a `decision` callout.
+4. **Render the page.** Fill [template.html](template.html) and write it to the OS temp directory (e.g. `$TMPDIR/visual-plan-<slug>.html`), not into the repo. The only external resources are the Tailwind and Mermaid CDNs.
+5. **Open it** — `open` on macOS, `xdg-open` on Linux, `start` on Windows. If that fails, give the user the absolute path.
+6. **Capture decisions.** Ask each open question with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot; plain text if it has none), recommended option first. Questions that don't depend on each other can go together. Highlighting in the page is cosmetic.
+7. **Fold the answers back** into the plan document so execution works from the settled version.
 
-1. **Get the plan.** Use the plan the writing-plans skill produced, or read the existing plan doc. If there is no plan yet, stop and write one first — visual-plan renders a plan, it does not invent one.
-2. **Decompose into blocks.** Map the plan onto the block taxonomy in [BLOCKS.md](BLOCKS.md). Pick the block that fits each part; do not force everything into prose. Highlight only load-bearing code with `annotated-code` — never dump whole files.
-3. **Collect open decisions.** Pull every either/or choice that would change the plan into a single open-questions block at the bottom. Each gets a recommended option. Everything already settled stays as prose or a `decision` callout — not a question.
-4. **Render the HTML.** Fill the [template.html](template.html) scaffold. Write it to the OS temp directory (e.g. `$TMPDIR/visual-plan-<slug>.html`), not into the repo. The only external resources are the Tailwind and Mermaid CDNs; the file is otherwise static.
-5. **Open it.** Open the file in the user's browser (`open` on macOS, `xdg-open` on Linux, `start` on Windows).
-6. **Capture decisions in the terminal.** For each open question, ask via `AskUserQuestion` (Claude Code) or `askQuestions` (VS Code Copilot) with the recommended option first, labelled "(Recommended)". The HTML highlighting is cosmetic only — the decision is recorded in the terminal, not the browser.
-7. **Fold answers back into the plan.** Update the markdown plan doc with the resolved decisions so executing-plans works from the settled version. The HTML is a disposable review aid; the markdown is what ships.
+## Rules
 
-## Hard rules
-
-- **No shelling out to external services. No npm packages. No accounts, tokens, or hosted plan apps.** The plan never leaves the machine except as the CDN-loaded HTML the user opens locally.
-- **The markdown plan is the source of truth.** The HTML is a throwaway review surface; do not treat it as the deliverable and do not commit it.
-- **Render, don't pad.** If a section is genuinely just prose, render it as prose. Visual blocks earn their place by making something clearer than text would.
-
-See [BLOCKS.md](BLOCKS.md) for the block taxonomy and the quality bar a strong visual plan must meet.
+- **Local only.** No hosted plan apps, accounts, tokens or npm packages; the plan leaves the machine only as the CDN-loaded page the user opens.
+- **The plan document is the source of truth.** The HTML is a throwaway review aid; don't commit it.
+- **Render, don't pad.** A visual block has to make something clearer than text would.

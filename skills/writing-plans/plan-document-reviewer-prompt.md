@@ -1,48 +1,31 @@
-# Plan Document Reviewer Prompt Template
+# Plan reviewer prompt
 
-Use this template when dispatching a fresh agent to review a plan document.
+Use this to get a fresh-context review of a plan before execution starts. Hand it to a subagent if your harness has one; otherwise paste it into a new chat along with the plan and spec. The reviewer should not be the agent that wrote the plan.
 
-**Purpose:** Verify the plan is complete, matches the spec, and has proper task decomposition.
-
-**Dispatch after:** The complete plan is written.
+Fill in where the plan and spec are — file paths, issue or work-item links, or the text itself.
 
 ```
-Dispatch a fresh agent with this prompt:
+You are reviewing an implementation plan before anyone executes it. Check that it is complete, matches the spec, and can be followed without getting stuck.
 
-  You are a plan document reviewer. Verify this plan is complete and ready for implementation.
+Plan: [PLAN PATH, LINK OR TEXT]
+Spec: [SPEC PATH, LINK OR TEXT — or "none"]
 
-  **Plan to review:** [PLAN_FILE_PATH]
-  **Spec for reference:** [SPEC_FILE_PATH]
+Check for:
+- Completeness: TODOs, placeholders, tasks without a way to verify them.
+- Spec alignment: every requirement has a task; no significant scope creep.
+- Decomposition: tasks have clear boundaries and each step can be acted on.
+- Consistency: names, signatures and types match across tasks.
+- Verification: the plan ends with an end-to-end check that proves the feature works.
 
-  ## What to Check
+Only flag issues that would cause real problems during implementation: an implementer building the wrong thing or getting stuck. Wording, style and nice-to-haves are not issues. A reviewer asked to find gaps will usually report some even when the plan is sound, so approve unless there are missing requirements, contradictory steps, placeholders, or tasks too vague to act on.
 
-  | Category | What to Look For |
-  |----------|------------------|
-  | Completeness | TODOs, placeholders, incomplete tasks, missing steps |
-  | Spec Alignment | Plan covers spec requirements, no major scope creep |
-  | Task Decomposition | Tasks have clear boundaries, steps are actionable |
-  | Buildability | Could an engineer follow this plan without getting stuck? |
+Reply in this format:
 
-  ## Calibration
+Status: Approved | Issues found
 
-  **Only flag issues that would cause real problems during implementation.**
-  An implementer building the wrong thing or getting stuck is an issue.
-  Minor wording, stylistic preferences, and "nice to have" suggestions are not.
+Issues:
+- [task/step]: [issue] — [why it matters for implementation]
 
-  Approve unless there are serious gaps — missing requirements from the spec,
-  contradictory steps, placeholder content, or tasks so vague they can't be acted on.
-
-  ## Output Format
-
-  ## Plan Review
-
-  **Status:** Approved | Issues Found
-
-  **Issues (if any):**
-  - [Task X, Step Y]: [specific issue] - [why it matters for implementation]
-
-  **Recommendations (advisory, do not block approval):**
-  - [suggestions for improvement]
+Recommendations (advisory, not blocking):
+- [suggestion]
 ```
-
-**Reviewer returns:** Status, Issues (if any), Recommendations
