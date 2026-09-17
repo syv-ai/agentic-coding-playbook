@@ -5,7 +5,7 @@ description: Compacts the current conversation into a handoff document so anothe
 
 Write a handoff document summarising the current conversation so a fresh agent can continue the work. This is how to continue in a fresh session when the user chooses one, for example between planning and implementation, or after several failed attempts have cluttered the context.
 
-Save it to the OS temp directory unless the project's instructions file (AGENTS.md, or CLAUDE.md in Claude Code) says where such documents go. Tell the user the path.
+Save it to the OS temp directory unless the project's instructions file (AGENTS.md, or CLAUDE.md in Claude Code) says where such documents go. Give the user the file's full absolute path, resolved (for example with `realpath`) rather than `$TMPDIR/…`, `~` or a relative path, so they can open it and pass it to the next session.
 
 Before writing, ask the user the questions whose answers would make the next session clearer: decisions still open, priorities between remaining tasks, what is out of scope, constraints or context that never made it into the conversation. Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot); if it has none, ask in plain text. Batch questions that don't depend on each other. Ask only what the conversation and repo cannot answer, and skip this step when nothing is unclear. Fold the answers into the document.
 

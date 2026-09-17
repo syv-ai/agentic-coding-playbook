@@ -90,7 +90,7 @@ The eight rules, so you can draft against them. The auditor prompt owns their de
 
 Two or more strong candidates → write the report. Fewer → say it in the conversation and stop. Never build the report to justify the review.
 
-The report is a self-contained HTML page written outside the repo and opened in the browser. Contract, palette and card structure are in REPORT.md. Every candidate carries: a title in the codebase's own nouns · family · standard name · what it costs · the named remedy · what the remedy costs and how you'd know it was wrong. Coverage and the gate tally (drafted, kept, downgraded, dropped) go above the findings. No agent instructions in the report, and no refactoring yet.
+The report is one self-contained page: published as an artifact where the harness can, otherwise a local HTML file whose full absolute path you give the user. Delivery, contract, palette and card structure are in REPORT.md. Every candidate carries: a title in the codebase's own nouns · family · standard name · what it costs · the named remedy · what the remedy costs and how you'd know it was wrong. Coverage and the gate tally (drafted, kept, downgraded, dropped) go above the findings. No agent instructions in the report, and no refactoring yet.
 
 ## 7. Grill
 

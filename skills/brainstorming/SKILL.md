@@ -58,4 +58,4 @@ For small, agreed changes, going straight to implementation is fine if the user 
 
 ## Visual companion
 
-For questions the user would understand better by seeing than by reading — mockups, layouts, diagrams, side-by-side designs — you can show static HTML pages in their browser and capture the answer with the question tool. Offer it once, when you expect visual questions, and mention that it uses more tokens. If they accept, decide per question: conceptual choices, requirements and trade-offs stay in text. See [visual-companion.md](visual-companion.md) for the loop and the template's classes.
+For questions the user would understand better by seeing than by reading — mockups, layouts, diagrams, side-by-side designs — you can show static HTML pages (published as artifacts where your harness can, otherwise local files in their browser) and capture the answer with the question tool. Offer it once, when you expect visual questions, and mention that it uses more tokens. If they accept, decide per question: conceptual choices, requirements and trade-offs stay in text. See [visual-companion.md](visual-companion.md) for the loop and the template's classes.

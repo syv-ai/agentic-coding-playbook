@@ -1,6 +1,18 @@
 # HTML Report Format
 
-The architectural review is rendered as a single self-contained HTML file in the OS temp directory. Tailwind and Mermaid both come from CDNs. Mermaid handles graph-shaped diagrams reliably; hand-built divs and inline SVG handle the more editorial visuals (mass diagrams, cross-sections). Mix the two — don't lean on Mermaid for everything, it'll start to look generic.
+The architectural review is one self-contained page. Tailwind comes from its CDN; Mermaid from its CDN in a local file, natively in an artifact.
+
+**Deliver the page.** If your harness can publish artifacts (in Claude Code, the `Artifact` tool), publish it and give the user the link, following the harness's own artifact guidance (in Claude Code, load the `artifact-design` skill first). Publishing uploads the page, including any quoted code; mention that once. Otherwise write a self-contained HTML file to the OS temp directory, open it in the browser (`open` on macOS, `xdg-open` on Linux, `start ""` on Windows), and give the user the file's full absolute path, resolved (for example with `realpath`) rather than `$TMPDIR/…`, `~` or a relative path.
+
+The same page works both ways, with three differences:
+
+- **Skeleton.** A published page is content only (`<title>`, `<style>`, markup, scripts): the publisher adds `<!doctype>`, `<html>`, `<head>` and `<body>`, and doubled skeleton tags break rendering. A local file is a complete HTML document.
+- **Mermaid.** Artifacts render `<pre class="mermaid">` natively, so don't load the Mermaid library there. A local file loads it from the CDN.
+- **External resources.** Artifacts allow scripts only from a few hosts (`cdn.tailwindcss.com`, `cdn.jsdelivr.net/npm/`, `cdnjs.cloudflare.com`) and block remote stylesheets (except Google Fonts), images and fetches. Inline everything else so the page works in both.
+
+The scaffold below is the local-file form. To publish it, keep the `<title>`, the Tailwind script and the `<style>` block, drop the Mermaid import and the skeleton tags, and keep the `<main>` content.
+
+ Mermaid handles graph-shaped diagrams reliably; hand-built divs and inline SVG handle the more editorial visuals (mass diagrams, cross-sections). Mix the two — don't lean on Mermaid for everything, it'll start to look generic.
 
 ## Scaffold
 
@@ -97,7 +109,7 @@ Before: a tree of function calls rendered as nested boxes. After: the same tree 
 - Colour sparingly: one accent (emerald or indigo) plus red for leakage and amber for warnings.
 - Keep diagrams ~320px tall so before/after sits comfortably side by side without scrolling.
 - Use `text-xs uppercase tracking-wider` for module labels inside diagrams — they should read as schematic, not as UI.
-- The only scripts are the Tailwind CDN and the Mermaid ESM import. The report is otherwise static — no app code, no interactivity beyond Mermaid's own rendering.
+- The only scripts are the Tailwind CDN and, in a local file, the Mermaid ESM import. The report is otherwise static — no app code, no interactivity beyond Mermaid's own rendering.
 
 ## Top recommendation section
 

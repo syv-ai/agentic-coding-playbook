@@ -13,8 +13,10 @@ A question *about* a UI topic isn't automatically visual. "What kind of wizard d
 
 ## The loop
 
-1. **Write a page.** Read [template.html](template.html), replace the `<!-- CONTENT -->` marker with your content fragment, and write the result to a new file in the OS temp directory (e.g. `<tmpdir>/brainstorm-<slug>.html`). Use a new filename for every screen and version (`layout.html`, `layout-v2.html`) so earlier versions stay comparable.
-2. **Open it** best-effort: `open <file>` on macOS, `xdg-open <file>` on Linux, `start "" <file>` on Windows. If that fails (remote or headless), print the absolute `file://` path and ask the user to open it.
+1. **Write a page.** Read [template.html](template.html) and replace the `<!-- CONTENT -->` marker with your content fragment. Use a new file for every screen and version (`layout.html`, `layout-v2.html`) so earlier versions stay comparable.
+2. **Deliver it.**
+   - If your harness can publish artifacts (in Claude Code, the `Artifact` tool), publish the page and give the user the link. Drop the template's doctype, `<html>`, `<head>` and `<body>` tags, since the publisher adds them; keep its `<title>`, `<style>` and `<script>`.
+   - Otherwise write it to the OS temp directory, open it best-effort (`open <file>` on macOS, `xdg-open <file>` on Linux, `start "" <file>` on Windows), and give the user the file's full absolute path, resolved rather than `$TMPDIR/…` or `~`, whether or not it opened.
 3. **Ask for the decision** with the question tool, mirroring the page's options with the same letters and labels. Clicking in the page only highlights; the tool answer is what counts.
 4. **Iterate or move on.** If the feedback changes the screen, write a new version and open it. Move on once the question is settled.
 
@@ -52,7 +54,7 @@ Then ask "Which layout?" with options **A — Single column** and **B — Two co
 
 ## Diagrams
 
-For flowcharts, state machines and entity relationships, Mermaid from a CDN works when the user is online:
+For flowcharts, state machines and entity relationships, use Mermaid. A published artifact renders `<pre class="mermaid">` natively, so don't load the library there. A local file loads it from a CDN when the user is online:
 
 ```html
 <script type="module">
@@ -70,4 +72,4 @@ Offline, build diagrams from plain HTML and CSS (`.mockup`, `.placeholder`).
 - Put the question on the page ("Which feels more professional?"), not just "Pick one".
 - Two to four options per screen.
 - Use real content when it matters; placeholders hide design problems.
-- Files in the temp directory are disposable. If you wrote them into the project instead, mention that the user can delete them and should keep them out of version control.
+- Temp-directory files and throwaway artifacts are disposable. If you wrote them into the project instead, mention that the user can delete them and should keep them out of version control.

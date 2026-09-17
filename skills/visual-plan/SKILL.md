@@ -24,13 +24,13 @@ Skip it for routine fixes and small changes. If the plan fits in a few lines, wr
 1. **Get the plan.** Use the plan from **writing-plans**, or read the existing one. Where plans live comes from the project's instructions file (AGENTS.md, or CLAUDE.md in Claude Code). If there is no plan yet, write one first — this skill renders a plan, it doesn't invent one.
 2. **Map it onto blocks.** Pick the block that makes each part clearest, using [BLOCKS.md](BLOCKS.md). Most of the plan stays prose. Show only load-bearing code, with annotations.
 3. **Collect open decisions.** Put every either/or choice that would change the plan into one open-questions block at the bottom, each with a recommended option. Settled decisions stay as prose or a `decision` callout.
-4. **Render the page.** Fill [template.html](template.html) and write it to the OS temp directory (e.g. `$TMPDIR/visual-plan-<slug>.html`), not into the repo. The only external resources are the Tailwind and Mermaid CDNs.
-5. **Open it** — `open` on macOS, `xdg-open` on Linux, `start` on Windows. If that fails, give the user the absolute path.
+4. **Render the page.** Fill [template.html](template.html). Never write it into the repo.
+5. **Deliver it.** If your harness can publish artifacts (in Claude Code, the `Artifact` tool, after loading the `artifact-design` skill), publish it and give the user the link: drop the template's skeleton tags and its Mermaid import, since the publisher adds the skeleton and artifacts render Mermaid natively. Otherwise write it to the OS temp directory (e.g. `visual-plan-<slug>.html`), open it in the browser (`open` on macOS, `xdg-open` on Linux, `start ""` on Windows), and give the user the file's full absolute path, resolved rather than `$TMPDIR/…` or `~`.
 6. **Capture decisions.** Ask each open question with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot; plain text if it has none), recommended option first. Questions that don't depend on each other can go together. Highlighting in the page is cosmetic.
 7. **Fold the answers back** into the plan document so execution works from the settled version.
 
 ## Rules
 
-- **Local only.** No hosted plan apps, accounts, tokens or npm packages; the plan leaves the machine only as the CDN-loaded page the user opens.
+- **No extra services.** No hosted plan apps, accounts, tokens or npm packages. The plan leaves the machine only as the page itself: a local file, or an artifact where the harness publishes one.
 - **The plan document is the source of truth.** The HTML is a throwaway review aid; don't commit it.
 - **Render, don't pad.** A visual block has to make something clearer than text would.

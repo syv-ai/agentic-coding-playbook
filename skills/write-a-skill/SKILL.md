@@ -66,7 +66,9 @@ description: Test-driven development with red-green-refactor. Use when implement
 ## Conventions for this collection
 
 - **Multi-agent first.** Write for any harness. Say "the project's instructions file (AGENTS.md, or CLAUDE.md in Claude Code)"; don't assume CLAUDE.md, `.claude/`, `docs/`, GitHub or git commits unless the project's instructions say so. For questions: "Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot); if it has none, ask in plain text." For exploration: "delegate to an exploration subagent if your harness has one; otherwise keep the exploration narrow."
-- **Harness-specific features as notes.** Workflows, `/goal`, Stop hooks, Artifacts, `context: fork` and `${CLAUDE_SKILL_DIR}` appear only as short "In Claude Code, …" notes next to a portable default.
+- **Harness-specific features as notes.** Workflows, `/goal`, Stop hooks, `context: fork` and `${CLAUDE_SKILL_DIR}` appear only as short "In Claude Code, …" notes next to a portable default.
+- **Reports: artifact if possible, local file otherwise.** A skill that produces a page for a person publishes it as an artifact where the harness can (in Claude Code, the `Artifact` tool), and otherwise writes a self-contained HTML file and opens it. Note the differences: a published page has no skeleton tags and loads no Mermaid library.
+- **Share full paths.** Whenever the agent writes something for a person to read into a temp directory, it gives the file's full absolute path, resolved rather than `$TMPDIR/…`, `~` or a relative path.
 - **Project facts come from the project.** Trackers, where specs and plans go, planning depth and verification commands come from the instructions file. If it's silent: infer from the repo, then ask, then offer to record the answer there. Don't invent settings files.
 - **Scale to the task.** If a change fits in one sentence, the skill should let the agent skip the ceremony, and say so.
 - **Calm, direct tone.** Imperative instructions with the reason in a clause. No capitalised MUST/NEVER, iron laws or lists of forbidden excuses; current models over-apply shouted rules.

@@ -95,7 +95,7 @@ Put the switcher in a single shared component so both sub-shapes can reuse it. L
 
 Before handing over, render each variant and look at it. Open the route with each `?variant=` key and take a screenshot, using browser automation if your harness has it (for example Claude in Chrome, Playwright or Puppeteer), otherwise ask the user to check the page loads.
 
-Compare the screenshots against the question and each other. Fix anything broken (blank regions, overflow, a variant that failed to render, two variants that turned out alike) before the user sees them. Share the screenshots with the user alongside the URL, so they can compare real renders at a glance.
+Compare the screenshots against the question and each other. Fix anything broken (blank regions, overflow, a variant that failed to render, two variants that turned out alike) before the user sees them. Share the screenshots with the user alongside the URL, so they can compare real renders at a glance. If you saved them to disk, give each one's full absolute path.
 
 ### 6. Hand it over
 

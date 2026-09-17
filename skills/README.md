@@ -110,8 +110,9 @@ never touches it.
 ## Design principles
 
 - **Multi-agent.** AGENTS.md and plain `SKILL.md` folders first. Claude Code
-  features (subagent types, workflows, `/goal`, hooks, Artifacts) are optional
-  notes with a portable default.
+  features (subagent types, workflows, `/goal`, hooks) are optional notes with a
+  portable default. Reports are published as artifacts where the harness can,
+  and written as local HTML files otherwise, always with their full path shared.
 - **The project decides.** Skills don't assume GitHub, PRDs, a `docs/` folder or
   committed plans. They follow the project's instructions file, infer from the
   repo, and ask when still unsure.

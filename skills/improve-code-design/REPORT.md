@@ -2,17 +2,21 @@
 
 Write only when there are **two or more strong candidates**. One candidate, or none, goes in the conversation. Do not build the report to justify the review — a page with sections to fill is the main pressure toward padding, and this rule is what removes it.
 
-## Form: a self-contained page
+## Form: one self-contained page
 
-Write one HTML file outside the repo (the OS temp directory, e.g. `<tmpdir>/design-review-<repo>.html`), open it in the browser, and give the user the absolute path. Each revision gets a new file name.
+**Deliver the page.** If your harness can publish artifacts (in Claude Code, the `Artifact` tool), publish it and give the user the link, following the harness's own artifact guidance (in Claude Code, load the `artifact-design` skill first). Publishing uploads the page, including any quoted code; mention that once. Otherwise write a self-contained HTML file to the OS temp directory, open it in the browser (`open` on macOS, `xdg-open` on Linux, `start ""` on Windows), and give the user the file's full absolute path, resolved (for example with `realpath`) rather than `$TMPDIR/…`, `~` or a relative path.
 
-In Claude Code with the `Artifact` tool, you can publish the same page instead: load the `artifact-design` skill, write the file to the scratchpad, publish it, and give the user the URL. Say once that publishing uploads the quoted source excerpts to claude.ai and that the page is private until shared. To revise, republish the same file path, which keeps the URL.
+The same page works both ways, with three differences:
 
-The contract is the same either way:
+- **Skeleton.** A published page is content only (`<title>`, `<style>`, markup, scripts): the publisher adds `<!doctype>`, `<html>`, `<head>` and `<body>`, and doubled skeleton tags break rendering. A local file is a complete HTML document.
+- **Mermaid.** Artifacts render `<pre class="mermaid">` natively, so don't load the Mermaid library there. A local file loads it from the CDN.
+- **External resources.** Artifacts allow scripts only from a few hosts (`cdn.tailwindcss.com`, `cdn.jsdelivr.net/npm/`, `cdnjs.cloudflare.com`) and block remote stylesheets (except Google Fonts), images and fetches. Inline everything else so the page works in both.
 
-**Content, not a document skeleton, when publishing.** The `Artifact` publisher wraps the page in `<html>`/`<head>`/`<body>`, so a published file holds only a `<title>`, a `<style>` block and page content; doubled skeleton tags break rendering. A local file needs the full skeleton.
+To revise a published report, republish the same file, which keeps the link. A local revision gets a new file name.
 
-**Nothing loads from the network.** No CDN scripts, stylesheets, webfonts or remote images — artifact pages enforce this with a strict CSP, and local pages stay usable offline. Inline the CSS, hand-build diagrams as inline `<svg>`, and use system font stacks.
+The rest of the contract applies either way:
+
+**Nothing loads from the network.** This report needs no library: inline the CSS, hand-build diagrams as inline `<svg>`, and use system font stacks, so it renders the same published or offline.
 
 **Both themes.** Define the palette as custom properties on `:root`, redefine only those properties under `@media (prefers-color-scheme: dark)`, then again under `:root[data-theme="dark"]` and `:root[data-theme="light"]` so a viewer toggle wins in both directions. Style components through the tokens, never inside the media query. Diagram strokes and fills are tokens too — an SVG with a hardcoded `#111` disappears on a dark ground.
 

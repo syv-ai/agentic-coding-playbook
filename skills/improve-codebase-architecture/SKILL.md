@@ -41,7 +41,7 @@ Apply the deletion test to anything you suspect is shallow.
 
 ## 2. Report
 
-Write a self-contained HTML file to the OS temp directory (`$TMPDIR`, falling back to `/tmp`, or `%TEMP%` on Windows) as `architecture-review-<timestamp>.html`, so nothing lands in the repo. Open it (`open` on macOS, `xdg-open` on Linux, `start` on Windows) and give the user the absolute path.
+Present the candidates as one self-contained page, never written into the repo: published as an artifact where your harness can, otherwise a local HTML file (`architecture-review-<timestamp>.html` in the OS temp directory) opened in the browser, with its full absolute path given to the user. Delivery details are in [HTML-REPORT.md](HTML-REPORT.md).
 
 Each candidate gets a card with:
 
