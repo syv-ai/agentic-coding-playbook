@@ -53,7 +53,7 @@ python3 "$SKILL_DIR/scripts/inventory.py" plan PATH --batch 8
 Hand each batch to the **design-inventory** subagent. It returns a factual table per file and evaluates nothing. Pass the batch and nothing else; adding "and note anything problematic" reintroduces the satisficing this step removes. How to run it depends on the harness:
 
 - **Claude Code (plugin install):** "Use the design-inventory subagent on batch 3: `<paths>`".
-- **Other harnesses with subagents:** start a subagent whose instructions are the contents of `$SKILL_DIR/subagents/design-inventory.md`, and give it the batch.
+- **Other harnesses with subagents:** start a subagent whose instructions are the prompt in `$SKILL_DIR/subagents/design-inventory.md` (the text below its frontmatter, which only Claude Code reads), and give it the batch.
 - **No subagents:** run that prompt in a fresh chat per batch and paste the tables back, rather than doing the work inline here.
 
 Below ~15 files, skip delegation and read them yourself. Then prove coverage:

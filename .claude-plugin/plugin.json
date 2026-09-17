@@ -36,5 +36,9 @@
     "./skills/write-a-skill",
     "./skills/setup",
     "./skills/setup-syv-skills"
+  ],
+  "agents": [
+    "./skills/improve-code-design/subagents/design-inventory.md",
+    "./skills/improve-code-design/subagents/design-auditor.md"
   ]
 }
