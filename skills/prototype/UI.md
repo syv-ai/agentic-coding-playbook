@@ -91,13 +91,19 @@ Behaviour:
 
 Put the switcher in a single shared component so both sub-shapes can reuse it. Locate it wherever shared UI lives in the project.
 
-### 5. Hand it over
+### 5. Look at every variant
+
+Before handing over, render each variant and look at it. Open the route with each `?variant=` key and take a screenshot, using browser automation if your harness has it (for example Claude in Chrome, Playwright or Puppeteer), otherwise ask the user to check the page loads.
+
+Compare the screenshots against the question and each other. Fix anything broken (blank regions, overflow, a variant that failed to render, two variants that turned out alike) before the user sees them. Share the screenshots with the user alongside the URL, so they can compare real renders at a glance.
+
+### 6. Hand it over
 
 Surface the URL (and the `?variant=` keys). The user will flip through whenever they get to it. The interesting feedback is usually **"I want the header from B with the sidebar from C"** — that's the actual design they want.
 
-### 6. Capture the answer and clean up
+### 7. Capture the answer and clean up
 
-Once a variant has won, write down which one and why (commit message, ADR, issue, or a `NOTES.md` next to the prototype if running AFK and the user hasn't responded yet). Then:
+Once a variant has won, write down which one and why, wherever the project records decisions (a commit message, an ADR, a work item), or in a `NOTES.md` next to the prototype if the user hasn't responded yet. Then:
 
 - **Sub-shape A** — delete the losing variants and the switcher; fold the winner into the existing page.
 - **Sub-shape B** — promote the winning variant to a real route, delete the throwaway route and the switcher.

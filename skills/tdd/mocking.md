@@ -1,25 +1,18 @@
-# When to Mock
+# Mocking
 
-Mock at **system boundaries** only:
+## Where mocks belong
 
-- External APIs (payment, email, etc.)
-- Databases (sometimes - prefer test DB)
-- Time/randomness
-- File system (sometimes)
+Mock at **system boundaries** you don't control:
 
-Don't mock:
+- External APIs (payments, email, third-party services)
+- Time and randomness
+- Databases and the file system, when a test instance isn't practical
 
-- Your own classes/modules
-- Internal collaborators
-- Anything you control
+Don't mock your own modules or internal collaborators. A test that replaces them checks the wiring you wrote, not the behaviour callers rely on.
 
-## Designing for Mockability
+## Designing boundaries that are easy to mock
 
-At system boundaries, design interfaces that are easy to mock:
-
-**1. Use dependency injection**
-
-Pass external dependencies in rather than creating them internally:
+**Pass dependencies in.**
 
 ```typescript
 // Easy to mock
@@ -34,26 +27,38 @@ function processPayment(order) {
 }
 ```
 
-**2. Prefer SDK-style interfaces over generic fetchers**
-
-Create specific functions for each external operation instead of one generic function with conditional logic:
+**Prefer one function per operation over a generic fetcher.** Each mock then returns one known shape, with no branching in test setup.
 
 ```typescript
-// GOOD: Each function is independently mockable
+// Each operation mocks independently
 const api = {
   getUser: (id) => fetch(`/users/${id}`),
   getOrders: (userId) => fetch(`/users/${userId}/orders`),
   createOrder: (data) => fetch('/orders', { method: 'POST', body: data }),
 };
 
-// BAD: Mocking requires conditional logic inside the mock
+// Mocking this needs conditional logic inside the mock
 const api = {
   fetch: (endpoint, options) => fetch(endpoint, options),
 };
 ```
 
-The SDK approach means:
-- Each mock returns one specific shape
-- No conditional logic in test setup
-- Easier to see which endpoints a test exercises
-- Type safety per endpoint
+## Common mistakes
+
+**Asserting on the mock.** `expect(screen.getByTestId('sidebar-mock')).toBeInTheDocument()` proves the mock rendered. Test the real component, or assert on the behaviour of the unit under test with the mock present.
+
+**Test-only methods in production code.** A `destroy()` that only tests call looks like real API and can be called by accident. Put cleanup in test utilities instead, and check the class actually owns the resource.
+
+**Mocking without knowing what the real thing does.** Mocking a high-level method can remove a side effect the test depends on, such as a config write, so the test passes or fails for the wrong reason. Run the test against the real implementation first, see what it needs, then mock the slow or external part at the lowest level that works.
+
+**Incomplete mock data.** A response mocked with only the fields this test reads hides assumptions; downstream code that reads `metadata.requestId` fails only in production. Mirror the real response shape, using the API's documentation or a captured example.
+
+**Mocks that outgrow the test.** When setup is longer than the test, or the mock needs methods the real component has, ask whether a test with real components would be simpler. It often is.
+
+## Warning signs
+
+- Assertions on `*-mock` test ids
+- Methods called only from test files
+- Mock setup is most of the test
+- The test fails when you remove the mock, but the behaviour is fine
+- You can't say why the mock is needed

@@ -4,7 +4,7 @@
 
 When you fix a bug caused by invalid data, adding validation at one place feels sufficient. But that single check can be bypassed by different code paths, refactoring, or mocks.
 
-**Core principle:** Validate at EVERY layer data passes through. Make the bug structurally impossible.
+**Core principle:** Once you know the root cause, validate at each layer the data passes through, so the bug becomes structurally impossible rather than merely fixed.
 
 ## Why Multiple Layers
 
