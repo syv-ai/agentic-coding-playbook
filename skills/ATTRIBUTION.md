@@ -25,8 +25,7 @@ every skill stands on its own.
 |---|---|
 | `grill-me` | mattpocock/skills (`grill-me`), with the CONTEXT.md glossary idea folded in from `grill-with-docs` |
 | `brainstorming` | obra/superpowers (`brainstorming`); the visual companion was reworked from the Node WebSocket server to static HTML + `AskUserQuestion` |
-| `to-prd` | mattpocock/skills (`to-prd`), decoupled from the setup/issue-tracker config machinery |
-| `to-issues` | mattpocock/skills (`to-issues`), decoupled from the setup/issue-tracker config machinery |
+| `track-work` | **Merge** of mattpocock/skills (`to-prd` and `to-issues`), generalized across trackers and artefact types, and reading tracker conventions from the project's instructions file |
 | `writing-plans` | obra/superpowers (`writing-plans`) |
 | `visual-plan` | Syv.ai original — self-contained static-HTML review surface; block taxonomy inspired by BuilderIO/skills (`visual-plan`) |
 | `prototype` | mattpocock/skills (`prototype`) |
@@ -40,7 +39,7 @@ every skill stands on its own.
 | `write-a-skill` | **Merge** of mattpocock/skills (`write-a-skill`) + obra/superpowers (`writing-skills`) |
 | `guardrails` | Syv.ai original — extends mattpocock/skills (`git-guardrails-claude-code`) into a broader project/session safety skill |
 | `setup` | Syv.ai original (purpose absorbed from mattpocock/skills `setup-pre-commit`, generalized) |
-| `setup-syv-skills` | Syv.ai original |
+| `setup-syv-skills` | Syv.ai original — interview in the style of `grill-me`; recording answers as a section in the instructions file follows the pattern of mattpocock/skills (`setup-matt-pocock-skills`) |
 
 ## Upstream licenses
 

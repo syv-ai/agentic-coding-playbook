@@ -9,7 +9,6 @@
     {
       "name": "syv-skills",
       "description": "Best-of-breed agentic-coding skills for planning, execution, quality, and verification with any agentic coding harness.",
-      "version": "0.3.1",
       "source": "./",
       "author": {
         "name": "Syv.ai",

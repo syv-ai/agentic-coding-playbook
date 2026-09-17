@@ -102,13 +102,13 @@ Complete annotated bibliography of all 26 primary sources organized by theme. Ke
 
 A companion **[skills collection](skills/)** ships alongside the modules — a curated, best-of-breed set of agentic-coding skills (planning, execution, quality, verification) distilled from [`mattpocock/skills`](https://github.com/mattpocock/skills) and [`obra/superpowers`](https://github.com/obra/superpowers), plus skills written for this playbook. Where the modules teach the *why*, the skills are the *how* — installable workflows your agent runs.
 
-Install into any project:
+The skills are plain `SKILL.md` folders that work in Claude Code, GitHub Copilot, Codex, Cursor and other agents that support Agent Skills. Install into any project:
 
 ```bash
-npx skills add syv-ai/agentic-coding-playbook
+npx skills add syv-ai/agentic-coding-playbook      # or: gh skill install syv-ai/agentic-coding-playbook --all
 ```
 
-Or, inside Claude Code, install it as a native plugin (supports `/plugin update`):
+Or, inside Claude Code, install it as a plugin, then enable auto-update for the `syv-skills` marketplace under `/plugin` → Marketplaces:
 
 ```
 /plugin marketplace add syv-ai/agentic-coding-playbook
@@ -121,7 +121,7 @@ Either way, then run:
 /setup-syv-skills
 ```
 
-The collection is self-contained and tool-agnostic in spirit. See [skills/README.md](skills/README.md) for the full catalog and [skills/ATTRIBUTION.md](skills/ATTRIBUTION.md) for provenance and licensing.
+It interviews you about how your team works and records the answers in your project's instructions file (AGENTS.md, or CLAUDE.md for Claude Code). The collection is self-contained and multi-agent: AGENTS.md first, Claude Code features optional. See [skills/README.md](skills/README.md) for the full catalog and [skills/ATTRIBUTION.md](skills/ATTRIBUTION.md) for provenance and licensing.
 
 ## How to Use This
 

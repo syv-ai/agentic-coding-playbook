@@ -1,7 +1,6 @@
 {
   "name": "syv-skills",
   "description": "Syv.ai's curated agentic-coding skills collection — the practical companion to the Agentic Coding Playbook. A best-of-breed set of skills for planning, execution, quality, and verification with any agentic coding harness.",
-  "version": "0.3.1",
   "author": {
     "name": "Syv.ai",
     "email": "nicolai@syv.ai"
@@ -21,8 +20,7 @@
   "skills": [
     "./skills/grill-me",
     "./skills/brainstorming",
-    "./skills/to-prd",
-    "./skills/to-issues",
+    "./skills/track-work",
     "./skills/writing-plans",
     "./skills/visual-plan",
     "./skills/prototype",
@@ -38,8 +36,5 @@
     "./skills/write-a-skill",
     "./skills/setup",
     "./skills/setup-syv-skills"
-  ],
-  "agents": [
-    "./agents"
   ]
 }

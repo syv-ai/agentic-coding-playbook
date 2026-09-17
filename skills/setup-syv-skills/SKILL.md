@@ -1,64 +1,84 @@
 ---
 name: setup-syv-skills
-description: One-command onboarding for the Syv.ai skills collection. Checks the environment (git, GitHub CLI auth), seeds a slim CLAUDE.md pointer if absent, confirms which skills resolved, and gives a short orientation. Use when a user has just installed the collection and runs /setup-syv-skills, or asks how to get set up to use the Syv skills.
+description: Interviews the user about how their team wants agents to work in this repo — tracker, specs and plans, planning depth, verification, which agents they use — and records the answers as a short section in the project's instructions file. Use when the collection has just been installed, when onboarding a repo to it, or when the user runs /setup-syv-skills.
 disable-model-invocation: true
+argument-hint: "[optional: anything you already know, e.g. 'ADO, no PRDs, Copilot + Claude Code']"
 ---
 
 # Setup Syv Skills
 
-The onboarding command for the Syv.ai skills collection. After a user installs
-the collection (`npx skills add syv-ai/agentic-coding-playbook`), this readies
-**the current repo and environment** to use it. This is the workshop "pre-flight"
-collapsed into one command — run explicitly, never auto-invoked.
+Onboard this repo to the collection by finding out how the team wants to work, then writing that down where every agent will read it. Several skills (**track-work**, **brainstorming**, **writing-plans**, **executing-plans**, **tdd**) follow what the project's instructions say about tracking, planning and verification. This skill is how those facts get there.
 
-This is a prompt-driven skill, not a script. Explore the current state, report
-what you found, fix what's missing with the user's go-ahead, and orient them.
+Run it as an interview in the style of **grill-me**: detect what you can, ask only what is still unclear, and recommend an answer for each question. If the user passed arguments, treat them as answers already given.
 
-## Process
+## 1. Detect before asking
 
-### 1. Check the environment
+Look first, so the questions are about choices rather than facts you could have read:
 
-Run these and report a short PASS/ACTION line for each — don't fix silently:
+- **Instructions file** — does the repo have AGENTS.md, CLAUDE.md, both, or neither? If CLAUDE.md contains `@AGENTS.md`, AGENTS.md is the source.
+- **Existing process docs** — CONTRIBUTING.md, a README "Development" section, PR or issue templates, links to a wiki. Link to these later rather than copying them.
+- **Tracker** — issue references in commits and branch names (`#123`, `AB#123`, `PROJ-123`), `.github/ISSUE_TEMPLATE/`, `azure-pipelines.yml`, Jira or Linear links, a folder of markdown specs or issues.
+- **Specs and plans** — folders where earlier specs, PRDs, ADRs or plans already live, and whether they are committed.
+- **Verification** — the real test, lint, type-check and build commands (package scripts, Makefile, CI workflows).
+- **Agents in use** — `.claude/`, `.github/copilot-instructions.md` or `.github/agents/`, `.cursor/`, `.codex/`, `.agents/skills/`.
 
-- **Git** — `git rev-parse --is-inside-work-tree`. If this isn't a repo, offer to `git init` (ask first).
-- **GitHub CLI** — `gh --version`, then `gh auth status`. The `to-prd` / `to-issues` skills default to publishing via `gh`. If `gh` is missing or unauthenticated, tell the user to run `gh auth login` themselves (it's interactive — they should run it, e.g. by typing `! gh auth login`). Note that these skills fall back to writing markdown under `docs/` if `gh` stays unavailable, so this is a recommendation, not a blocker.
-- **Platform note (Windows):** on native Windows, prefer a skill's PowerShell variant where one exists (e.g. `guardrails` ships both). Any bash-based script a skill installs needs **WSL or Git Bash**. The `brainstorming` visual companion is static HTML (no Node, no server) — it just needs a browser and an `open`/`start` command.
+## 2. Interview
 
-### 2. Confirm the skills resolved
+Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot); if it has none, ask in plain text. Batch questions that don't depend on each other, put your recommended option first, and skip anything detection already answered. Cover:
 
-List the skills the harness has picked up from this collection so the user can see they're available, grouped the way the [collection README](../README.md) groups them. If none resolved, the install didn't register — point them back to the install step and check the plugin is enabled.
+1. **Tracker** — where work items live: GitHub Issues, Azure DevOps, Jira, Linear, markdown files in the repo, or nowhere.
+2. **What describes a piece of work** — PRD, spec, feature description, epic, user stories, or nothing formal. Whether items are broken down, and into what (issues, tasks, product backlog items).
+3. **Specs and plans** — kept or throwaway? If kept, where: in the tracker, a repo folder, or a wiki. Committed or not.
+4. **Planning depth** — the default before building. Recommend: plan only when a change spans several files or the approach is unclear; skip it when the change fits in one sentence.
+5. **Verification** — which commands prove a change works, and whether UI changes should be checked visually.
+6. **Agents** — which harnesses the team uses (Claude Code, Copilot, Codex, Cursor, others). This decides which instructions file and shims matter.
 
-### 3. Seed a slim CLAUDE.md pointer (offer, don't force)
+Stop when every point is answered or explicitly left open. Don't ask about things the team doesn't do.
 
-If the repo has **no** `CLAUDE.md`, offer to create a slim one. Keep it tiny — only what is both undiscoverable and globally relevant. A good starting point:
+## 3. Check what the chosen tracker needs
+
+Only for the tracker the user picked, and report a short PASS/ACTION line for each:
+
+- **GitHub** — `gh auth status`.
+- **Azure DevOps** — `az account show` and `az extension show --name azure-devops`.
+- **Jira, Linear, others** — whether a CLI or MCP server is available to the agent. If not, say work items will be drafted as text for the user to paste.
+
+Interactive logins are the user's to run (in Claude Code they can type `! gh auth login`). A missing tool is an action item, not a blocker.
+
+## 4. Record the answers
+
+Write a short section into the project's instructions file (AGENTS.md, or CLAUDE.md in Claude Code):
+
+- AGENTS.md if it exists; otherwise CLAUDE.md; if neither exists, ask which to create. AGENTS.md is read by most agents.
+- Name the heading after its content, not after this collection, since any agent or plugin can use these facts. Keep it to a handful of lines an agent could not work out on its own. Link to existing process docs instead of restating them.
+- Show the section to the user before writing it. If a section like it already exists, update it rather than adding a second one.
+
+For example:
 
 ```markdown
-# <project name>
-
-<one-line description of what this project is>
-
-<non-standard commands the agent couldn't infer — build/test/run>
+## Work tracking and planning
+- Work items live in Azure DevOps (`az boards`). Features carry the description; no PRDs.
+- Specs and plans are not committed. Keep them in the session unless asked.
+- Plan only when a change spans several files or the approach is unclear.
+- Verify with `npm test` and `npm run lint`. Check UI changes with a screenshot.
 ```
 
-Do **not** run `/init` or generate a fat CLAUDE.md. Standards belong in a
-referenced `docs/` file or a skill, not in CLAUDE.md. If a `CLAUDE.md` already
-exists, leave it alone — just mention they can keep it slim.
+Personal preferences that the team doesn't share belong in the harness's local file (for example `CLAUDE.local.md` or `AGENTS.override.md`), and only if the user asks.
 
-### 4. Orient
+Updating the collection never touches this section. It belongs to the project.
 
-Close with a two-line orientation: the core loop the collection is built around —
-**`/grill-me` → `/to-prd` → `/to-issues` → build → review** — and that
-`/setup` will wire up the project's dev environment and commit gate if that hasn't
-been done yet.
+## 5. Shims for the agents in use
+
+- **Claude Code** reads CLAUDE.md, not AGENTS.md. If the team uses Claude Code and only AGENTS.md exists, offer a CLAUDE.md containing `@AGENTS.md`. Prefer the import to a symlink, which breaks on Windows without Developer Mode.
+- Don't generate a long instructions file, and don't run an init command that writes one.
+
+## 6. Orient
+
+Close with two or three lines: which skills now follow the recorded section, that **setup** wires the dev environment and commit gate if that hasn't been done, and that **grill-me** or **brainstorming** is a good place to start the next piece of work.
 
 ## Done when
 
-- [ ] Git + `gh` auth status reported, with clear next actions for anything missing
-- [ ] The available Syv skills are listed for the user
-- [ ] A slim `CLAUDE.md` exists or the user declined
-- [ ] The user knows the core workflow and where to go next (`/setup`, `/grill-me`)
-
-## Related skills
-
-- **setup** — wire up the project's stack, dev env, and commit gate.
-- **grill-me** — the first step of the core workflow.
+- [ ] Detection ran, and the user was asked only what it couldn't answer
+- [ ] The tracker's tooling was checked, with clear next actions for anything missing
+- [ ] A short, content-named section is in the instructions file, or the user declined
+- [ ] Shims are in place for the agents the team uses, or the user declined
