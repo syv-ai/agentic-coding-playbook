@@ -1,6 +1,6 @@
 ---
 name: track-work
-description: Records what is being built (PRD, spec, feature description, epic — whatever the project uses) and breaks it into independently grabbable work items, in whichever tracker the project uses: GitHub Issues, Azure DevOps, Jira, Linear, markdown files, or none. Use when the user wants to write up a feature, create a PRD or spec, turn a plan into issues, tickets or backlog items, or persist the outcome of a planning conversation.
+description: "Records what is being built (PRD, spec, feature description, epic — whatever the project uses) and breaks it into independently grabbable work items, in whichever tracker the project uses: GitHub Issues, Azure DevOps, Jira, Linear, markdown files, or none. Use when the user wants to write up a feature, create a PRD or spec, turn a plan into issues, tickets or backlog items, or persist the outcome of a planning conversation."
 disable-model-invocation: true
 argument-hint: "[optional: 'describe', 'breakdown', or an existing item/plan to work from]"
 ---
