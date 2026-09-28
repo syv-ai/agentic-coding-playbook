@@ -27,6 +27,12 @@ If the spec covers several independent subsystems, suggest one plan per subsyste
 - Split by responsibility, not by technical layer.
 - In an existing codebase, follow its patterns. Only include a split if a file you are changing has become unwieldy.
 
+**Then name one owner per rule.** A file map splits work by file, so a rule that several files need can end up written into each of them. List every rule the plan introduces or relies on that more than one file needs: a format (what counts as a link, an id, a valid name), a lookup (where a folder or record is found), an invariant (what must hold after every write), an ordering or a constant. Name the one function or module that owns each; every other file calls it. A rule both sides of a boundary need (client and server, two processes, two services) lives in code both sides import.
+
+Two tasks that each write their own version of a rule mean two owners, and they will drift: an index parser in one process and a link renderer in another, each with its own regex for "a link to a note", disagree on the first odd link. Plan text like "keep in step with", "mirrors" or "same as in Task N" marks the same problem. So does "every caller must call X, and a test catches the ones that forget": find the one point every caller passes through and enforce the rule there.
+
+**Say what the plan deletes.** When a task adds a new way to do something the codebase already does, list the old paths it replaces and delete them in a task. Any that stay are named, with the reason and a follow-up.
+
 **Start with a short header:**
 
 ```markdown
@@ -79,6 +85,8 @@ After writing the plan, check it against the spec:
 1. **Coverage** — can you point to a task for every requirement? Add tasks for gaps.
 2. **Gaps** — search for the patterns above and fix them.
 3. **Consistency** — names, signatures and types match across tasks (`clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug).
+4. **One owner per rule** — for every format, lookup, invariant and constant, point to the one task that defines it. Search the plan for a pattern, parser or constant defined twice, and for "keep in step", "mirrors" or "must also call". Consistent names don't catch this: two differently named functions can encode the same rule.
+5. **Deletions** — every old path the plan replaces is deleted in a task, or kept with a stated reason.
 
 For a larger plan, also get a fresh-context review with [plan-document-reviewer-prompt.md](plan-document-reviewer-prompt.md).
 
