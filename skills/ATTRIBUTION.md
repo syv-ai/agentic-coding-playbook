@@ -30,6 +30,7 @@ every skill stands on its own.
 | `visual-plan` | Syv.ai original — self-contained static-HTML review surface; block taxonomy inspired by BuilderIO/skills (`visual-plan`) |
 | `prototype` | mattpocock/skills (`prototype`) |
 | `executing-plans` | obra/superpowers (`executing-plans`) |
+| `work-autonomously` | Syv.ai original — the autonomous counterpart to `executing-plans` |
 | `zoom-out` | mattpocock/skills (`zoom-out`) |
 | `tdd` | **Merge** of obra/superpowers (`test-driven-development`) + mattpocock/skills (`tdd` and its reference files) |
 | `systematic-debugging` | **Merge** of obra/superpowers (`systematic-debugging`) + mattpocock/skills (`diagnose`) |

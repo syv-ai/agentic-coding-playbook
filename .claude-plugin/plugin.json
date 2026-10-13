@@ -25,6 +25,7 @@
     "./skills/visual-plan",
     "./skills/prototype",
     "./skills/executing-plans",
+    "./skills/work-autonomously",
     "./skills/zoom-out",
     "./skills/tdd",
     "./skills/systematic-debugging",

@@ -87,6 +87,7 @@ never touches it.
 
 **Execution**
 - [`executing-plans`](executing-plans/) — execute a written plan with review checkpoints.
+- [`work-autonomously`](work-autonomously/) — hand over a plan or spec and walk away: one batch of questions up front, then the agent plans, decides and executes on its own, logging every decision in `design-decisions.md`, delegating to subagents to save context, and keeping a Mac awake with `caffeinate`. *(User-only command.)*
 - [`zoom-out`](zoom-out/) — get a higher-level map of an unfamiliar area of the codebase.
 
 **Quality & verification**

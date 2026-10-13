@@ -56,4 +56,5 @@ Summarise what was built, the verification evidence, and anything deferred. Then
 - **writing-plans** — creates the plan this skill executes.
 - **tdd** — the test-first loop for individual tasks.
 - **systematic-debugging** — when a verification failure isn't obvious.
+- **work-autonomously** — to run a plan end to end without check-ins.
 - **handoff** — to continue in a fresh session.
