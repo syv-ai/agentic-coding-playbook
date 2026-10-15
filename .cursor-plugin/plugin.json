@@ -1,0 +1,46 @@
+{
+  "name": "syv-skills",
+  "version": "1.0.0",
+  "description": "Syv.ai's curated agentic-coding skills collection — the practical companion to the Agentic Coding Playbook. A best-of-breed set of skills for planning, execution, quality, and verification with any agentic coding harness.",
+  "author": {
+    "name": "Syv.ai",
+    "email": "nicolai@syv.ai"
+  },
+  "homepage": "https://github.com/syv-ai/agentic-coding-playbook",
+  "repository": "https://github.com/syv-ai/agentic-coding-playbook",
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "agentic-coding",
+    "tdd",
+    "debugging",
+    "planning",
+    "code-review",
+    "workshop"
+  ],
+  "skills": [
+    "./skills/grill-me",
+    "./skills/brainstorming",
+    "./skills/track-work",
+    "./skills/writing-plans",
+    "./skills/visual-plan",
+    "./skills/prototype",
+    "./skills/executing-plans",
+    "./skills/work-autonomously",
+    "./skills/zoom-out",
+    "./skills/tdd",
+    "./skills/systematic-debugging",
+    "./skills/receiving-code-review",
+    "./skills/improve-codebase-architecture",
+    "./skills/improve-code-design",
+    "./skills/guardrails",
+    "./skills/handoff",
+    "./skills/write-a-skill",
+    "./skills/setup",
+    "./skills/setup-syv-skills"
+  ],
+  "agents": [
+    "./skills/improve-code-design/subagents/design-inventory.md",
+    "./skills/improve-code-design/subagents/design-auditor.md"
+  ]
+}

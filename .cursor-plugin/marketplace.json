@@ -1,0 +1,14 @@
+{
+  "name": "syv-skills",
+  "owner": {
+    "name": "Syv.ai",
+    "email": "nicolai@syv.ai"
+  },
+  "plugins": [
+    {
+      "name": "syv-skills",
+      "source": "./",
+      "description": "Best-of-breed agentic-coding skills for planning, execution, quality, and verification with any agentic coding harness."
+    }
+  ]
+}
