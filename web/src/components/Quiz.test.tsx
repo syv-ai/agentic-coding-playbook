@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen, fireEvent, cleanup } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup, act } from "@testing-library/react";
 import Quiz from "./Quiz";
 
 const questions = [
@@ -48,17 +48,28 @@ describe("Quiz", () => {
     expect(screen.getByText("After the agent says it is done").closest("button")?.disabled).toBe(true);
   });
 
-  it("shows one question at a time and advances with Next", () => {
+  it("shows one question at a time; a correct pick moves on by itself, a wrong one explains and waits for Next", () => {
+    vi.useFakeTimers();
     render(<Quiz id="t" questions={two} />);
     fireEvent.click(screen.getByText("Start"));
     expect(screen.queryByText("Second prompt")).toBeNull();
     fireEvent.click(screen.getByText("Before the agent starts"));
-    fireEvent.click(screen.getByText("Next question"));
+    expect(screen.queryByText("Next question")).toBeNull();
+    expect(screen.queryByText("The check is the target the loop optimises for.")).toBeNull();
+    act(() => { vi.advanceTimersByTime(1400); });
     expect(screen.queryByText("When do you write the check?")).toBeNull();
     expect(screen.getByText("Second prompt")).toBeTruthy();
     fireEvent.click(screen.getByText("Only choice"));
-    fireEvent.click(screen.getByText("See result"));
+    act(() => { vi.advanceTimersByTime(1400); });
     expect(screen.getByText("2 / 2")).toBeTruthy();
+    vi.useRealTimers();
+    cleanup();
+    render(<Quiz id="w" questions={questions} />);
+    fireEvent.click(screen.getByText("Start"));
+    fireEvent.click(screen.getByText("After the agent says it is done"));
+    expect(screen.getByText("Then the check only confirms what you already believe.")).toBeTruthy();
+    fireEvent.click(screen.getByText("See result"));
+    expect(screen.getByText("0 / 1")).toBeTruthy();
   });
 
   it("replaces the title with the question counter while answering and numbers the options", () => {
@@ -109,8 +120,10 @@ describe("Quiz", () => {
     fireEvent.click(screen.getByText("See result"));
     expect(screen.queryByLabelText("All correct")).toBeNull();
     fireEvent.click(screen.getByText("Try again"));
+    vi.useFakeTimers();
     fireEvent.click(screen.getByText("Before the agent starts"));
-    fireEvent.click(screen.getByText("See result"));
+    act(() => { vi.advanceTimersByTime(1400); });
+    vi.useRealTimers();
     expect(screen.getByLabelText("All correct")).toBeTruthy();
     cleanup();
     render(<Quiz id="t" questions={questions} title="Quick check" />);

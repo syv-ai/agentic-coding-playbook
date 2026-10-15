@@ -12,10 +12,10 @@ const labels = { note: "Note", tension: "Active tension", supersedes: "Supersede
 </aside>
 
 <style>
-  /* A soft tint of the kind's colour, no border: the label carries the meaning. */
+  /* A soft tint of the kind's colour, no border. The label is standard text: never the tint's own hue on the tint. */
   .callout { --tint: var(--accent); border-radius: 14px; padding: 1.25rem 1.5rem; margin: 3.5rem 0; background: color-mix(in srgb, var(--tint) 6%, var(--bg)); }
   .callout[data-kind="tension"] { --tint: var(--warn); }
   .callout[data-kind="supersedes"] { --tint: var(--text-faint); }
-  .callout-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--tint); margin-bottom: 0.35rem; }
+  .callout-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 0.35rem; }
   .callout-body :global(p:last-child) { margin-bottom: 0; }
 </style>

@@ -59,6 +59,14 @@ export default function Quiz({ id, questions, title = "Test your understanding",
     if (step + 1 >= total) setView("result");
     else setStep(step + 1);
   };
+  // A correct pick needs no explanation: the check shows for a moment, then the next question comes by itself.
+  const pickedCorrect = view === "questions" && answers[step] !== undefined && !!questions[step].choices[answers[step]]?.correct;
+  useEffect(() => {
+    if (!pickedCorrect) return;
+    const t = setTimeout(advance, 1400);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pickedCorrect, step]);
   const reset = () => {
     setAnswers({});
     setStep(0);
@@ -109,7 +117,7 @@ export default function Quiz({ id, questions, title = "Test your understanding",
                 </button>
               );
             })}
-            {picked !== undefined && (
+            {picked !== undefined && !pickedCorrect && (
               <div className="quiz-after">
                 <p className="quiz-explain">{q.choices[picked].explain}</p>
                 <button type="button" className="btn btn-primary" onClick={advance}>

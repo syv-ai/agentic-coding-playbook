@@ -128,6 +128,7 @@ export function createSteps(root: HTMLElement, animate = true): Steps {
     index = to;
     const t = templates[to];
     if (meta) meta.textContent = `· step ${to + 1} of ${count}`;
+    dots?.setAttribute("aria-label", `Step ${to + 1} of ${count}`);
     const setText = (el: HTMLElement | null, text: string) => { if (el) { el.textContent = text; el.hidden = !text; } };
     if (animate && head) slideHeight(head, () => setText(desc, t.dataset.desc ?? "")); else setText(desc, t.dataset.desc ?? "");
     if (animate && note) slideHeight(note, () => setText(note, t.dataset.note ?? "")); else setText(note, t.dataset.note ?? "");

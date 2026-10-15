@@ -55,7 +55,7 @@ describe("createSteps", () => {
     const prev = root.querySelector<HTMLButtonElement>("[data-steps-prev]")!, next = root.querySelector<HTMLButtonElement>("[data-steps-next]")!;
     expect(prev.disabled).toBe(true);
     next.click();
-    expect(root.querySelector("[data-steps-meta]")?.textContent).toBe("· step 2 of 3");
+    expect(root.querySelector("[data-steps-dots]")?.getAttribute("aria-label")).toBe("Step 2 of 3");
     expect(root.querySelector("[data-steps-desc]")?.textContent).toBe("two");
     expect(root.querySelector("[data-steps-note]")?.textContent).toBe("n2");
     expect(Array.from(root.querySelectorAll("[data-steps-dots] i")).map((d) => d.classList.contains("on"))).toEqual([false, true, false]);

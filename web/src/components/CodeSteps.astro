@@ -19,30 +19,30 @@ interface Props {
   /** Shiki language id: "python", "ts", "bash", … */
   lang: string;
   steps: Step[];
-  /** Small muted suffix after the title, defaults to the language. */
+  /** Small muted suffix after the title, optional. */
   meta?: string;
   /** Seconds per step. Set to cycle through the steps on its own, wrapping; the pointer over the block holds it. */
   auto?: number;
   /** Show the Previous and Next pills. Off is for blocks that run themselves. */
   controls?: boolean;
 }
-const { title, lang, steps, meta = lang, auto, controls = true } = Astro.props;
+const { title, lang, steps, meta, auto, controls = true } = Astro.props;
 if (steps.length < 2) throw new Error(`<CodeSteps> "${title}" needs at least two steps.`);
 ---
 <section class="ix code-steps" class:list={{ "is-reserved": !!auto }} data-code-steps data-auto={auto ? Math.round(auto * 1000) : undefined} data-pagefind-ignore>
-  <header class="ix-head">
-    <div class="ix-lead">
-      <h3 class="ix-title">{title} <span class="ix-meta">· {meta} <span data-steps-meta>· step 1 of {steps.length}</span></span></h3>
-      <div class="steps-stack">
-        <p class="ix-desc" data-steps-desc>{steps[0].desc}</p>
-        {steps.map((s) => <p class="ix-desc steps-ghost" aria-hidden="true">{s.desc}</p>)}
+  <header class="ix-head steps-head">
+    <h3 class="ix-title">{title}{meta && <span class="ix-meta"> · {meta}</span>}</h3>
+    <span class="steps-dots" data-steps-dots role="img" aria-label={`Step 1 of ${steps.length}`}>{steps.map((_, i) => <i class:list={{ on: i === 0 }}></i>)}</span>
+    <div class="steps-stack">
+      <p class="ix-desc" data-steps-desc>{steps[0].desc}</p>
+      {steps.map((s) => <p class="ix-desc steps-ghost" aria-hidden="true">{s.desc}</p>)}
+    </div>
+    {controls && (
+      <div class="ix-action">
+        <button type="button" class="btn" data-steps-prev disabled>Previous</button>
+        <button type="button" class="btn btn-primary" data-steps-next>Next</button>
       </div>
-    </div>
-    <div class="ix-action">
-      <span class="steps-dots" data-steps-dots aria-hidden="true">{steps.map((_, i) => <i class:list={{ on: i === 0 }}></i>)}</span>
-      {controls && <button type="button" class="btn" data-steps-prev disabled>Previous</button>}
-      {controls && <button type="button" class="btn btn-primary" data-steps-next>Next</button>}
-    </div>
+    )}
   </header>
   <div class="steps-stage steps-stack" data-steps-stage>
     <div class="steps-live" data-steps-live><Code code={steps[0].code} lang={lang as never} themes={SHIKI_THEMES} defaultColor={false} /></div>
@@ -59,9 +59,15 @@ if (steps.length < 2) throw new Error(`<CodeSteps> "${title}" needs at least two
 </section>
 
 <style is:global>
-  .code-steps .ix-action { gap: 0.35rem; }
-  .steps-dots { display: inline-flex; gap: 0.4rem; align-items: center; margin-right: 0.5rem; }
-  .steps-dots i { width: 6px; height: 6px; border-radius: 999px; background: var(--border); transition: background 0.3s; }
+  /* Two rows: the title with the dots at its right, then the description with the buttons at its right. */
+  .steps-head { grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: auto auto; align-items: center; row-gap: 0.35rem; column-gap: 2rem; }
+  .steps-head .ix-title { grid-area: 1 / 1; }
+  .steps-head .steps-dots { grid-area: 1 / 2; justify-self: end; }
+  .steps-head .steps-stack { grid-area: 2 / 1; }
+  .steps-head .ix-action { grid-area: 2 / 2; gap: 0.35rem; }
+  .steps-head .ix-desc { margin-top: 0; }
+  .steps-dots { display: inline-flex; gap: 0.5rem; align-items: center; }
+  .steps-dots i { width: 10px; height: 10px; border-radius: 999px; background: var(--border); transition: background 0.3s; }
   .steps-dots i.on { background: var(--accent); }
   /* Height is pinned while lines move; leaving lines sit out of flow at their old row and must never scroll. */
   .steps-stage { margin: 2.5rem 0; }
@@ -77,6 +83,7 @@ if (steps.length < 2) throw new Error(`<CodeSteps> "${title}" needs at least two
   .code-steps .ix-head, .code-steps .steps-note { transition: height 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
   /* While the height is pinned for the slide, the row must hug the top, or the grid centres it in the spare space and the title dips. */
   .code-steps .ix-head { margin-bottom: 1.75rem; align-content: start; }
+  @media (max-width: 600px) { .steps-head { grid-template-columns: minmax(0, 1fr) auto; } }
   .steps-stage code { position: relative; display: block; }
   /* Motion: removed lines lift first, kept lines glide, new lines rise in last. */
   .steps-stage .line { border-radius: 4px; transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s, opacity 0.5s ease 0.45s, background-color 0.6s ease; }
