@@ -56,5 +56,5 @@ State these to the user with the list. Retro sees one session, so it can give to
 ## Related skills
 
 - **improve-codebase-architecture** and **improve-code-design** look at the code; retro looks at how the session went.
-- **setup** builds a project's checks and feedback loops from scratch.
+- **setup-syv-skills** records how the team works and can add a commit gate.
 - **guardrails** covers safety controls: what an agent could damage and the harness settings that prevent it.

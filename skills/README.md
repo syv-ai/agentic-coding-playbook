@@ -84,8 +84,9 @@ verification, which agents you use — and records the answers as a short
 section in your project's instructions file, AGENTS.md by default. It also
 checks that each agent you use reads that file: Claude Code reads AGENTS.md on
 its own when there is no CLAUDE.md, and Gemini CLI needs a setting or a
-GEMINI.md that imports it. The other skills follow that section. Updating the
-collection never touches it.
+GEMINI.md that imports it. If the repo has no commit gate, it offers to add
+one and proves it blocks a failing commit. The other skills follow that
+section. Updating the collection never touches it.
 
 ## The catalog
 
@@ -118,8 +119,7 @@ collection never touches it.
 - [`write-a-skill`](write-a-skill/) — create or revise agent skills: structure, a description that triggers, progressive disclosure and bundled resources.
 
 **Setup**
-- [`setup`](setup/) — set up a project's stack and dev-env feedback loops (new or existing repo). *(User-only command.)*
-- [`setup-syv-skills`](setup-syv-skills/) — interview the team about how agents should work here and record it in the instructions file. *(User-only command.)*
+- [`setup-syv-skills`](setup-syv-skills/) — interview the team about how agents should work here, record it in the instructions file, and add a commit gate if there isn't one. *(User-only command.)*
 
 ## Design principles
 

@@ -81,4 +81,4 @@ End with the table from step 4, updated with the decision for each finding, the 
 
 ## Related skills
 
-- **setup** and **setup-syv-skills** recommend running this skill once the repo is ready for agents.
+- **setup-syv-skills** recommends running this skill once the repo is ready for agents.

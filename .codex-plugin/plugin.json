@@ -37,7 +37,6 @@
     "./skills/handoff",
     "./skills/retro",
     "./skills/write-a-skill",
-    "./skills/setup",
     "./skills/setup-syv-skills"
   ],
   "interface": {

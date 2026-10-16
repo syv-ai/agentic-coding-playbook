@@ -1,5 +1,7 @@
 # Native controls by harness
 
+Last checked against each harness's documentation: 2026-10-16.
+
 Where each harness keeps its safety settings, what its controls can do, and how to confirm they are active. These features change often and several are in preview: check the harness's current documentation before configuring anything, and trust its own status views over this file.
 
 Across harnesses, watch for four things:
