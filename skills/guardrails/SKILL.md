@@ -1,6 +1,6 @@
 ---
 name: guardrails
-description: Reviews what a coding agent could damage in this repo (production data, infrastructure, secrets, destructive operations), notes the safety controls already in place, and asks the developer whether to cover each remaining risk with their agent's own controls. Use when onboarding an agent to a codebase, before risky work, or when the user runs /guardrails.
+description: Reviews what a coding agent could damage in this repo, notes the controls already in place, and asks which remaining risks to cover.
 disable-model-invocation: true
 argument-hint: "[optional: the task about to be worked on, to focus the review]"
 ---
@@ -13,20 +13,21 @@ If the user passed arguments, treat them as the task about to be worked on and f
 
 ## 1. Establish the harnesses and scope
 
-Find out which agents run in this repo: the project's instructions file (AGENTS.md, or CLAUDE.md in Claude Code) may say, and config folders such as `.claude/`, `.dash`, `.codex/`, `.cursor/` and `.vscode/` hint at it. Include the harness you are running in. Ask only if it is still unclear.
+Find out which agents run in this repo: the project's instructions file (AGENTS.md or CLAUDE.md) may say, and config folders such as `.claude/`, `.dash`, `.codex/`, `.cursor/`, `.vscode/`, `.github/copilot/`, `.gemini/` and `.pi/` hint at it. Include the harness you are running in. Ask only if it is still unclear.
 
 ## 2. Inventory the existing guardrails
 
-Before looking for risks, read what is already configured for each harness, at every level that applies: organisation-managed, user, project and local. [CONTROLS.md](CONTROLS.md) lists where each harness keeps its settings and what each control does. Also note protections outside the agent: a dev container or VM, credentials that only exist in CI, read-only database users, branch protection.
+Before looking for risks, read what is already configured for each harness, at every level that applies: organisation-managed, user, project and local. [CONTROLS.md](CONTROLS.md) lists where each harness keeps its settings and what each control does. Also note protections outside the agent: a dev container or VM, credentials that only exist in CI, read-only database users, branch protection. A mode where a model approves actions for the user (such as Claude Code's auto mode) cuts prompts but doesn't count as coverage.
 
 ## 3. Assess the risk surface
 
-Read the project rather than assuming. Delegate the sweep to an exploration subagent if your harness has one; otherwise keep it targeted. Look for:
+Read the project rather than assuming. Delegate the sweep to an exploration subagent (`Explore` in Claude Code and Cursor, the `explorer` role in Codex, `codebase_investigator` in Gemini CLI); if your harness has none, keep it targeted. Look for:
 
 - **Data** — connection strings and database config (`.env*`, `docker-compose.yml`, app config). Do they point at remote or production systems, or only local fixtures?
 - **Infrastructure** — Terraform, Kubernetes or Helm, cloud CLIs, deploy scripts, CI/CD that can change production.
 - **Internal systems** — internal hostnames, private APIs, service credentials, MCP servers with write access.
 - **Secrets and personal data** — secret files, credential stores, customer data that shouldn't reach a model or an external service.
+- **Egress** — routes that send repo content off the machine: web fetches, MCP servers, and pages the agent publishes (Claude Code's `Artifact` tool uploads pages to claude.ai). Raise it only where the repo holds something that must stay local.
 - **Destructive operations** — migrations that drop or truncate, bulk deletes, force pushes, cleanup scripts.
 
 Each finding needs evidence (a file and line, a command, a config key). Don't list hypothetical risks the repo shows no sign of.
@@ -47,7 +48,7 @@ If everything is covered, say so, summarise the controls in place, and stop. Ask
 
 ## 5. Ask about each open finding
 
-For each partial or uncovered finding, ask whether and how to address it. Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot); if it has none, ask in plain text. Batch findings that don't depend on each other.
+For each partial or uncovered finding, ask whether and how to address it. Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI, `askQuestions` in VS Code, `request_user_input` in Codex Plan mode); if it has none, ask in plain text. Batch findings that don't depend on each other; most question tools take three or four questions per call, so split larger batches.
 
 Stay neutral: don't label an option as recommended. Offer only options the team's harnesses actually support, and state each one's trade-off in a clause:
 
@@ -76,7 +77,7 @@ Report what you ran and what came back.
 
 ## 8. Report
 
-End with the table from step 4, updated with the decision for each finding, the control now in place and whether it was verified. Then say plainly what remains unenforced: harnesses in the team that have no equivalent control, routes a rule doesn't cover (text-matched command rules can be reworded; shell sandboxes don't cover other tools) and anything the developer chose to leave.
+End with the table from step 4, updated with the decision for each finding, the control now in place and whether it was verified. Then say plainly what remains unenforced: harnesses in the team that have no equivalent control (Pi, unless it runs in a container or VM), routes a rule doesn't cover (text-matched command rules can be reworded; shell sandboxes don't cover other tools) and anything the developer chose to leave.
 
 ## Related skills
 

@@ -4,23 +4,22 @@ Write only when there are **two or more strong candidates**. One candidate, or n
 
 ## Form: one self-contained page
 
-**Deliver the page.** If your harness can publish artifacts (in Claude Code, the `Artifact` tool), publish it and give the user the link, following the harness's own artifact guidance (in Claude Code, load the `artifact-design` skill first). Publishing uploads the page, including any quoted code; mention that once. Otherwise write a self-contained HTML file to the OS temp directory, open it in the browser (`open` on macOS, `xdg-open` on Linux, `start ""` on Windows), and give the user the file's full absolute path, resolved (for example with `realpath`) rather than `$TMPDIR/…`, `~` or a relative path.
+**Deliver the page.** If your harness can publish a page (in Claude Code, the `Artifact` tool, when it is in your tool list; load the `artifact-design` skill first), publish it and give the user the link. The page is private to the user until they choose to share it, but publishing does upload it, quoted code included; mention that once. Put the one-sentence summary in the publish description, not the title. Otherwise write a self-contained HTML file to the OS temp directory, open it in the browser (`open` on macOS, `xdg-open` on Linux, `start ""` on Windows), and give the user the file's full absolute path, resolved (for example with `realpath`) rather than `$TMPDIR/…`, `~` or a relative path.
 
-The same page works both ways, with three differences:
+The same page works both ways, with two differences:
 
 - **Skeleton.** A published page is content only (`<title>`, `<style>`, markup, scripts): the publisher adds `<!doctype>`, `<html>`, `<head>` and `<body>`, and doubled skeleton tags break rendering. A local file is a complete HTML document.
-- **Mermaid.** Artifacts render `<pre class="mermaid">` natively, so don't load the Mermaid library there. A local file loads it from the CDN.
-- **External resources.** Artifacts allow scripts only from a few hosts (`cdn.tailwindcss.com`, `cdn.jsdelivr.net/npm/`, `cdnjs.cloudflare.com`) and block remote stylesheets (except Google Fonts), images and fetches. Inline everything else so the page works in both.
-
-To revise a published report, republish the same file, which keeps the link. A local revision gets a new file name.
+- **Revisions.** To revise a published report, republish the same file: the link stays and a new version is added. A local revision gets a new file name.
 
 The rest of the contract applies either way:
 
-**Nothing loads from the network.** This report needs no library: inline the CSS, hand-build diagrams as inline `<svg>`, and use system font stacks, so it renders the same published or offline.
+**Nothing loads from the network.** This report needs no library: inline the CSS, hand-build diagrams as inline `<svg>`, and use system font stacks, so it renders the same published or offline. (Published pages block scripts from all but a few CDNs, and every other stylesheet, image and fetch, so this also keeps it publishable.)
 
-**Both themes.** Define the palette as custom properties on `:root`, redefine only those properties under `@media (prefers-color-scheme: dark)`, then again under `:root[data-theme="dark"]` and `:root[data-theme="light"]` so a viewer toggle wins in both directions. Style components through the tokens, never inside the media query. Diagram strokes and fills are tokens too — an SVG with a hardcoded `#111` disappears on a dark ground.
+**Title.** A 2–4 word name, such as "Payments design review". No "Name — explainer"; the explanation goes in the publish description.
 
-**Wide content scrolls itself.** Code blocks, before/after pairs and diagrams each sit in a container with `overflow-x: auto`. The page body never scrolls sideways.
+**Both themes.** Define the palette as custom properties on `:root`. Redefine only those properties under `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { … } }`, then again under `:root[data-theme="dark"]`, so a viewer's explicit choice wins in both directions; set `color-scheme: dark` in both dark blocks. Give `body` an explicit `background: var(--paper)`. Style components through the tokens, never inside the media query. Diagram strokes and fills are tokens too — an SVG with a hardcoded `#111` disappears on a dark ground.
+
+**Wide content scrolls itself.** Keep a side gutter of at least 16px. Code blocks, before/after pairs and diagrams each sit in a container with `overflow-x: auto`, so the page body never scrolls sideways at phone width.
 
 ## Design
 
@@ -52,7 +51,7 @@ Strength is ink density on one hue, not three hues: **Strong** is a solid `--acc
 ## Structure
 
 ```
-<title>           Design review — <repo>
+<title>           <repo or area> design review
 header            repo · date · comment-trust mode
 section#coverage  the tally and what was not examined
 section#findings  the candidate cards
