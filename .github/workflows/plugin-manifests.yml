@@ -38,15 +38,20 @@ jobs:
       - name: Generated manifests are current
         run: node scripts/sync-manifests.mjs --check
       # Claude Code and Codex only refresh an installed plugin when its version
-      # changes, so a skill change without a bump never reaches existing users.
-      - name: Skill changes bump the version
+      # changes, and a lower version can leave existing installs behind, so a
+      # skill change must raise the version.
+      - name: Skill changes raise the version
         if: github.event_name == 'pull_request'
         run: |
           base="${{ github.event.pull_request.base.sha }}"
           if git diff --quiet "$base" HEAD -- skills; then exit 0; fi
-          old=$(git show "$base:.claude-plugin/plugin.json" | node -pe 'JSON.parse(require("fs").readFileSync(0)).version')
+          old=$(git show "$base:.claude-plugin/plugin.json" | node -pe 'JSON.parse(require("fs").readFileSync(0)).version || "0.0.0"')
           new=$(node -pe 'require("./.claude-plugin/plugin.json").version')
-          if [ "$old" = "$new" ]; then
-            echo "::error::skills/ changed but the version is still $new. Run: node scripts/sync-manifests.mjs --bump <next>"
+          if ! node -e '
+            const [a, b] = process.argv.slice(1).map((v) => v.split(".").map(Number));
+            const cmp = a.map((n, i) => n - b[i]).find((d) => d !== 0) ?? 0;
+            process.exit(cmp > 0 ? 0 : 1);
+          ' "$new" "$old"; then
+            echo "::error::skills/ changed, so the version must be higher than $old (it is $new). Run: node scripts/sync-manifests.mjs --bump <next>"
             exit 1
           fi
