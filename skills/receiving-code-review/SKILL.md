@@ -21,7 +21,7 @@ If any item is unclear, ask about those items before implementing any of them. P
 
 > "Items 1, 2, 3 and 6 are clear. For 4 and 5: do you mean the retry limit per request or per session?"
 
-Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot); if it has none, ask in plain text. Independent questions can go together.
+Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI, `askQuestions` in VS Code, `request_user_input` in Codex Plan mode); if it has none, ask in plain text. Independent questions can go together.
 
 ## Weigh the source
 
@@ -33,6 +33,8 @@ If you can't verify a claim, say so: "I can't confirm this without running again
 ## Don't chase every finding
 
 A reviewer asked to find problems will usually find some, even in sound work. Treat findings that affect correctness or stated requirements as required; treat the rest as optional and say which is which.
+
+A reviewer's severity label is advice. Grade each finding by what a user would get if it shipped. A finding marked minor only because the spec didn't mention the input (an empty file, a duplicate entry, a second run) may still be required: the spec's silence doesn't make a crash acceptable.
 
 **YAGNI check.** When a reviewer asks to "implement this properly" (metrics, configuration, export options), search for real usage first:
 
