@@ -1,131 +1,39 @@
 # Root Cause Tracing
 
-## Overview
+Bugs often show up deep in the call stack: `git init` runs in the wrong directory, a file lands in the wrong place, a database opens with the wrong path. Fixing where the error appears treats the symptom. Trace backward through the call chain to where the bad value came from, and fix there.
 
-Bugs often manifest deep in the call stack (git init in wrong directory, file created in wrong location, database opened with wrong path). Your instinct is to fix where the error appears, but that's treating a symptom.
+Use this when the error happens deep in execution, the stack trace is long, or it's unclear where invalid data originated.
 
-**Core principle:** Trace backward through the call chain until you find the original trigger, then fix at the source.
+## The process
 
-## When to Use
+1. **Observe the symptom.** `Error: git init failed in ~/project/packages/core`
+2. **Find the immediate cause.** The code that directly fails: `execFileAsync('git', ['init'], { cwd: projectDir })`.
+3. **Ask what called it, and with what.** Walk up the chain and note the value at each step:
+   ```
+   WorktreeManager.createSessionWorktree(projectDir, sessionId)
+     ← Session.initializeWorkspace()
+     ← Session.create()
+     ← test calling Project.create()
+   ```
+   Here `projectDir` was `''`, and an empty `cwd` resolves to `process.cwd()`, the source directory.
+4. **Find the original trigger.** The test read `context.tempDir` at the top level, before `beforeEach` had set it, so it was still `''`.
 
-```dot
-digraph when_to_use {
-    "Bug appears deep in stack?" [shape=diamond];
-    "Can trace backwards?" [shape=diamond];
-    "Fix at symptom point" [shape=box];
-    "Trace to original trigger" [shape=box];
-    "BETTER: Also add defense-in-depth" [shape=box];
+## When you can't trace by reading
 
-    "Bug appears deep in stack?" -> "Can trace backwards?" [label="yes"];
-    "Can trace backwards?" -> "Trace to original trigger" [label="yes"];
-    "Can trace backwards?" -> "Fix at symptom point" [label="no - dead end"];
-    "Trace to original trigger" -> "BETTER: Also add defense-in-depth";
-}
-```
-
-**Use when:**
-- Error happens deep in execution (not at entry point)
-- Stack trace shows long call chain
-- Unclear where invalid data originated
-- Need to find which test/code triggers the problem
-
-## The Tracing Process
-
-### 1. Observe the Symptom
-```
-Error: git init failed in ~/project/packages/core
-```
-
-### 2. Find Immediate Cause
-**What code directly causes this?**
-```typescript
-await execFileAsync('git', ['init'], { cwd: projectDir });
-```
-
-### 3. Ask: What Called This?
-```typescript
-WorktreeManager.createSessionWorktree(projectDir, sessionId)
-  → called by Session.initializeWorkspace()
-  → called by Session.create()
-  → called by test at Project.create()
-```
-
-### 4. Keep Tracing Up
-**What value was passed?**
-- `projectDir = ''` (empty string!)
-- Empty string as `cwd` resolves to `process.cwd()`
-- That's the source code directory!
-
-### 5. Find Original Trigger
-**Where did empty string come from?**
-```typescript
-const context = setupCoreTest(); // Returns { tempDir: '' }
-Project.create('name', context.tempDir); // Accessed before beforeEach!
-```
-
-## Adding Stack Traces
-
-When you can't trace manually, add instrumentation:
+Log just before the failing operation, with the value, the context and a stack trace:
 
 ```typescript
-// Before the problematic operation
-async function gitInit(directory: string) {
-  const stack = new Error().stack;
-  console.error('DEBUG git init:', {
-    directory,
-    cwd: process.cwd(),
-    nodeEnv: process.env.NODE_ENV,
-    stack,
-  });
-
-  await execFileAsync('git', ['init'], { cwd: directory });
-}
+console.error('[DEBUG-a4f2] git init', {
+  directory, cwd: process.cwd(), stack: new Error().stack,
+});
 ```
 
-**Critical:** Use `console.error()` in tests (not logger - may not show)
+Write to stderr in tests, since the project's logger may be suppressed, then filter: `npm test 2>&1 | grep DEBUG-a4f2`. In the traces, look for the test file names, the line that triggers the call, and the pattern (same test, same parameter).
 
-**Run and capture:**
-```bash
-npm test 2>&1 | grep 'DEBUG git init'
-```
+If the bad state appears during a test run but you don't know which test causes it, bisect the test list ([feedback-loops.md](feedback-loops.md#finding-a-polluting-test)).
 
-**Analyze stack traces:**
-- Look for test file names
-- Find the line number triggering the call
-- Identify the pattern (same test? same parameter?)
+## Fix at the origin
 
-## Finding Which Test Causes Pollution
+In the example, the fix was to make `tempDir` a getter that throws when read before `beforeEach`, not to validate `cwd` inside `git init`. If you can't trace any further up, fix at the deepest point you reached, add a guard, and say the origin is still unknown.
 
-If something appears during tests but you don't know which test, bisect: run tests one-by-one (or in halves) until you find the first one that produces the pollution. Stop at the first test that triggers it, then trace from there.
-
-## Real Example: Empty projectDir
-
-**Symptom:** `.git` created in `packages/core/` (source code)
-
-**Trace chain:**
-1. `git init` runs in `process.cwd()` ← empty cwd parameter
-2. WorktreeManager called with empty projectDir
-3. Session.create() passed empty string
-4. Test accessed `context.tempDir` before beforeEach
-5. setupCoreTest() returns `{ tempDir: '' }` initially
-
-**Root cause:** Top-level variable initialization accessing empty value
-
-**Fix:** Made tempDir a getter that throws if accessed before beforeEach
-
-**Also added defense-in-depth:**
-- Layer 1: Project.create() validates directory
-- Layer 2: WorkspaceManager validates not empty
-- Layer 3: NODE_ENV guard refuses git init outside tmpdir
-- Layer 4: Stack trace logging before git init
-
-## Key Principle
-
-Fix where the bad value originates, not where the error appears. If you can't trace any further up, fix at the deepest point you reached and add a guard, and say that the origin is still unknown.
-
-## Stack Trace Tips
-
-**In tests:** Use `console.error()` not logger - logger may be suppressed
-**Before operation:** Log before the dangerous operation, not after it fails
-**Include context:** Directory, cwd, environment variables, timestamps
-**Capture stack:** `new Error().stack` shows complete call chain
+Add a guard elsewhere only at a dangerous operation, and only where it's cheap: refusing `git init` or `rm -rf` outside a temp directory during tests is worth one check. Don't add validation at every layer as a substitute for finding the origin.
