@@ -1,6 +1,6 @@
 ---
 name: setup-syv-skills
-description: Interviews the user about how their team wants agents to work in this repo — tracker, specs and plans, planning depth, verification, which agents they use — and records the answers as a short section in the project's instructions file. Use when the collection has just been installed, when onboarding a repo to it, or when the user runs /setup-syv-skills.
+description: Interviews the team about how agents should work in this repo and records the answers in the project's instructions file.
 disable-model-invocation: true
 argument-hint: "[optional: anything you already know, e.g. 'ADO, no PRDs, Copilot + Claude Code']"
 ---
@@ -20,18 +20,18 @@ Look first, so the questions are about choices rather than facts you could have 
 - **Tracker** — issue references in commits and branch names (`#123`, `AB#123`, `PROJ-123`), `.github/ISSUE_TEMPLATE/`, `azure-pipelines.yml`, Jira or Linear links, a folder of markdown specs or issues.
 - **Specs and plans** — folders where earlier specs, PRDs, ADRs or plans already live, and whether they are committed.
 - **Verification** — the real test, lint, type-check and build commands (package scripts, Makefile, CI workflows).
-- **Agents in use** — `.claude/`, `.github/copilot-instructions.md` or `.github/agents/`, `.cursor/`, `.codex/`, `.agents/skills/`.
+- **Agents in use** — `.claude/`; `.github/copilot-instructions.md`, `.github/agents/` or `.github/hooks/` (Copilot); `.cursor/`, including `.cursor/agents/`; `.codex/`, including `.codex/agents/`; `.gemini/` or GEMINI.md (Gemini CLI); `.pi/` (Pi); `.agents/skills/`.
 
 ## 2. Interview
 
-Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot); if it has none, ask in plain text. Batch questions that don't depend on each other, put your recommended option first, and skip anything detection already answered. Cover:
+Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI, `askQuestions` in VS Code, `request_user_input` in Codex Plan mode); if it has none, ask in plain text. Most take three or four questions per call, so split larger batches. Batch questions that don't depend on each other, and put your recommended option first so the user can accept it in a word. Skip a question entirely when detection already settled it. Cover:
 
 1. **Tracker** — where work items live: GitHub Issues, Azure DevOps, Jira, Linear, markdown files in the repo, or nowhere.
 2. **What describes a piece of work** — PRD, spec, feature description, epic, user stories, or nothing formal. Whether items are broken down, and into what (issues, tasks, product backlog items).
 3. **Specs and plans** — kept or throwaway? If kept, where: in the tracker, a repo folder, or a wiki. Committed or not.
 4. **Planning depth** — the default before building. Recommend: plan only when a change spans several files or the approach is unclear; skip it when the change fits in one sentence.
 5. **Verification** — which commands prove a change works, and whether UI changes should be checked visually.
-6. **Agents** — which harnesses the team uses (Claude Code, Copilot, Codex, Cursor, others). This decides which instructions file and shims matter.
+6. **Agents** — which harnesses the team uses (Claude Code, Copilot, Codex, Cursor, Gemini CLI, Pi, others). This decides which instructions files matter.
 
 Stop when every point is answered or explicitly left open. Don't ask about things the team doesn't do.
 
@@ -47,9 +47,9 @@ Interactive logins are the user's to run (in Claude Code they can type `! gh aut
 
 ## 4. Record the answers
 
-Write a short section into the project's instructions file (AGENTS.md, or CLAUDE.md in Claude Code):
+Write a short section into the project's instructions file:
 
-- AGENTS.md if it exists; otherwise CLAUDE.md; if neither exists, ask which to create. AGENTS.md is read by most agents.
+- AGENTS.md if it exists. If only CLAUDE.md exists and doesn't import AGENTS.md, write the section there and offer to move the content into AGENTS.md (step 5). If neither exists, recommend creating AGENTS.md: most agents, including Claude Code, read it.
 - Name the heading after its content, not after this collection, since any agent or plugin can use these facts. Keep it to a handful of lines an agent could not work out on its own. Link to existing process docs instead of restating them.
 - Show the section to the user before writing it. If a section like it already exists, update it rather than adding a second one.
 
@@ -63,13 +63,16 @@ For example:
 - Verify with `npm test` and `npm run lint`. Check UI changes with a screenshot.
 ```
 
-Personal preferences that the team doesn't share belong in the harness's local file (for example `CLAUDE.local.md` or `AGENTS.override.md`), and only if the user asks.
+Personal preferences that the team doesn't share belong in the harness's local file, and only if the user asks. In Claude Code that is `CLAUDE.local.md`; note that its presence stops Claude Code from reading AGENTS.md directly, so it should start with `@AGENTS.md`.
 
 Updating the collection never touches this section. It belongs to the project.
 
-## 5. Shims for the agents in use
+## 5. Make sure each agent reads it
 
-- **Claude Code** reads CLAUDE.md, not AGENTS.md. If the team uses Claude Code and only AGENTS.md exists, offer a CLAUDE.md containing `@AGENTS.md`. Prefer the import to a symlink, which breaks on Windows without Developer Mode.
+Copilot, Codex, Cursor and Pi read AGENTS.md directly. For the others in use:
+
+- **Claude Code** (v2.1.277 and later) reads AGENTS.md when there is no CLAUDE.md or CLAUDE.local.md in the working directory or above it. Don't create a CLAUDE.md only for Claude. If one exists, make sure it imports `@AGENTS.md`, since Claude otherwise reads CLAUDE.md instead. Prefer the import to a symlink, which breaks on Windows without Developer Mode.
+- **Gemini CLI** reads GEMINI.md by default. Offer either `"context": { "fileName": ["AGENTS.md", "GEMINI.md"] }` in `.gemini/settings.json`, or a GEMINI.md containing `@AGENTS.md`.
 - Don't generate a long instructions file, and don't run an init command that writes one.
 
 ## 6. Orient
@@ -83,4 +86,4 @@ Also recommend that each developer runs **guardrails** (it is manual-only, so th
 - [ ] Detection ran, and the user was asked only what it couldn't answer
 - [ ] The tracker's tooling was checked, with clear next actions for anything missing
 - [ ] A short, content-named section is in the instructions file, or the user declined
-- [ ] Shims are in place for the agents the team uses, or the user declined
+- [ ] Every agent the team uses reads the section, or the user declined

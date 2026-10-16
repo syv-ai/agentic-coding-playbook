@@ -7,8 +7,8 @@ description: Maps an unfamiliar area of code one level of abstraction up — the
 
 Give a map of an area of code, one level up from the lines in front of you.
 
-1. **Scope the area.** Take it from the arguments or the conversation: a file, a feature, a symbol. If it's unclear or too broad to map usefully ("the backend"), ask with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot), or in plain text if it has none.
-2. **Explore out of band.** Delegate the reading to an exploration subagent if your harness has one (the Explore agent in Claude Code), so the file reads stay out of this conversation. Give it the scoped area and ask for the map below. Otherwise keep the exploration narrow: entry points, direct callers and callees, not the whole tree.
+1. **Scope the area.** Take it from the arguments or the conversation: a file, a feature, a symbol. If it's unclear or too broad to map usefully ("the backend"), ask with your harness's question tool (`AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI, `askQuestions` in VS Code, `request_user_input` in Codex Plan mode), or in plain text if it has none.
+2. **Explore out of band.** Delegate the reading to an exploration subagent if your harness has one (`Explore` in Claude Code and Cursor, the `explorer` role in Codex, `codebase_investigator` in Gemini CLI), so the file reads stay out of this conversation. Give it the scoped area and ask for the map below. Otherwise keep the exploration narrow: entry points, direct callers and callees, not the whole tree.
 3. **Return a compact map:**
    - The modules involved, each with the one job it does.
    - Who calls in, and what the area calls out to.

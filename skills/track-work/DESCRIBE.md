@@ -4,7 +4,7 @@ Record what is being built and why, in the form the project uses: a PRD, a spec,
 
 ## Before writing
 
-- **Sketch the test seams.** Decide where the feature will be verified from the outside. Prefer existing seams and the highest one that works. Check these with the user; they shape everything downstream.
+- **Sketch the test seams.** Decide where the feature will be verified from the outside. Prefer existing seams and the highest one that works. The fewer seams across the codebase, the better; the ideal number is one. Check these with the user; they shape everything downstream.
 - **Use the project's vocabulary.** If there is a domain glossary (for example CONTEXT.md), use its terms throughout.
 - **Keep implementation detail at the level of decisions.** Name modules and interfaces rather than file paths or code, which go stale quickly. Exception: when a prototype produced a snippet that encodes a decision more precisely than prose (a state machine, schema or type shape), inline the decision-rich part and note that it came from a prototype.
 

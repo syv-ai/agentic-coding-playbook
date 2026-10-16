@@ -1,13 +1,13 @@
 ---
 name: setup
-description: Set up a project's stack and dev-environment feedback loops — the agent's senses. For a new or empty repo, interview the user on the desired stack and scaffold it; for an existing project, detect the stack and wire up the dev environment. Either way, install a format/lint/type/test gate that runs on every commit. Use when starting a project, onboarding to a repo, or when there's no automated quality gate yet.
+description: Sets up a project's stack, dev environment and a format, lint, type-check and test gate that runs on every commit.
 disable-model-invocation: true
 argument-hint: "[optional: desired stack, e.g. 'python cli' or 'node web service']"
 ---
 
 # Setup
 
-Get a repo ready for agentic work: a working dev environment plus the feedback loops that let an agent verify its own work and retry without you — a formatter, a linter or type-check, a test runner, and a gate that runs them on every commit. A failing check blocks the commit, the agent reads the error and fixes it. Agents don't tire of repetition, so deterministic gates pay off disproportionately.
+Get a repo ready for agentic work: a working dev environment plus the feedback loops that let an agent verify its own work and retry without you — a formatter, a linter or type-check, a test runner, and a gate that runs them on every commit. A failing check blocks the commit, the agent reads the error and fixes it. An agent runs the same checks on every attempt without tiring, so a deterministic gate catches its mistakes each time without you reviewing them.
 
 If the user passed arguments (`$ARGUMENTS` in Claude Code), treat them as a hint about the stack and skip the matching interview questions — `setup python cli` means don't ask about language or project shape, just confirm the rest.
 
@@ -16,13 +16,13 @@ If the user passed arguments (`$ARGUMENTS` in Claude Code), treat them as a hint
 - Is this a version-controlled repo at all (`git rev-parse`, or the project's VCS)?
 - Project manifests: `package.json`, `pyproject.toml`, `requirements.txt`, `go.mod`, `Cargo.toml`, `*.csproj`/`*.sln`, `pom.xml`, `Gemfile`, …
 - Existing tooling: lockfiles, `.pre-commit-config.yaml`, `.husky/`, CI config, a configured formatter or linter.
-- The project's instructions file (AGENTS.md, or CLAUDE.md in Claude Code): does it already name the commands?
+- The project's instructions file (AGENTS.md or CLAUDE.md): does it already name the commands?
 
 No manifest → **new project**. Manifest present → **existing project**.
 
 ## New project: interview, then scaffold
 
-Don't guess the stack. Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot); if it has none, ask in plain text. Batch the questions and offer a sensible default for each:
+Don't guess the stack. Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI, `askQuestions` in VS Code, `request_user_input` in Codex Plan mode); if it has none, ask in plain text. Most take three or four questions per call, so split larger batches. Offer a sensible default for each:
 
 - Language and runtime version
 - Package manager (`uv`/`poetry`/`pip`, `pnpm`/`npm`, …)
