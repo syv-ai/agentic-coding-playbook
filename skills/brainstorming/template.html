@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Brainstorming</title>
+  <title>Design options</title>
   <style>
     /*
      * STATIC BRAINSTORM COMPANION TEMPLATE
@@ -12,7 +12,8 @@
      * directly in a browser. Selection highlighting is cosmetic only — the
      * decision is captured in the conversation via the agent's ask-the-user tool.
      *
-     * Inject your content fragment where the <!-- CONTENT --> marker is.
+     * Inject your content fragment in place of the CONTENT marker inside #content,
+     * and replace the <title> with a 2-4 word name for this page.
      */
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,22 +35,40 @@
       --error: #ff3b30;
       --selected-bg: #e8f4fd;
       --selected-border: #0071e3;
+      --on-accent: #ffffff;
+      --shadow: rgba(0, 0, 0, 0.1);
     }
 
+    /* Dark values: once for the OS setting (unless the viewer chose light), once for an explicit dark choice. */
     @media (prefers-color-scheme: dark) {
-      :root {
+      :root:not([data-theme="light"]) {
         --bg-primary: #1d1d1f;
         --bg-secondary: #2d2d2f;
         --bg-tertiary: #3d3d3f;
         --border: #424245;
         --text-primary: #f5f5f7;
-        --text-secondary: #86868b;
-        --text-tertiary: #636366;
+        --text-secondary: #a1a1a6;
+        --text-tertiary: #7c7c80;
         --accent: #0a84ff;
         --accent-hover: #409cff;
         --selected-bg: rgba(10, 132, 255, 0.15);
         --selected-border: #0a84ff;
+        color-scheme: dark;
       }
+    }
+    :root[data-theme="dark"] {
+      --bg-primary: #1d1d1f;
+      --bg-secondary: #2d2d2f;
+      --bg-tertiary: #3d3d3f;
+      --border: #424245;
+      --text-primary: #f5f5f7;
+      --text-secondary: #a1a1a6;
+      --text-tertiary: #7c7c80;
+      --accent: #0a84ff;
+      --accent-hover: #409cff;
+      --selected-bg: rgba(10, 132, 255, 0.15);
+      --selected-border: #0a84ff;
+      color-scheme: dark;
     }
 
     body {
@@ -64,7 +83,9 @@
     /* ===== FRAME STRUCTURE ===== */
     .header {
       background: var(--bg-secondary);
-      padding: 0.5rem 1.5rem;
+      padding-block: 0.5rem;
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -74,12 +95,21 @@
     .header h1 { font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); }
 
     .main { flex: 1; overflow-y: auto; }
-    #content { padding: 2rem; min-height: 100%; }
+    #content {
+      padding-block: 1.5rem;
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
+      min-height: 100%;
+      max-width: 72rem;
+      margin: 0 auto;
+    }
 
     .indicator-bar {
       background: var(--bg-secondary);
       border-top: 1px solid var(--border);
-      padding: 0.5rem 1.5rem;
+      padding-block: 0.5rem;
+      padding-left: max(16px, env(safe-area-inset-left, 0px));
+      padding-right: max(16px, env(safe-area-inset-right, 0px));
       flex-shrink: 0;
       text-align: center;
     }
@@ -115,13 +145,13 @@
       display: flex; align-items: center; justify-content: center;
       font-weight: 600; font-size: 0.85rem; flex-shrink: 0;
     }
-    .option.selected .letter { background: var(--accent); color: white; }
-    .option .content { flex: 1; }
+    .option.selected .letter { background: var(--accent); color: var(--on-accent); }
+    .option .content { flex: 1; min-width: 0; }
     .option .content h3 { font-size: 0.95rem; margin-bottom: 0.15rem; }
     .option .content p { color: var(--text-secondary); font-size: 0.85rem; margin: 0; }
 
     /* ===== CARDS (for showing designs/mockups) ===== */
-    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 1rem; }
     .card {
       background: var(--bg-secondary);
       border: 1px solid var(--border);
@@ -130,9 +160,9 @@
       cursor: pointer;
       transition: all 0.15s ease;
     }
-    .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px var(--shadow); }
     .card.selected { border-color: var(--selected-border); border-width: 2px; }
-    .card-image { background: var(--bg-tertiary); aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center; }
+    .card-image { background: var(--bg-tertiary); aspect-ratio: 16/10; max-width: 100%; display: flex; align-items: center; justify-content: center; }
     .card-body { padding: 1rem; }
     .card-body h3 { margin-bottom: 0.25rem; }
     .card-body p { color: var(--text-secondary); font-size: 0.85rem; }
@@ -156,10 +186,12 @@
 
     /* ===== SPLIT VIEW (side-by-side comparison) ===== */
     .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .split > * { min-width: 0; }
     @media (max-width: 700px) { .split { grid-template-columns: 1fr; } }
 
     /* ===== PROS/CONS ===== */
     .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+    @media (max-width: 700px) { .pros-cons { grid-template-columns: 1fr; } }
     .pros, .cons { background: var(--bg-secondary); border-radius: 8px; padding: 1rem; }
     .pros h4 { color: var(--success); font-size: 0.85rem; margin-bottom: 0.5rem; }
     .cons h4 { color: var(--error); font-size: 0.85rem; margin-bottom: 0.5rem; }
@@ -177,16 +209,16 @@
     }
 
     /* ===== INLINE MOCKUP ELEMENTS ===== */
-    .mock-nav { background: var(--accent); color: white; padding: 0.75rem 1rem; display: flex; gap: 1.5rem; font-size: 0.9rem; }
-    .mock-sidebar { background: var(--bg-tertiary); padding: 1rem; min-width: 180px; }
-    .mock-content { padding: 1.5rem; flex: 1; }
-    .mock-button { background: var(--accent); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.85rem; }
-    .mock-input { background: var(--bg-primary); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem; width: 100%; }
+    .mock-nav { background: var(--accent); color: var(--on-accent); padding: 0.75rem 1rem; display: flex; flex-wrap: wrap; gap: 1.5rem; font-size: 0.9rem; }
+    .mock-sidebar { background: var(--bg-tertiary); padding: 1rem; min-width: min(180px, 100%); }
+    .mock-content { padding: 1.5rem; flex: 1; min-width: 0; }
+    .mock-button { background: var(--accent); color: var(--on-accent); border: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.85rem; }
+    .mock-input { background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem; width: 100%; }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>Brainstorming</h1>
+    <h1>Design options</h1>
   </div>
 
   <div class="main">
