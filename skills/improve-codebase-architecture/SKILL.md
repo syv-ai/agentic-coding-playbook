@@ -29,7 +29,11 @@ If the project keeps a domain glossary (e.g. CONTEXT.md) or architecture decisio
 
 ## 1. Explore
 
-Read the glossary and any ADRs in the area first. Then walk the codebase — delegate to an exploration subagent if your harness has one; otherwise keep the exploration narrow, starting from the area the user named. Explore organically and note where you feel friction:
+Read the glossary and any ADRs in the area first.
+
+**Scope before you scan.** Deepening pays off where code keeps changing, so weight the areas that change most. If the user named an area or direction, take it. Otherwise walk back a good stretch of history (for example `git log --since=6.months --name-only --format=`, counted per file or directory) to find the hot spots, and start there. If changes are scattered with no clear hot spot, widen the scan.
+
+Then walk the code — delegate to an exploration subagent if your harness has one (`Explore` in Claude Code and Cursor, the `explorer` role in Codex, `codebase_investigator` in Gemini CLI); otherwise keep the exploration narrow. Explore organically and note where you feel friction:
 
 - Where does understanding one concept mean bouncing between many small modules?
 - Where are modules shallow — interface nearly as complex as the implementation?
@@ -58,7 +62,7 @@ Use the project's domain vocabulary for the domain and LANGUAGE.md vocabulary fo
 
 If a candidate contradicts an ADR, include it only when the friction justifies reopening the decision, and mark it on the card ("contradicts ADR-0007 — worth reopening because…").
 
-Don't propose interfaces yet. Once the file is written, ask which candidate the user wants to explore.
+Don't propose interfaces yet. Once the page is delivered, ask which candidate the user wants to explore.
 
 ## 3. Grill
 

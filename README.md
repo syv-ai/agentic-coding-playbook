@@ -123,7 +123,7 @@ Either way, then run:
 /setup-syv-skills
 ```
 
-It interviews you about how your team works and records the answers in your project's instructions file (AGENTS.md, or CLAUDE.md for Claude Code). The collection is self-contained and multi-agent: AGENTS.md first, Claude Code features optional. See [skills/README.md](skills/README.md) for the full catalog and [skills/ATTRIBUTION.md](skills/ATTRIBUTION.md) for provenance and licensing.
+It interviews you about how your team works and records the answers in your project's instructions file, AGENTS.md by default, which Claude Code and most other agents read. The collection is self-contained and multi-agent: AGENTS.md first, features of a particular agent optional. See [skills/README.md](skills/README.md) for the full catalog and [skills/ATTRIBUTION.md](skills/ATTRIBUTION.md) for provenance and licensing.
 
 ## How to Use This
 

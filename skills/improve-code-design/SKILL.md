@@ -52,8 +52,8 @@ python3 "$SKILL_DIR/scripts/inventory.py" plan PATH --batch 8
 
 Hand each batch to the **design-inventory** subagent. It returns a factual table per file and evaluates nothing. Pass the batch and nothing else; adding "and note anything problematic" reintroduces the satisficing this step removes. How to run it depends on the harness:
 
-- **Claude Code (plugin install):** "Use the design-inventory subagent on batch 3: `<paths>`".
-- **Other harnesses with subagents:** start a subagent whose instructions are the prompt in `$SKILL_DIR/subagents/design-inventory.md` (the text below its frontmatter, which only Claude Code reads), and give it the batch.
+- **Named agent registered:** the prompts ship inside this skill, in `$SKILL_DIR/subagents/`. The Claude Code and Cursor plugins register them as named agents, so say "Use the design-inventory subagent on batch 3: `<paths>`".
+- **Other harnesses with subagents:** start a subagent whose instructions are the prompt in `$SKILL_DIR/subagents/design-inventory.md` (the text below its frontmatter), and give it the batch. To keep it as a named agent, save it in Gemini CLI as a Markdown file in `.gemini/agents/` with only `name` and `description` frontmatter (the Claude Code `tools` and `model` values don't apply there), or in Codex as a TOML file in `.codex/agents/` with `name`, `description` and the prompt as `developer_instructions`.
 - **No subagents:** run that prompt in a fresh chat per batch and paste the tables back, rather than doing the work inline here.
 
 Below ~15 files, skip delegation and read them yourself. Then prove coverage:
@@ -64,7 +64,7 @@ python3 "$SKILL_DIR/scripts/inventory.py" check PATH --covered covered.txt
 
 Anything uncovered goes in the report as not examined. A tally that reads as complete when it isn't is worse than a missing candidate.
 
-In Claude Code, if dynamic workflows are available and the user has opted in, the batch fan-out and the audit below can run as one workflow; the steps stay the same.
+In Claude Code, the batch fan-out and the audit below can run as one dynamic workflow if the user has opted in, by typing `ultracode` in their prompt, asking for a workflow, or turning ultracode on with `/effort ultracode`. Don't start one otherwise; the steps stay the same either way.
 
 ## 4. Judge
 
@@ -90,7 +90,7 @@ The eight rules, so you can draft against them. The auditor prompt owns their de
 
 Two or more strong candidates → write the report. Fewer → say it in the conversation and stop. Never build the report to justify the review.
 
-The report is one self-contained page: published as an artifact where the harness can, otherwise a local HTML file whose full absolute path you give the user. Delivery, contract, palette and card structure are in REPORT.md. Every candidate carries: a title in the codebase's own nouns · family · standard name · what it costs · the named remedy · what the remedy costs and how you'd know it was wrong. Coverage and the gate tally (drafted, kept, downgraded, dropped) go above the findings. No agent instructions in the report, and no refactoring yet.
+The report is one self-contained page: published where the harness can (in Claude Code, the `Artifact` tool), where it stays private to the user until they share it; otherwise a local HTML file whose full absolute path you give the user. Delivery, contract, palette and card structure are in REPORT.md. Every candidate carries: a title in the codebase's own nouns · family · standard name · what it costs · the named remedy · what the remedy costs and how you'd know it was wrong. Coverage and the gate tally (drafted, kept, downgraded, dropped) go above the findings. No agent instructions in the report, and no refactoring yet.
 
 ## 7. Grill
 

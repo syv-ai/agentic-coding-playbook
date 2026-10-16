@@ -3,106 +3,163 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Visual plan — {{PLAN TITLE}}</title>
+    <title>{{PLAN NAME, 2-4 WORDS}}</title>
 
     <!--
       SELF-CONTAINED VISUAL PLAN TEMPLATE
 
-      No server, no build, no npm, no account. Open this file directly in a
-      browser. The only external resources are the Tailwind and Mermaid CDNs.
+      No server, no build, no npm. Open this file directly in a browser. The
+      only external scripts are Tailwind's play CDN and, in a local file,
+      Mermaid, both pinned to exact versions.
 
-      Publishing as an artifact instead? Keep the <title>, the Tailwind script
-      and the <style> block; drop the doctype, <html>, <head> and <body> tags
-      (the publisher adds them) and the Mermaid import (artifacts render
-      <pre class="mermaid"> natively).
+      Title: a 2-4 word name for the plan ("Billing retry queue"), not
+      "Visual plan — …". When publishing, put the one-sentence explanation in
+      the publish description instead.
+
+      Colours: every colour is a token on :root, redefined for dark mode below,
+      and mapped into Tailwind as bg-paper, text-ink, border-rule and so on.
+      Don't use Tailwind's own palette classes (bg-slate-50, dark:…): they
+      ignore a viewer's explicit theme choice.
+
+      Publishing as an artifact instead? Keep the <title>, both Tailwind
+      scripts and the <style> block; drop the doctype, <html>, <head> and
+      <body> tags (the publisher adds them) and the Mermaid import (artifacts
+      render <pre class="mermaid"> natively).
 
       This file is a THROWAWAY review surface. The markdown plan is the source
-      of truth — fold resolved decisions back into it, and do not commit this.
+      of truth: fold resolved decisions back into it, and do not commit this.
 
       Selection highlighting on the open-questions block is COSMETIC ONLY. The
       decision is captured in the conversation via the agent's question tool.
 
       Replace every {{PLACEHOLDER}} and the example block content below. Delete
-      blocks you don't need — render only what makes the plan clearer.
+      blocks you don't need; render only what makes the plan clearer.
     -->
 
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              paper: "var(--paper)", raise: "var(--raise)", ink: "var(--ink)",
+              muted: "var(--muted)", rule: "var(--rule)",
+              accent: "var(--accent)", "accent-soft": "var(--accent-soft)",
+              "code-bg": "var(--code-bg)", "code-ink": "var(--code-ink)",
+              ok: "var(--ok)", "ok-soft": "var(--ok-soft)",
+              warn: "var(--warn)", "warn-soft": "var(--warn-soft)",
+              risk: "var(--risk)", "risk-soft": "var(--risk-soft)",
+            },
+          },
+        },
+      };
+    </script>
     <script type="module">
-      import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
-      mermaid.initialize({ startOnLoad: true, theme: "neutral", securityLevel: "loose" });
+      import mermaid from "https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.15.0/mermaid.esm.min.mjs";
+      const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+      mermaid.initialize({ startOnLoad: true, theme: dark ? "dark" : "neutral", securityLevel: "loose" });
     </script>
 
     <style>
-      :root { color-scheme: light dark; }
-      body { font-feature-settings: "ss01"; }
-      /* margin annotation tie-line for annotated-code */
-      .anno { border-left: 2px solid #6366f1; }
-      /* cosmetic selection state for open questions */
-      .opt[data-selected="true"] { outline: 2px solid #6366f1; background: #eef2ff; }
-      @media (prefers-color-scheme: dark) {
-        .opt[data-selected="true"] { background: #1e1b4b; }
+      :root {
+        --paper: #f6f7f5; --raise: #ffffff; --ink: #15181e; --muted: #5f6672; --rule: #dcdfe3;
+        --accent: #3b45a8; --accent-soft: #e8eafa;
+        --code-bg: #1b1e26; --code-ink: #e6e8ee;
+        --ok: #1d7a4f; --ok-soft: #e3f3ea;
+        --warn: #8a5a12; --warn-soft: #fbf0dc;
+        --risk: #a3303a; --risk-soft: #f9e5e7;
       }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --paper: #0f1116; --raise: #171a21; --ink: #e7e9ee; --muted: #9098a6; --rule: #2a2e38;
+          --accent: #9aa3f0; --accent-soft: #23264a;
+          --code-bg: #0a0c10; --code-ink: #e6e8ee;
+          --ok: #6cc79a; --ok-soft: #142a20;
+          --warn: #dcaa62; --warn-soft: #2d2313;
+          --risk: #ee8b93; --risk-soft: #321a1d;
+          color-scheme: dark;
+        }
+      }
+      :root[data-theme="dark"] {
+        --paper: #0f1116; --raise: #171a21; --ink: #e7e9ee; --muted: #9098a6; --rule: #2a2e38;
+        --accent: #9aa3f0; --accent-soft: #23264a;
+        --code-bg: #0a0c10; --code-ink: #e6e8ee;
+        --ok: #6cc79a; --ok-soft: #142a20;
+        --warn: #dcaa62; --warn-soft: #2d2313;
+        --risk: #ee8b93; --risk-soft: #321a1d;
+        color-scheme: dark;
+      }
+      body { background: var(--paper); color: var(--ink); font-feature-settings: "ss01"; }
+      h1, h2 { text-wrap: balance; }
+      /* margin annotation tie-line for annotated-code */
+      .anno { border-left: 2px solid var(--accent); }
+      /* cosmetic selection state for open questions */
+      .opt[data-selected="true"] { outline: 2px solid var(--accent); background: var(--accent-soft); }
     </style>
   </head>
 
-  <body class="bg-stone-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased">
-    <main class="max-w-4xl mx-auto px-6 py-12 space-y-12">
+  <body class="bg-paper text-ink font-sans antialiased">
+    <!-- px-4 keeps a 16px side gutter at phone width -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-12">
 
       <!-- ===== HEADER ===== -->
-      <header class="space-y-3 border-b border-slate-200 dark:border-slate-800 pb-6">
-        <p class="text-xs uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Implementation plan</p>
-        <h1 class="text-3xl font-serif font-semibold">{{PLAN TITLE}}</h1>
-        <p class="text-slate-600 dark:text-slate-400 max-w-2xl">{{ONE-SENTENCE OBJECTIVE — what this builds and what "done" means}}</p>
-        <dl class="flex flex-wrap gap-x-8 gap-y-1 text-sm text-slate-500 pt-2">
-          <div><dt class="inline font-medium text-slate-700 dark:text-slate-300">Scope:</dt> <dd class="inline">{{in scope}}</dd></div>
-          <div><dt class="inline font-medium text-slate-700 dark:text-slate-300">Non-goals:</dt> <dd class="inline">{{out of scope}}</dd></div>
+      <header class="space-y-3 border-b border-rule pb-6">
+        <p class="text-xs uppercase tracking-widest text-accent">Implementation plan</p>
+        <h1 class="text-3xl font-serif font-semibold">{{PLAN NAME}}</h1>
+        <p class="text-muted max-w-2xl">{{ONE-SENTENCE OBJECTIVE: what this builds and what "done" means}}</p>
+        <dl class="flex flex-wrap gap-x-8 gap-y-1 text-sm text-muted pt-2">
+          <div><dt class="inline font-medium text-ink">Scope:</dt> <dd class="inline">{{in scope}}</dd></div>
+          <div><dt class="inline font-medium text-ink">Non-goals:</dt> <dd class="inline">{{out of scope}}</dd></div>
         </dl>
       </header>
 
       <!-- ===== PROSE: approach + key decisions ===== -->
       <section class="space-y-3">
         <h2 class="text-xl font-serif font-semibold">Approach</h2>
-        <p class="text-slate-700 dark:text-slate-300 leading-relaxed">{{The proposed approach in plain prose. State the key decisions and the rationale behind them. Lead concrete for broad work.}}</p>
+        <p class="leading-relaxed">{{The proposed approach in plain prose. State the key decisions and the rationale behind them. Lead concrete for broad work.}}</p>
       </section>
 
       <!-- ===== CALLOUT: settled decision (NOT an open question) ===== -->
-      <aside class="rounded-lg border-l-4 border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 px-4 py-3">
-        <p class="text-xs uppercase tracking-wider text-emerald-700 dark:text-emerald-400 font-medium">Decision</p>
-        <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">{{A choice already made — e.g. "Use the existing job queue rather than adding a scheduler."}}</p>
+      <aside class="rounded-lg border-l-4 border-ok bg-ok-soft px-4 py-3">
+        <p class="text-xs uppercase tracking-wider text-ok font-medium">Decision</p>
+        <p class="text-sm mt-1">{{A choice already made, e.g. "Use the existing job queue rather than adding a scheduler."}}</p>
       </aside>
-      <!-- Tones: emerald=decision · indigo=note · amber=warning · rose=risk -->
+      <!-- Tones: ok=decision · accent/accent-soft=note · warn=warning · risk=risk -->
 
       <!-- ===== FILE MAP ===== -->
       <section class="space-y-3">
         <h2 class="text-xl font-serif font-semibold">File map</h2>
-        <ul class="font-mono text-sm space-y-1">
-          <li><span class="inline-block w-16 text-emerald-600">create</span> {{path/to/new.ts}} <span class="text-slate-500">— {{responsibility}}</span></li>
-          <li><span class="inline-block w-16 text-amber-600">modify</span> {{path/to/existing.ts:120-145}} <span class="text-slate-500">— {{what changes}}</span></li>
-          <li><span class="inline-block w-16 text-indigo-600">test</span> {{path/to/test.ts}} <span class="text-slate-500">— {{what it covers}}</span></li>
-        </ul>
+        <div class="overflow-x-auto">
+          <ul class="font-mono text-sm space-y-1">
+            <li><span class="inline-block w-16 text-ok">create</span> {{path/to/new.ts}} <span class="text-muted">— {{responsibility}}</span></li>
+            <li><span class="inline-block w-16 text-warn">modify</span> {{path/to/existing.ts:120-145}} <span class="text-muted">— {{what changes}}</span></li>
+            <li><span class="inline-block w-16 text-accent">test</span> {{path/to/test.ts}} <span class="text-muted">— {{what it covers}}</span></li>
+          </ul>
+        </div>
       </section>
 
       <!-- ===== DIAGRAM (Mermaid for graph-shaped flows) ===== -->
       <section class="space-y-3">
         <h2 class="text-xl font-serif font-semibold">Architecture</h2>
-        <div class="rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4">
+        <div class="rounded-lg border border-rule bg-raise p-4 overflow-x-auto">
           <pre class="mermaid">
             flowchart LR
               A["{{Caller}}"] --> B["{{New module}}"]
               B --> C[("{{Store}}")]
           </pre>
         </div>
-        <!-- For editorial visuals Mermaid can't do well, hand-build divs + inline SVG instead. -->
+        <!-- For editorial visuals Mermaid can't do well, hand-build divs + inline SVG,
+             with stroke and fill from the tokens (var(--ink), var(--accent)). -->
       </section>
 
       <!-- ===== ANNOTATED CODE (the load-bearing change) ===== -->
       <section class="space-y-3">
         <h2 class="text-xl font-serif font-semibold">{{The key change}}</h2>
-        <div class="grid grid-cols-[1fr_18rem] gap-0 rounded-lg border border-slate-200 dark:border-slate-800 overflow-hidden">
-          <pre class="bg-slate-900 text-slate-100 text-sm p-4 overflow-x-auto m-0"><code>{{only the load-bearing lines, not the whole file}}</code></pre>
-          <div class="bg-slate-50 dark:bg-slate-900 text-sm divide-y divide-slate-200 dark:divide-slate-800">
-            <div class="anno px-3 py-2"><span class="font-mono text-xs text-indigo-600">L12</span> — {{why this line matters}}</div>
-            <div class="anno px-3 py-2"><span class="font-mono text-xs text-indigo-600">L18-20</span> — {{the decision encoded here}}</div>
+        <div class="grid grid-cols-1 md:grid-cols-[1fr_18rem] rounded-lg border border-rule overflow-hidden">
+          <pre class="min-w-0 bg-code-bg text-code-ink text-sm p-4 overflow-x-auto m-0"><code>{{only the load-bearing lines, not the whole file}}</code></pre>
+          <div class="min-w-0 bg-raise text-sm divide-y divide-rule">
+            <div class="anno px-3 py-2"><span class="font-mono text-xs text-accent">L12</span> — {{why this line matters}}</div>
+            <div class="anno px-3 py-2"><span class="font-mono text-xs text-accent">L18-20</span> — {{the decision encoded here}}</div>
           </div>
         </div>
       </section>
@@ -110,14 +167,14 @@
       <!-- ===== COLUMNS (before / after) ===== -->
       <section class="space-y-3">
         <h2 class="text-xl font-serif font-semibold">Before / after</h2>
-        <div class="grid grid-cols-2 gap-4">
-          <div class="rounded-lg border border-slate-200 dark:border-slate-800 p-4">
-            <p class="text-xs uppercase tracking-wider text-slate-500 mb-2">Before</p>
-            <p class="text-sm text-slate-700 dark:text-slate-300">{{current state}}</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="min-w-0 rounded-lg border border-rule p-4">
+            <p class="text-xs uppercase tracking-wider text-muted mb-2">Before</p>
+            <p class="text-sm">{{current state}}</p>
           </div>
-          <div class="rounded-lg border border-indigo-200 dark:border-indigo-800 p-4">
-            <p class="text-xs uppercase tracking-wider text-indigo-600 mb-2">After</p>
-            <p class="text-sm text-slate-700 dark:text-slate-300">{{target state}}</p>
+          <div class="min-w-0 rounded-lg border border-accent p-4">
+            <p class="text-xs uppercase tracking-wider text-accent mb-2">After</p>
+            <p class="text-sm">{{target state}}</p>
           </div>
         </div>
       </section>
@@ -126,28 +183,28 @@
       <section class="space-y-3">
         <h2 class="text-xl font-serif font-semibold">Verification</h2>
         <ul class="space-y-2 text-sm">
-          <li class="flex gap-2"><span class="text-slate-400">☐</span> {{End-to-end check that exercises a real workflow — actual command + expected result}}</li>
-          <li class="flex gap-2"><span class="text-slate-400">☐</span> {{On-disk / browser assertion that proves it works}}</li>
+          <li class="flex gap-2"><span class="text-muted">☐</span> {{End-to-end check that exercises a real workflow: actual command + expected result}}</li>
+          <li class="flex gap-2"><span class="text-muted">☐</span> {{On-disk / browser assertion that proves it works}}</li>
         </ul>
       </section>
 
-      <!-- ===== OPEN QUESTIONS (bottom only — resolved in the conversation) ===== -->
-      <section class="space-y-4 border-t border-slate-200 dark:border-slate-800 pt-8">
+      <!-- ===== OPEN QUESTIONS (bottom only, resolved in the conversation) ===== -->
+      <section class="space-y-4 border-t border-rule pt-8">
         <div>
           <h2 class="text-xl font-serif font-semibold">Open questions</h2>
-          <p class="text-sm text-slate-500">Answer these in the conversation — the agent will ask. Highlighting here is just a preview.</p>
+          <p class="text-sm text-muted">Answer these in the conversation; the agent will ask. Highlighting here is just a preview.</p>
         </div>
 
         <div class="space-y-2">
           <p class="font-medium">{{Question that would change the plan?}}</p>
           <div class="grid gap-2">
-            <div class="opt rounded-md border border-slate-200 dark:border-slate-800 px-4 py-2 text-sm" data-selected="true">
-              {{Option A}} <span class="text-indigo-600 text-xs font-medium">(Recommended)</span>
-              <p class="text-slate-500 text-xs mt-0.5">{{why this is the default}}</p>
+            <div class="opt rounded-md border border-rule px-4 py-2 text-sm" data-selected="true">
+              {{Option A}} <span class="text-accent text-xs font-medium">(Recommended)</span>
+              <p class="text-muted text-xs mt-0.5">{{why this is the default}}</p>
             </div>
-            <div class="opt rounded-md border border-slate-200 dark:border-slate-800 px-4 py-2 text-sm">
+            <div class="opt rounded-md border border-rule px-4 py-2 text-sm">
               {{Option B}}
-              <p class="text-slate-500 text-xs mt-0.5">{{trade-off}}</p>
+              <p class="text-muted text-xs mt-0.5">{{trade-off}}</p>
             </div>
           </div>
         </div>

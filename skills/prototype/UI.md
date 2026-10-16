@@ -101,14 +101,14 @@ Compare the screenshots against the question and each other. Fix anything broken
 
 Surface the URL (and the `?variant=` keys). The user will flip through whenever they get to it. The interesting feedback is usually **"I want the header from B with the sidebar from C"** — that's the actual design they want.
 
-### 7. Capture the answer and clean up
+### 7. Capture the answer and the prototype
 
-Once a variant has won, write down which one and why, wherever the project records decisions (a commit message, an ADR, a work item), or in a `NOTES.md` next to the prototype if the user hasn't responded yet. Then:
+Once a variant has won, record which one and why, then capture the prototype as [SKILL.md](SKILL.md) describes. Commit the full set of variants and the switcher to the throwaway branch first, so they're kept as the evidence behind the choice. Then, on main:
 
-- **Sub-shape A** — delete the losing variants and the switcher; fold the winner into the existing page.
-- **Sub-shape B** — promote the winning variant to a real route, delete the throwaway route and the switcher.
+- **Sub-shape A** — fold the winner into the existing page; remove the losing variants and the switcher.
+- **Sub-shape B** — promote the winning variant to a real route; remove the throwaway route and the switcher.
 
-Don't leave variant components or the switcher lying around. They rot fast and confuse the next reader.
+Variant components and the switcher left on main rot fast and confuse the next reader; on the throwaway branch they stay available if the decision is ever revisited.
 
 ## Anti-patterns
 
