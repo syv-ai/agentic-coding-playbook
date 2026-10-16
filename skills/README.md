@@ -10,54 +10,54 @@ it says so as an optional note.
 
 ## Install
 
-Three ways — pick one.
+Install it as a plugin in your agent, or copy the skills into a project. Both
+give you the same skills from the same `skills/` folder.
 
-### A. As a Claude Code plugin
+### As a plugin
 
-Installs through Claude Code's plugin system:
+| Agent | Install | Update |
+|---|---|---|
+| Claude Code | `/plugin marketplace add syv-ai/agentic-coding-playbook`<br>`/plugin install syv-skills@syv-skills` | `/plugin update syv-skills`, or turn on auto-update (below) |
+| Codex | `codex plugin marketplace add syv-ai/agentic-coding-playbook`<br>`codex plugin add syv-skills@syv-skills` (or install from `/plugins`) | `codex plugin marketplace upgrade syv-skills` |
+| GitHub Copilot CLI | `copilot plugin marketplace add syv-ai/agentic-coding-playbook`<br>`copilot plugin install syv-skills@syv-skills` | `copilot plugin update syv-skills` |
+| VS Code (Copilot agent plugins) | Add `"chat.plugins.marketplaces": ["syv-ai/agentic-coding-playbook"]` to your settings, then install **syv-skills** from the Agent Plugins section of the Extensions view | **Extensions: Check for Extension Updates**, or daily with `extensions.autoUpdate` |
+| Cursor | A team admin imports the repo under Dashboard → Plugins & MCPs → Add Marketplace → Import from Repo; developers install it from Customize | Imported marketplaces refresh on their own |
+| Gemini CLI (0.26+) | `gemini extensions install https://github.com/syv-ai/agentic-coding-playbook --auto-update` | Automatic with `--auto-update`, otherwise `gemini extensions update syv-skills` |
+| Pi | `pi install git:github.com/syv-ai/agentic-coding-playbook` | `pi update git:github.com/syv-ai/agentic-coding-playbook` |
 
-```
-/plugin marketplace add syv-ai/agentic-coding-playbook
-/plugin install syv-skills@syv-skills
-```
+New skills show up in the next session. Claude Code doesn't auto-update
+third-party marketplaces by default. To turn it on, run `/plugin`, open
+**Marketplaces**, select `syv-skills` and choose **Enable auto-update**.
 
-Third-party marketplaces don't auto-update by default. To receive new versions
-automatically, run `/plugin`, open **Marketplaces**, select `syv-skills` and
-choose **Enable auto-update**. Otherwise update by hand with `/plugin update`.
+### As project files, with `npx skills` or `gh skill`
 
-### B. With `npx skills` (any agent)
-
-Copies the collection into your project:
+These copy the skills into your project, so re-run the same command to update:
 
 ```bash
 npx skills add syv-ai/agentic-coding-playbook
-```
-
-Skills land in `.agents/skills/` for Copilot, Codex, Cursor and most other
-agents, and in `.claude/skills/` for Claude Code. Requires Node.js 18+.
-
-**On Windows**, copy instead of symlinking — Windows blocks symlink creation
-without Developer Mode or admin rights:
-
-```bash
-npx skills add syv-ai/agentic-coding-playbook --copy
-```
-
-### C. With the GitHub CLI (any agent `gh skill` supports)
-
-```bash
+# or
 gh skill install syv-ai/agentic-coding-playbook --all
 ```
 
-Add `--agent <name>` (for example `--agent github-copilot`) if you have several
-agents set up. Skills are then available as `/skill-name`, and agents pick them
+- **`npx skills`** puts skills in `.agents/skills/` for Copilot, Codex, Cursor
+  and most other agents, and in `.claude/skills/` for Claude Code. It needs
+  Node.js 18+. On Windows, add `--copy`: Windows blocks symlinks without
+  Developer Mode or admin rights.
+- **`gh skill`** takes `--agent <name>` (for example `--agent github-copilot`)
+  if you have several agents set up.
+
+Either way, skills are then available as `/skill-name`, and agents pick them
 up on their own when a task matches a skill's description.
 
 ### Notes for any install
 
 - `improve-code-design` delegates to two subagents. Their prompts ship inside
   the skill, so any agent that can start a subagent can use them; nothing needs
-  copying. The Claude Code plugin also registers them as named agents.
+  copying. The Claude Code and Cursor plugins also register them as named
+  agents.
+- Skills marked *(user-only command)* below run only when you call them.
+  Claude Code, Codex, Cursor, VS Code and Pi respect this. Gemini CLI doesn't
+  yet, so there the agent may also start them on its own.
 - Skills that interview you ask through the agent's question tool:
   `AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot (turn on
   `chat.askQuestions.enabled` if the question carousel doesn't appear), and plain

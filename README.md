@@ -102,18 +102,20 @@ Complete annotated bibliography of all 26 primary sources organized by theme. Ke
 
 A companion **[skills collection](skills/)** ships alongside the modules — a curated, best-of-breed set of agentic-coding skills (planning, execution, quality, verification) distilled from [`mattpocock/skills`](https://github.com/mattpocock/skills) and [`obra/superpowers`](https://github.com/obra/superpowers), plus skills written for this playbook. Where the modules teach the *why*, the skills are the *how* — installable workflows your agent runs.
 
-The skills are plain `SKILL.md` folders that work in Claude Code, GitHub Copilot, Codex, Cursor and other agents that support Agent Skills. Install into any project:
+The skills are plain `SKILL.md` folders that work in Claude Code, GitHub Copilot, Codex, Cursor, Gemini CLI, Pi and other agents that support Agent Skills. Install into any project:
 
 ```bash
 npx skills add syv-ai/agentic-coding-playbook      # or: gh skill install syv-ai/agentic-coding-playbook --all
 ```
 
-Or, inside Claude Code, install it as a plugin, then enable auto-update for the `syv-skills` marketplace under `/plugin` → Marketplaces:
+Or install it as a plugin, which keeps it updated. In Claude Code:
 
 ```
 /plugin marketplace add syv-ai/agentic-coding-playbook
 /plugin install syv-skills@syv-skills
 ```
+
+The repo is also a plugin for Codex, Copilot CLI, VS Code and Cursor, a Gemini CLI extension and a Pi package. [skills/README.md](skills/README.md#install) has the install and update commands for each.
 
 Either way, then run:
 

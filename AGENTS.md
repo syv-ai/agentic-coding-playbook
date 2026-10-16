@@ -15,6 +15,13 @@ Next.js slide viewer and a distributable collection of agent skills.
 - `skills/`, `agents/`, and `.claude-plugin/` are the separate distributable
   product surface. `.claude-plugin/` packages the top-level `skills/` collection;
   keep it unchanged for repository-local guidance work.
+- `.claude-plugin/plugin.json` is the source for every harness's plugin
+  manifest. `scripts/sync-manifests.mjs` generates `.cursor-plugin/`,
+  `.codex-plugin/`, `.agents/plugins/marketplace.json` and
+  `gemini-extension.json` from it; never edit those by hand. Copilot CLI and
+  VS Code read `.claude-plugin/` directly, and Pi finds `skills/` on its own.
+  Do not add a root `plugin.json`: Copilot CLI and VS Code would prefer it
+  over `.claude-plugin/`.
 
 ## Editorial boundaries
 
@@ -68,6 +75,21 @@ cd slides && npm run lint && npm run build
 Install documentation dependencies from `requirements-docs.txt` and run
 `npm ci` in `slides/` only when needed for validation. Do not commit `site/`,
 `slides/node_modules/`, or other generated outputs and dependencies.
+
+## Releasing the skills collection
+
+Claude Code and Codex refresh an installed plugin only when its version
+changes, so every change under `skills/` needs a version bump. CI fails a
+pull request that changes skills without raising the version.
+
+1. When adding or removing a skill, update the `skills` list in
+   `.claude-plugin/plugin.json`.
+2. Run `node scripts/sync-manifests.mjs --bump <x.y.z>`, using a patch bump for
+   fixes and a minor bump for new skills. This sets the version in every
+   manifest.
+3. After merging, tag the release (`git tag v<x.y.z>` and push the tag) and
+   create a GitHub Release for it, so Gemini CLI and pinned installs have
+   something to track.
 
 ## Project-local skills
 
