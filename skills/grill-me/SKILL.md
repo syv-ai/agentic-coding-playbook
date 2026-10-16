@@ -5,7 +5,16 @@ description: Interviews the user relentlessly about a plan or design until reach
 
 Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Treat it as a decision tree: every decision branches into the decisions that hang off it. For each question, give your recommended answer.
 
-**Ask through your harness's question tool** (`AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI, `askQuestions` in VS Code, `request_user_input` in Codex Plan mode). If it has none, ask in plain text. Put your recommended answer first, labelled as recommended, with the other plausible answers as options, and word each question so "yes" accepts your recommendation. That way I can pick quickly and the decision is recorded cleanly.
+## Ask how I want to answer
+
+Before the first round, ask me once which way I'd like the questions, with a one-line note on each:
+
+- **Menus**: through your harness's question tool (`AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI, `askQuestions` in VS Code, `request_user_input` in Codex Plan mode), recommended answer first. Quick to answer and cleanly recorded, but preset options can steer me toward your assumptions.
+- **Open questions**: plain text, answered in my own words. Slower, but more likely to bring out what I actually think.
+
+Keep to my choice for the rest of the session, and don't ask again if I already chose earlier in it. If your harness has no question tool, use open questions without asking.
+
+With menus, label your recommended answer and put it first, list the other plausible answers as options, and word each question so "yes" accepts your recommendation. With open questions, ask each round as a short numbered list and give your recommendation after each question.
 
 ## Work the tree in rounds
 

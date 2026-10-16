@@ -66,7 +66,9 @@ up on their own when a task matches a skill's description.
   `AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI,
   `askQuestions` in VS Code, `request_user_input` in Codex Plan mode, and plain
   text elsewhere. Most take three or four questions per call, so longer
-  interviews come in batches.
+  interviews come in batches. `grill-me` and `brainstorming` first ask whether
+  you want menus (quicker, but preset options can steer you toward the agent's
+  assumptions) or open questions answered in your own words.
 - Skills that produce a page for you (reports, plans, prototypes) publish it
   where the agent can, as with Claude Code's `Artifact` tool, and otherwise
   write a local HTML file. Either way you get the link or the file's full path.

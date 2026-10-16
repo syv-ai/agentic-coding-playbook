@@ -19,7 +19,7 @@ Until the user has agreed to the design, don't write code, scaffold, install dep
 ## Process
 
 1. **Explore the context.** Look at the relevant files, docs and recent commits. Delegate to an exploration subagent if your harness has one (`Explore` in Claude Code and Cursor, the `explorer` role in Codex, `codebase_investigator` in Gemini CLI); otherwise keep the exploration narrow and targeted.
-2. **Open the conversation.** In your first message, offer in one line that they can skip the questions and have you just start. If they take it, state any significant how-it-gets-made choice (platform, language, medium) in one line, then proceed. Otherwise ask your first questions, starting with what they want this for.
+2. **Open the conversation.** In your first message, offer in one line that they can skip the questions and have you just start, and ask how they'd like to be asked (see below). If they skip, state any significant how-it-gets-made choice (platform, language, medium) in one line, then proceed. Otherwise ask your first questions, starting with what they want this for.
 3. **Find the intent first.** Learn why they want it, what success looks like, what would make it a failure even if it technically works, and what exists already, before you propose features. A guess they can correct ("I'm guessing this is because X keeps breaking?") often works better than an abstract question.
 4. **Settle how it gets made.** Early on, find out which choices they want to make themselves (platform, language, libraries, hosting), which they hand to you, and what they already have to build on. Where there's existing work, build on what it uses. A choice you make goes in the design as your call, never as something they agreed to. A session that designs an iOS app without asking about platform can end up building a web app.
 5. **Play back as you go** (see below).
@@ -34,7 +34,14 @@ Approval covers what you showed them. A default they never heard is one they cou
 
 ## Asking questions
 
-Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI, `askQuestions` in VS Code, `request_user_input` in Codex Plan mode); if it has none, ask in plain text. Prefer multiple choice with your recommended option first, and leave room for an answer in their own words. Questions that don't depend on each other can go together; most tools take three or four per call, so split larger batches. Ask dependent questions in sequence, since each answer changes the next question. If the codebase can answer a question, look instead of asking.
+Before the first question, ask once which way they'd like to be asked, with a one-line note on each:
+
+- **Menus**: through your harness's question tool (`AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI, `askQuestions` in VS Code, `request_user_input` in Codex Plan mode), recommended option first. Quick to answer, but preset options can steer them toward your assumptions.
+- **Open questions**: plain text, answered in their own words. Slower, but more likely to bring out what they actually want.
+
+Keep to their choice for the rest of the session, and don't ask again if they already chose earlier in it. If your harness has no question tool, use open questions without asking. Either way, visual choices (layouts, mockups) can still go through the visual companion.
+
+With menus, put your recommended option first and leave room for an answer in their own words; most tools take three or four questions per call, so split larger batches. Questions that don't depend on each other can go together. Ask dependent questions in sequence, since each answer changes the next question. If the codebase can answer a question, look instead of asking.
 
 ## Play it back
 
