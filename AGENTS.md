@@ -80,7 +80,7 @@ Install documentation dependencies from `requirements-docs.txt` and run
 
 Claude Code and Codex refresh an installed plugin only when its version
 changes, so every change under `skills/` needs a version bump. CI fails a
-pull request that changes skills without one.
+pull request that changes skills without raising the version.
 
 1. When adding or removing a skill, update the `skills` list in
    `.claude-plugin/plugin.json`.
