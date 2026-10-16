@@ -12,7 +12,7 @@ Next.js slide viewer and a distributable collection of agent skills.
 - `docs/javascripts/visuals/` contains the D3 renderers and shared visual theme.
 - `slides/` is the Next.js slide viewer; it reads the published Markdown in `docs/`.
 - `.agents/skills/` contains project-local maintenance skills.
-- `skills/`, `agents/`, and `.claude-plugin/` are the separate distributable
+- `skills/` and `.claude-plugin/` are the separate distributable
   product surface. `.claude-plugin/` packages the top-level `skills/` collection;
   keep it unchanged for repository-local guidance work.
 - `.claude-plugin/plugin.json` is the source for every harness's plugin
@@ -95,6 +95,6 @@ pull request that changes skills without one.
 
 The local maintenance skills are portable Agent Skills under
 `.agents/skills/<name>/SKILL.md`; use their skill names rather than assuming a
-slash-command interface. The top-level `skills/` collection, `agents/` definitions,
+slash-command interface. The top-level `skills/` collection
 and `.claude-plugin/` manifest are a separate distributable product surface and
 should not be conflated with the local skills.
