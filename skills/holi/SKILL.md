@@ -1,5 +1,5 @@
 ---
-name: holi-cli
+name: holi
 description: Holi's local CLI for vault notes and app capabilities. Use when an agent needs to read, create, update, delete, or settle documents in an open Holi vault, or use Holi's other CLI commands.
 ---
 
