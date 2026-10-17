@@ -37,6 +37,7 @@ every skill stands on its own.
 | `receiving-code-review` | obra/superpowers (`receiving-code-review`) |
 | `improve-codebase-architecture` | mattpocock/skills (`improve-codebase-architecture`) |
 | `handoff` | mattpocock/skills (`handoff`) |
+| `holi` | Syv.ai original — Holi's vault-scoped CLI workflow |
 | `write-a-skill` | **Merge** of mattpocock/skills (`write-a-skill`) + obra/superpowers (`writing-skills`) |
 | `guardrails` | Syv.ai original — extends mattpocock/skills (`git-guardrails-claude-code`) into a broader project/session safety skill |
 | `setup` | Syv.ai original (purpose absorbed from mattpocock/skills `setup-pre-commit`, generalized) |
