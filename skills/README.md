@@ -104,6 +104,9 @@ never touches it.
 - [`handoff`](handoff/) — compact the conversation into a handoff doc for a fresh session.
 - [`write-a-skill`](write-a-skill/) — author new skills for this collection, with progressive disclosure.
 
+**Integrations**
+- [`holi-cli`](holi-cli/) — use the local Holi CLI to read and conditionally change vault notes, then verify commit and push delivery.
+
 **Setup**
 - [`setup`](setup/) — set up a project's stack and dev-env feedback loops (new or existing repo). *(User-only command.)*
 - [`setup-syv-skills`](setup-syv-skills/) — interview the team about how agents should work here and record it in the instructions file. *(User-only command.)*
