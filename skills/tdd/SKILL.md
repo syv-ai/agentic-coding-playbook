@@ -21,7 +21,7 @@ For anything larger than a one-sentence change, agree on these with the user bef
 
 - The interface change: what callers will see and use.
 - The behaviours worth testing, in priority order. You cannot test everything; favour critical paths and logic that is easy to get wrong.
-- Where the seam is. Prefer the highest seam that exercises the real behaviour, and small interfaces with deep implementations (see [interface-design.md](interface-design.md)).
+- Where the seam is. Prefer the highest seam that exercises the real behaviour, and small interfaces with deep implementations (see [interface-design.md](interface-design.md)). Give each proposed seam a one-line note on what it catches and what it misses, so the choice between seams isn't a guess.
 
 Use the project's own vocabulary for test names and interfaces. If the project records decisions (ADRs, a glossary), respect them.
 
@@ -37,7 +37,7 @@ WRONG (horizontal)            RIGHT (vertical)
 ```
 
 1. **Red.** Write one small test for one behaviour, with a name that states the behaviour. Run it. It should *fail*, not error, and fail because the behaviour is missing. If it passes already, it tests existing behaviour; fix the test. If it errors, fix the error and rerun until it fails correctly.
-2. **Green.** Write the simplest code that passes. No extra features, no refactoring of neighbouring code. Run the test and the rest of the suite; the output should be clean.
+2. **Green.** Write the simplest code that passes. No extra features, no refactoring of neighbouring code. Run the test, then the project's own test command, not only this test's file; the output should be clean.
 3. **Refactor.** Only while green. Remove duplication, improve names, and deepen modules by moving complexity behind a smaller interface. Keep tests passing and add no behaviour.
 4. Pick the next behaviour.
 
@@ -47,11 +47,18 @@ Each cycle informs the next test, because you now know what the code actually ne
 
 It happens. Don't keep it on trust and don't bolt on a test that merely passes. Write the test that would have caught the missing behaviour, then check it fails with the new code reverted or stubbed out, and passes with it restored. If you can't make the test fail, it isn't testing that code.
 
+| If you're tempted to… | Why the test-first step still matters |
+|---|---|
+| Write the tests after the code | They pass the first time they run, so they never showed they can catch the bug. |
+| Skip the test because you checked by hand | A manual check leaves no record and can't be re-run when the code changes. |
+
 ## Good tests
 
 - **One behaviour each.** An "and" in the name usually means two tests.
 - **Named for the behaviour,** not the method.
 - **Through the public interface.** A test that breaks on a rename or a refactor with no behaviour change was testing implementation.
+- **Names its break.** Before writing the body, name the production change that would make the test fail, and check it would be a bug rather than a deliberate decision.
+- **Expected values come from somewhere else.** Use literals or worked examples from the spec or by hand, not values computed the way the code computes them.
 - **Real code over mocks.** Mock only at system boundaries you don't control (network, time, randomness, third-party services).
 
 Details and examples: [tests.md](tests.md) for what makes a test good, [mocking.md](mocking.md) for when to mock and the mistakes mocks invite.
@@ -68,7 +75,7 @@ Details and examples: [tests.md](tests.md) for what makes a test good, [mocking.
 ## Before calling it done
 
 - Each new behaviour has a test you watched fail for the expected reason.
-- The full suite passes and the output is clean.
+- The project's full test command passes and the output is clean. Report every failure by name, including ones you didn't cause.
 - Mocks appear only at boundaries.
 - Edge cases and error paths that matter to callers are covered; you did not add tests for cases that cannot happen.
 

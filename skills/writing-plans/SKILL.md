@@ -11,9 +11,11 @@ Write a plan that someone with no context on this codebase could follow: which f
 
 If the change can be described in one sentence, skip the written plan and just do it (or say the steps in a line or two). Write a full plan when the change spans several files, the order of work matters, the approach needs agreement, or another session will execute it. Match the detail to the risk: a three-task change needs a short list, not a document.
 
+Don't build or scratch-implement while planning. Read the code you need to decide files, names and tests, and write those decisions down.
+
 ## Where the plan goes
 
-Where plans are saved, and whether they are kept at all, comes from the project's instructions file (AGENTS.md, or CLAUDE.md in Claude Code). If it says nothing, look for an existing convention (a plans folder, plans attached to work items). If still unclear, ask with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot; plain text if it has none) and offer to record the answer as a short section in the instructions file. A plan can live only in the conversation when it won't be executed elsewhere.
+Where plans are saved, and whether they are kept at all, comes from the project's instructions file (AGENTS.md or CLAUDE.md). If it says nothing, look for an existing convention (a plans folder, plans attached to work items). If still unclear, ask with your harness's question tool (`AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI, `askQuestions` in VS Code, `request_user_input` in Codex Plan mode; plain text if it has none) and offer to record the answer as a short section in the instructions file. A plan can live only in the conversation when it won't be executed elsewhere.
 
 ## Scope check
 
@@ -41,14 +43,33 @@ Two tasks that each write their own version of a rule mean two owners, and they 
 **Goal:** <one sentence: what this builds>
 **Approach:** <2–3 sentences>
 **Stack:** <key technologies>
+**Spec:** <where it lives, or "none">
+
+## Global constraints
+
+<The spec's project-wide requirements (version floors, dependency limits, naming
+or copy rules, platform requirements), one line each, exact values copied from
+the spec. Every task implicitly includes this section.>
+
+## Review focus
+
+<Up to five input classes or failure modes the spec implies but no task's tests
+exercise, most likely to bite a user first, each with the behaviour a user would
+expect.>
 ```
 
-**Then the tasks.** Each task is a self-contained change that makes sense on its own:
+The executor reads the spec alongside the plan, and conflicts inside the plan resolve against the spec. Global constraints copy what the spec says; don't invent process rules there.
+
+Write the review focus with the spec in front of you: its silence on an input (empty, a duplicate, a very large file, a second run) is not permission for that input to break the program, and each line gets a test in the task that owns the code.
+
+**Then the tasks.** A task is the smallest unit that carries its own test cycle. Fold setup, configuration and documentation into the task whose result needs them, and split only where a reviewer could reject one task while approving its neighbour.
 
 ````markdown
 ### Task N: <name>
 
 **Files:** create `path/new.py` · modify `path/existing.py:120-145` · test `tests/path/test_x.py`
+
+**Interfaces:** consumes `parse_token(raw: str) -> Token` (Task 2) · produces `check_expiry(token: Token, now: datetime) -> bool`
 
 **Behaviour:** <what this task makes true, stated so it can be checked>
 
@@ -57,42 +78,36 @@ Two tasks that each write their own version of a rule mean two owners, and they 
 - [ ] Verify: `pytest tests/path/test_x.py -v` → passes
 
 ```python
-# Only where code pins a decision: an interface, a tricky algorithm,
-# or a test that defines the behaviour precisely.
-def test_rejects_expired_token(): ...
+def test_rejects_expired_token():
+    assert check_expiry(token(expires="2026-01-01T00:00Z"), now=dt("2026-01-01T00:01Z")) is False
 ```
 ````
+
+The Interfaces line gives the exact signatures this task uses from earlier tasks and the exact names and types later tasks rely on. An implementer often sees only their own task; this is how they learn what the neighbours call things.
 
 Use checkboxes (`- [ ]`) so progress can be tracked. Add a commit step per task only if the project commits per task.
 
 **End with end-to-end verification:** the commands or actions that prove the whole feature works as a user would use it, with the expected result.
 
-## Be specific
+## What a step contains
 
-Every task needs what the implementer needs to act without guessing:
+A step is done when the implementer can write exactly one reasonable thing from it. Unambiguous, not complete:
 
-- Exact file paths, and line ranges for modifications.
-- The behaviour to produce, stated so it can be verified.
-- A verification command with its expected result.
-- Code where prose would be ambiguous. Elsewhere, behaviour and names are enough; don't write out code the implementer will obviously write the same way.
+- **Test step:** the test's name and its assertions, with the spec's exact values.
+- **Code step:** the signature, the file it lives in, and the values the spec pins. Write a body only for an algorithm the signature and tests don't determine, or for exact text the spec fixes.
+- **Verification step:** the command and the output that means it passed.
+
+Give exact file paths and line ranges for modifications, and point to another task's Interfaces line rather than repeating its code. A plan longer than the code it describes has written the code.
 
 These are gaps, not plans: "TBD", "add error handling", "handle edge cases", "write tests for the above" without saying which, "similar to Task N" when the tasks may be read out of order, and names used in one task but never defined.
 
 ## Review
 
-After writing the plan, check it against the spec:
-
-1. **Coverage** — can you point to a task for every requirement? Add tasks for gaps.
-2. **Gaps** — search for the patterns above and fix them.
-3. **Consistency** — names, signatures and types match across tasks (`clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug).
-4. **One owner per rule** — for every format, lookup, invariant and constant, point to the one task that defines it. Search the plan for a pattern, parser or constant defined twice, and for "keep in step", "mirrors" or "must also call". Consistent names don't catch this: two differently named functions can encode the same rule.
-5. **Deletions** — every old path the plan replaces is deleted in a task, or kept with a stated reason.
-
-For a larger plan, also get a fresh-context review with [plan-document-reviewer-prompt.md](plan-document-reviewer-prompt.md).
+After writing the plan, check it against the spec with the checklist in [plan-document-reviewer-prompt.md](plan-document-reviewer-prompt.md), reading it as if someone else wrote it, and fix what you find. For a larger plan, also hand that prompt to a reviewer with fresh context.
 
 ## Next step
 
-Once the plan is saved, ask the user how to continue:
+Once the plan is saved, give its location and ask the user to read the plan itself before execution starts. Agreeing on the idea or the scope is not approving a plan they haven't read. Then ask how to continue:
 
 - **Continue in this session** (default) with the **executing-plans** skill.
 - **Start fresh** — use the **handoff** skill, then run **executing-plans** in a new session with clean context.

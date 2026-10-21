@@ -37,10 +37,10 @@ every skill stands on its own.
 | `receiving-code-review` | obra/superpowers (`receiving-code-review`) |
 | `improve-codebase-architecture` | mattpocock/skills (`improve-codebase-architecture`) |
 | `handoff` | mattpocock/skills (`handoff`) |
+| `retro` | Syv.ai adaptation of mattpocock/skills (`retro`) |
 | `write-a-skill` | **Merge** of mattpocock/skills (`write-a-skill`) + obra/superpowers (`writing-skills`) |
 | `guardrails` | Syv.ai original — extends mattpocock/skills (`git-guardrails-claude-code`) into a broader project/session safety skill |
-| `setup` | Syv.ai original (purpose absorbed from mattpocock/skills `setup-pre-commit`, generalized) |
-| `setup-syv-skills` | Syv.ai original — interview in the style of `grill-me`; recording answers as a section in the instructions file follows the pattern of mattpocock/skills (`setup-matt-pocock-skills`) |
+| `setup-syv-skills` | Syv.ai original (its commit-gate step absorbs the purpose of mattpocock/skills `setup-pre-commit`) — interview in the style of `grill-me`; recording answers as a section in the instructions file follows the pattern of mattpocock/skills (`setup-matt-pocock-skills`) |
 
 ## Upstream licenses
 

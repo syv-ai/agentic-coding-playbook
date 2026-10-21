@@ -1,6 +1,6 @@
 ---
 name: track-work
-description: "Records what is being built (PRD, spec, feature description, epic — whatever the project uses) and breaks it into independently grabbable work items, in whichever tracker the project uses: GitHub Issues, Azure DevOps, Jira, Linear, markdown files, or none. Use when the user wants to write up a feature, create a PRD or spec, turn a plan into issues, tickets or backlog items, or persist the outcome of a planning conversation."
+description: Records what is being built and breaks it into independently grabbable work items in the project's tracker.
 disable-model-invocation: true
 argument-hint: "[optional: 'describe', 'breakdown', or an existing item/plan to work from]"
 ---
@@ -18,13 +18,13 @@ If the user passed arguments, use them to pick the job and the source material. 
 
 Don't assume GitHub, PRDs or a `docs/` folder. Establish the conventions in this order and stop as soon as they are clear:
 
-1. **The project's instructions file** (AGENTS.md, or CLAUDE.md in Claude Code). A section on work tracking settles it. If **setup-syv-skills** has been run, it is there.
+1. **The project's instructions file** (AGENTS.md or CLAUDE.md). A section on work tracking settles it. If **setup-syv-skills** has been run, it is there.
 2. **Best-effort inference** from the repo and tracker:
    - Issue references in commits and branch names: `#123` (GitHub), `AB#123` (Azure DevOps), `PROJ-123` (Jira or Linear).
    - Tracker config: `.github/ISSUE_TEMPLATE/`, `azure-pipelines.yml`, links in the README or CONTRIBUTING.md.
    - Existing artefacts: folders of specs, PRDs, ADRs or markdown issues, and their structure.
    - Available tools: `gh`, `az boards`, a Jira or Linear CLI or MCP server.
-3. **Ask** only what is still unclear. Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot); if it has none, ask in plain text. Batch the questions and put your best guess first:
+3. **Ask** only what is still unclear. Ask with your harness's question tool (`AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI, `askQuestions` in VS Code, `request_user_input` in Codex Plan mode); if it has none, ask in plain text. Most take three or four questions per call, so split larger batches. Put your best guess first:
    - Where do work items live?
    - What describes a piece of work here (PRD, spec, feature description, epic, user stories, nothing formal)?
    - What are items broken into, and which fields or item types matter (area path, labels, parent links, story points)?
@@ -45,7 +45,7 @@ Follow [DESCRIBE.md](DESCRIBE.md). Draft in the project's format, show it to the
 
 ## 4. Break down
 
-Follow [BREAKDOWN.md](BREAKDOWN.md). Present the proposed slices and iterate with the user until they approve the breakdown. Then publish the items in dependency order, blockers first, so later items can reference real identifiers.
+Follow [BREAKDOWN.md](BREAKDOWN.md) for slicing, sizing, the review with the user and publishing order. Publish nothing until the user approves the breakdown.
 
 ## Rules for writing to a tracker
 

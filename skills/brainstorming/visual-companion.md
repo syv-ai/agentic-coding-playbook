@@ -1,6 +1,6 @@
 # Visual companion
 
-Show the user mockups, diagrams and option comparisons as **static HTML files** — no server, no build, no dependencies. The page is for seeing; the answer comes back through your harness's question tool (`AskUserQuestion` in Claude Code, `askQuestions` in VS Code Copilot), or in plain text if it has none.
+Show the user mockups, diagrams and option comparisons as **static HTML files** — no server, no build, no dependencies. The page is for seeing; the answer comes back through your harness's question tool (`AskUserQuestion` in Claude Code, `ask_user` in Copilot CLI and Gemini CLI, `askQuestions` in VS Code, `request_user_input` in Codex Plan mode), or in plain text if it has none.
 
 ## When to use it
 
@@ -13,12 +13,22 @@ A question *about* a UI topic isn't automatically visual. "What kind of wizard d
 
 ## The loop
 
-1. **Write a page.** Read [template.html](template.html) and replace the `<!-- CONTENT -->` marker with your content fragment. Use a new file for every screen and version (`layout.html`, `layout-v2.html`) so earlier versions stay comparable.
+1. **Write a page.** Read [template.html](template.html), replace the `<!-- CONTENT -->` marker with your content fragment, and replace the `<title>` with a two-to-four-word name for this page (no "Name — explainer"). Use one file per question (`layout.html`, `onboarding-flow.html`). In Claude Code, load the `artifact-design` skill before writing the page.
 2. **Deliver it.**
-   - If your harness can publish artifacts (in Claude Code, the `Artifact` tool), publish the page and give the user the link. Drop the template's doctype, `<html>`, `<head>` and `<body>` tags, since the publisher adds them; keep its `<title>`, `<style>` and `<script>`.
+   - If your harness can publish a page (in Claude Code, the `Artifact` tool, when it's in the tool list), publish it and give the user the link; put the explanation in the publish description, not the title. The page is private to the user until they choose to share it. Drop the template's doctype, `<html>`, `<head>` and `<body>` tags, since the publisher adds them; keep its `<title>`, `<style>` and `<script>`.
    - Otherwise write it to the OS temp directory, open it best-effort (`open <file>` on macOS, `xdg-open <file>` on Linux, `start "" <file>` on Windows), and give the user the file's full absolute path, resolved rather than `$TMPDIR/…` or `~`, whether or not it opened.
 3. **Ask for the decision** with the question tool, mirroring the page's options with the same letters and labels. Clicking in the page only highlights; the tool answer is what counts.
-4. **Iterate or move on.** If the feedback changes the screen, write a new version and open it. Move on once the question is settled.
+4. **Iterate or move on.** If the feedback changes the screen, revise the same file and republish it: the link stays the same and the earlier version is kept in its history. A local file is simply rewritten; tell the user to reload. Start a new file only for a new question. Move on once the question is settled.
+
+In Claude Code, the user can also comment on a published page and send the comments to the session. Treat a comment as input, then confirm any decision it implies with the question tool.
+
+## Page rules
+
+The template already follows these; keep them when you add to it, so the page renders well in both themes and on a phone.
+
+- Colours as tokens on `:root`, with dark values under `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { … } }` and again under `:root[data-theme="dark"]`. Use the tokens in your fragment rather than literal colours.
+- No external scripts except pinned, exact versions from cdnjs.cloudflare.com, cdn.jsdelivr.net/npm/, unpkg.com, cdn.tailwindcss.com or code.jquery.com; stylesheets only from Google Fonts; everything else inline.
+- Works at phone width: the 16px side gutter is in the frame, so don't add fixed widths that cause horizontal scroll. `alert`, `confirm`, `prompt` and `print` do nothing on a published page.
 
 ## Content fragments
 
@@ -58,7 +68,7 @@ For flowcharts, state machines and entity relationships, use Mermaid. A publishe
 
 ```html
 <script type="module">
-  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
   mermaid.initialize({ startOnLoad: true, theme: "neutral" });
 </script>
 <pre class="mermaid">graph TD; A--&gt;B; A--&gt;C;</pre>
