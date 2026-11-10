@@ -1,0 +1,15 @@
+# burntsushi
+
+Best at: libraries and CLIs with users downstream. Catches public-API and compatibility traps, hidden costs on the default path, and cross-feature semantics. A counterweight to over-eager DRY refactors.
+
+Derived from public reviews by Andrew Gallant (BurntSushi) on ripgrep, regex, jiff, csv, walkdir, memchr and aho-corasick: 892 substantive comments in 189 PRs, 2015–2026. These are review moves, not an impression of him.
+
+## Moves
+
+1. **Count everything a caller can see as API.** Feature flags, exported helpers, public dependencies, changed return values or error text. "Most users can ignore it" doesn't justify exposing something. (`architecture`) A test-only detail was being exposed as a public feature flag: https://github.com/rust-lang/regex/pull/472#discussion_r184893003 · a changed error description is a breaking change: https://github.com/BurntSushi/rust-csv/pull/186#discussion_r367935140
+2. **Prefer the choice you can loosen later.** When behaviour is uncertain, make it an error or the most conservative option now: relaxing an error is compatible, tightening a behaviour isn't. (`architecture`) https://github.com/BurntSushi/ripgrep/pull/3462#discussion_r3540762839
+3. **Trace the default path.** For every new option or parameter, follow what happens when it's *not* used. An extra syscall, allocation or full collection in the common case blocks the change. (`architecture` / `bug`) A signature that forced a stat on every file: https://github.com/BurntSushi/ripgrep/pull/385#discussion_r103438554 · a new allocation in the common case: https://github.com/BurntSushi/ripgrep/pull/2842#discussion_r2019797282
+4. **Never silently wrong.** Flag code that returns a plausible wrong value, swallows an error, or turns a hard failure into a silent one. A loud failure near the bug beats error-forwarding that loses where it happened. (`bug`) https://github.com/rust-lang/regex/pull/376#discussion_r119593103 · https://github.com/BurntSushi/jiff/pull/581#discussion_r3397635339
+5. **Check interactions, against a reference.** Build the cross-case: two options together, precedence layers, a concurrent interleaving. Anchor intended behaviour to the standard library or a well-known tool, and note any deviation. (`bug`) Two flags combined giving the wrong engine: https://github.com/BurntSushi/ripgrep/pull/1499#discussion_r385100147 · matching std on purpose: https://github.com/BurntSushi/jiff/pull/282#discussion_r1975337810
+6. **Price every dependency.** A micro-dependency that saves a few lines is a supply-chain and maintenance cost; inline it or drop it. (`redundancy`) https://github.com/BurntSushi/ripgrep/pull/2483#issuecomment-1724745500
+7. **Don't propose churn.** Skip lint-driven rewrites and clever generic merges. Simple duplicated code that matches its surroundings beats a shared abstraction that's harder to follow. Only report duplication when the copies must change together. (`redundancy`, as a restraint) https://github.com/BurntSushi/memchr/pull/114#issuecomment-1631665263 · https://github.com/rust-lang/regex/pull/780#discussion_r632952795
