@@ -55,10 +55,10 @@ up on their own when a task matches a skill's description.
 
 ### Notes for any install
 
-- `improve-code-design` delegates to two subagents. Their prompts ship inside
-  the skill, so any agent that can start a subagent can use them; nothing needs
-  copying. The Claude Code and Cursor plugins also register them as named
-  agents.
+- `improve-code-design` delegates to two subagents and `review-tests` to one.
+  Their prompts ship inside the skills, so any agent that can start a subagent
+  can use them; nothing needs copying. The Claude Code and Cursor plugins also
+  register them as named agents.
 - Skills marked *(user-only command)* below run only when you call them.
   Claude Code, Codex, Copilot CLI, Cursor, VS Code and Pi respect this. Gemini
   CLI doesn't yet, so there the agent may also start them on its own.
@@ -114,6 +114,7 @@ section. Updating the collection never touches it.
 **Architecture, lifecycle & meta**
 - [`improve-codebase-architecture`](improve-codebase-architecture/) — find shallow modules, propose deeper ones.
 - [`improve-code-design`](improve-code-design/) — name the anti-pattern a piece of code is an instance of, the principle it violates, and the pattern that fixes it. Its sibling above asks "is this module deep?"; this one asks "does this violate a named principle, and is there a named remedy?" Enumeration is delegated to a `design-inventory` subagent and the suppression gate to `design-auditor`; both prompts ship inside the skill.
+- [`review-tests`](review-tests/) — read the test suite as evidence about the design: tests that pin a poor design, near-duplicate tests that reveal duplicated code, tests that freeze an over-specialised shape, and tests that keep dead code alive. Bundled scripts find the candidates, a `test-auditor` subagent gates them, and the result is a Markdown handoff: test fixes as tasks for `executing-plans`, design leads as scope for `improve-code-design`.
 - [`retro`](retro/) — after a session that was harder than it should have been, propose changes to the agent's environment (checks, pointers, review rules, tool access) so the next run goes better. *(User-only command.)*
 - [`handoff`](handoff/) — compact the conversation into a handoff doc for a fresh session.
 - [`write-a-skill`](write-a-skill/) — create or revise agent skills: structure, a description that triggers, progressive disclosure and bundled resources.

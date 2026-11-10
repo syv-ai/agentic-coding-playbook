@@ -36,6 +36,7 @@ every skill stands on its own.
 | `systematic-debugging` | **Merge** of obra/superpowers (`systematic-debugging`) + mattpocock/skills (`diagnose`) |
 | `receiving-code-review` | obra/superpowers (`receiving-code-review`) |
 | `improve-codebase-architecture` | mattpocock/skills (`improve-codebase-architecture`) |
+| `review-tests` | Syv.ai original — its suppression gate and report follow the pattern of this collection's `improve-code-design` |
 | `handoff` | mattpocock/skills (`handoff`) |
 | `retro` | Syv.ai adaptation of mattpocock/skills (`retro`) |
 | `write-a-skill` | **Merge** of mattpocock/skills (`write-a-skill`) + obra/superpowers (`writing-skills`) |
