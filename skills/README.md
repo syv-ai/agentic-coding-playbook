@@ -55,7 +55,8 @@ up on their own when a task matches a skill's description.
 
 ### Notes for any install
 
-- `improve-code-design` delegates to two subagents and `review-tests` to one.
+- `improve-code-design` delegates to two subagents and `review-tests` to one;
+  `review-loop` starts a fresh subagent per reviewer and one for its gate.
   Their prompts ship inside the skills, so any agent that can start a subagent
   can use them; nothing needs copying. The Claude Code and Cursor plugins also
   register them as named agents.
@@ -107,6 +108,7 @@ section. Updating the collection never touches it.
 - [`tdd`](tdd/) — red-green-refactor with behaviour-first, tracer-bullet tests.
 - [`systematic-debugging`](systematic-debugging/) — find the root cause before fixing, starting from a fast reproducible feedback loop; covers flaky tests and CI-only failures too.
 - [`receiving-code-review`](receiving-code-review/) — process review feedback with rigour, not performative agreement.
+- [`review-loop`](review-loop/) — review and fix a branch in rounds before it becomes a PR. Each round, fresh reviewer subagents follow persona checklists distilled from maintainers' public reviews (matklad, tiangolo, sindresorhus, BurntSushi) and review methods (`necessity`, `goldfish-reader`, `decisions`, `design-families`); a gate subagent fact-checks their findings; a bundled script keeps the ledger and stops the loop when a round finds nothing new, then writes the PR body. *(User-only command.)*
 
 **Safety**
 - [`guardrails`](guardrails/) — review what an agent could damage in this repo, note the safety controls already in place, and ask whether to cover each remaining risk with the agent's own settings (permission rules, sandbox). *(User-only command.)*

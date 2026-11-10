@@ -36,6 +36,7 @@ every skill stands on its own.
 | `systematic-debugging` | **Merge** of obra/superpowers (`systematic-debugging`) + mattpocock/skills (`diagnose`) |
 | `receiving-code-review` | obra/superpowers (`receiving-code-review`) |
 | `improve-codebase-architecture` | mattpocock/skills (`improve-codebase-architecture`) |
+| `review-loop` | Syv.ai original — persona checklists are paraphrased review moves distilled from public GitHub review comments by Alex Kladov (matklad), Sebastián Ramírez (tiangolo), Sindre Sorhus and Andrew Gallant (BurntSushi), linked to the source comments and not endorsed by them; `necessity` builds on dietrichgebert/ponytail's smallest-change ladder, `goldfish-reader` on google/elephant-goldfish-model's zero-context readers, and `design-families` uses this collection's `improve-code-design` |
 | `review-tests` | Syv.ai original — its suppression gate and report follow the pattern of this collection's `improve-code-design` |
 | `handoff` | mattpocock/skills (`handoff`) |
 | `retro` | Syv.ai adaptation of mattpocock/skills (`retro`) |
